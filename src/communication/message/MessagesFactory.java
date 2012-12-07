@@ -168,7 +168,13 @@ public class MessagesFactory {
                 .setGetMessage(getMessage).build();
     }
 
-
+    public static Message generateMasterMessage(ProcessIdentifier masterProcess) {
+        ImMasterMessage masterMessage = ImMasterMessage.newBuilder()
+                .setMasterProcess(masterProcess).build();
+        return Message.newBuilder()
+                .setType(MessageType.ImMaster)
+                .setMasterMessage(masterMessage).build();
+    }
 
 
 

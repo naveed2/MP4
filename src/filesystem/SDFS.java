@@ -397,4 +397,8 @@ public class SDFS {
         float usingTime = (TimeMachine.getTime() - startTime) /10;
         System.out.println("Del uses time " + usingTime + " seconds");
     }
+
+    public void createSDFSFile(String fileName) {
+
+    }
 }

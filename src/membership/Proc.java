@@ -46,6 +46,9 @@ public class Proc {
     private String hostAddress;
     private MemberList memberList;
 
+    private ProcessIdentifier master;
+    private Boolean isMaster;
+
     public Proc(Integer tcpPort) {
         this.timeStamp = 0;
         this.id = UUID.randomUUID().toString();
@@ -54,6 +57,9 @@ public class Proc {
         this.fileServerPort = tcpPort + 2;
         memberList = new MemberList();
         memberList.setProc(this);
+
+        this.isMaster = false;
+        this.master = null;
 
         this.isTCPServerStarted = this.isUDPServerStarted = this.isFileServerStarted = false ;
     }
@@ -99,6 +105,8 @@ public class Proc {
         initFileListScan();
 
         initReplicaManger();
+
+        initMultiCast();
 
     }
 
@@ -193,6 +201,10 @@ public class Proc {
         SDFileSystem.init();
     }
 
+    private void initMultiCast() {
+        MultiCast.init(this);
+    }
+
     public ProcessIdentifier getIdentifier() {
         return ProcessIdentifierFactory.generateProcessIdentifier(id, hostAddress, tcpPort, timeStamp);
     }
@@ -245,4 +257,15 @@ public class Proc {
     public ReplicationManager getReplicaManger() {
         return replicationManager;
     }
+
+    public Proc setMaster(ProcessIdentifier masterProcess) {
+        if(masterProcess.getId().equals(getId())) {
+            isMaster = true;
+        } else {
+            isMaster = false;
+            master = masterProcess;
+        }
+        return this;
+    }
+
 }

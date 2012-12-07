@@ -1,5 +1,6 @@
 package main;
 
+import communication.MultiCast;
 import communication.message.Messages;
 import communication.message.MessagesFactory;
 import communication.TCPClient;
@@ -206,6 +207,14 @@ public class MainEntry {
         long usingTime = System.currentTimeMillis() - startTime;
 
         logger.info("Get command uses " + usingTime + " ms");
+    }
+
+    /**
+     * This command is for debug
+     */
+    private static void masterNotification() {
+        MultiCast.broadCast(
+                proc.getMemberList().getList(), MessagesFactory.generateMasterMessage(proc.getIdentifier()));
     }
 
     private static boolean isMySelf(ProcessIdentifier identifier) {

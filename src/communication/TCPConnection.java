@@ -316,9 +316,17 @@ public class TCPConnection {
                 getFile(readyToGetFileMessage);
                 break;
 
+            case ImMaster:
+                ImMasterMessage masterMessage = m.getMasterMessage();
+                setMaster(masterMessage.getMasterProcess());
+
             default:
                 break;
         }
+    }
+
+    private void setMaster(ProcessIdentifier masterProcess) {
+        proc.setMaster(masterProcess);
     }
 
     private void putFile(ReadyToPutFileMessage readyToPutFileMessage){
