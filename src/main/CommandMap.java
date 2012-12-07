@@ -1,5 +1,6 @@
 package main;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +39,10 @@ public class CommandMap {
     private static final String CMD_DEL = "del";
     private static final String FUNC_DEL = "deleteFile";
 
+    /*---------Those commands below are used for debug----------*/
+    private static final String CMD_MASTER = "master";
+    private static final String FUNC_MASTER = "masterNotification";
+
     private CommandMap() {
 
     }
@@ -49,18 +54,43 @@ public class CommandMap {
     public synchronized CommandMap initialize() {
         instance = new CommandMap();
         stringToFuncName = new HashMap<String, String>();
+        Map<String,String> cmdMap = new HashMap<String, String>();
+        Map<String,String> funcNameMap = new HashMap<String, String>();
 
-        stringToFuncName.put(CMD_START, FUNC_START);
-        stringToFuncName.put(CMD_INIT, FUNC_INIT);
-        stringToFuncName.put(CMD_JOIN, FUNC_JOIN);
-        stringToFuncName.put(CMD_SHOW, FUNC_SHOW);
-        stringToFuncName.put(CMD_SHOW_FILE, FUNC_SHOW_FILE);
-        stringToFuncName.put(CMD_PUT, FUNC_PUT);
-        stringToFuncName.put(CMD_HELP, FUNC_HELP);
-        stringToFuncName.put(CMD_QUIT, FUNC_QUIT);
-        stringToFuncName.put(CMD_DEL, FUNC_DEL);
-        stringToFuncName.put(CMD_GET, FUNC_GET);
-        stringToFuncName.put(CMD_QUIT, FUNC_QUIT);
+        Class classType = CommandMap.class;
+
+        try{
+            for(Field field : classType.getDeclaredFields()) {
+                String fieldName = field.getName();
+                if(fieldName.startsWith("CMD_")) {
+                    cmdMap.put(fieldName.substring(4),(String)field.get(null));
+                } else if(fieldName.startsWith("FUNC_")) {
+                    funcNameMap.put(fieldName.substring(5), (String) field.get(null));
+                }
+
+            }
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        }
+
+        for(Map.Entry<String, String> entry : cmdMap.entrySet()) {
+            String key = entry.getKey();
+            stringToFuncName.put(entry.getValue(), funcNameMap.get(key));
+        }
+
+        System.out.println(stringToFuncName);
+
+//        stringToFuncName.put(CMD_START, FUNC_START);
+//        stringToFuncName.put(CMD_INIT, FUNC_INIT);
+//        stringToFuncName.put(CMD_JOIN, FUNC_JOIN);
+//        stringToFuncName.put(CMD_SHOW, FUNC_SHOW);
+//        stringToFuncName.put(CMD_SHOW_FILE, FUNC_SHOW_FILE);
+//        stringToFuncName.put(CMD_PUT, FUNC_PUT);
+//        stringToFuncName.put(CMD_HELP, FUNC_HELP);
+//        stringToFuncName.put(CMD_QUIT, FUNC_QUIT);
+//        stringToFuncName.put(CMD_DEL, FUNC_DEL);
+//        stringToFuncName.put(CMD_GET, FUNC_GET);
+//        stringToFuncName.put(CMD_QUIT, FUNC_QUIT);
 
         return this;
     }
@@ -74,5 +104,9 @@ public class CommandMap {
 
     public synchronized String findCommand(String cmd) {
         return stringToFuncName.get(cmd);
+    }
+
+    public static void main(String[] args) {
+        CommandMap.instance.initialize();
     }
 }
