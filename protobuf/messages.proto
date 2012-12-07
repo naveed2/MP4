@@ -1,0 +1,118 @@
+package communication.message;
+
+message ProcessIdentifier{
+    required string id = 1;
+    required string IP = 2;
+    required int32 port = 3;
+    optional int32 timestamp = 4;
+}
+
+message FileIdentifier{
+    required ProcessIdentifier fileStoringProcess = 1;
+    required string fileName = 2;
+    optional string fileState = 3;
+}
+
+enum MessageType{
+    Heartbeat = 0;
+    Join = 1;
+    Fail = 2;
+    SyncProcesses = 3;
+    SyncFiles = 4;
+    SendTo = 5;
+    ListenFrom = 6;
+    getFile = 7;
+    putFile = 8;
+    deleteFile = 9;
+    readyToPut = 10;
+    readyToGet = 11;
+    get = 12;
+}
+
+message HeartBeatMessage {
+    required ProcessIdentifier fromMachine = 1;
+}
+
+message JoinMessage{
+    required ProcessIdentifier joinedMachine = 1;
+}
+
+message LeaveMessage{
+    required ProcessIdentifier leftMachine = 1;
+}
+
+message FailMessage{
+    required ProcessIdentifier failedMachine = 1;
+    required ProcessIdentifier failureDetectorMachine = 2;
+}
+
+message SyncProcessesMessage{
+    repeated ProcessIdentifier members = 1;
+    required ProcessIdentifier syncingMachine = 2;
+}
+
+message SyncFilesListMessage{
+    repeated FileIdentifier files = 1;
+    repeated int32 timestamp = 2;
+}
+
+message SendToMessage {
+    required ProcessIdentifier sendToMachine = 1;
+}
+
+message GetFileMessage{
+    required string filepath = 1;
+    optional ProcessIdentifier requestingProcess = 2;
+}
+
+message ReadyToGetFileMessage{
+    required string filepath = 1;
+    optional ProcessIdentifier storingProcess = 2;
+}
+
+message PutFileMessage{
+    required string filepath = 1;
+    optional ProcessIdentifier storingProcess = 2;
+}
+
+message ReadyToPutFileMessage{
+    required string filepath = 1;
+    optional ProcessIdentifier storingProcess = 2;
+
+}
+
+message DeleteFileMessage{
+    required string filepath = 1;
+    optional ProcessIdentifier deletingProcess = 2;
+}
+
+message ListenFromMessage {
+    required ProcessIdentifier listenFromMachine = 1;
+}
+
+message GetMessage {
+    required ProcessIdentifier requestingProcess =1;
+    optional string fileName = 2;
+}
+
+message Message{
+    required MessageType type = 1;
+    optional JoinMessage joinMessage = 2;
+    optional LeaveMessage leaveMessage = 3;
+    optional FailMessage failMessage = 4;
+    optional SyncProcessesMessage syncProcessesMessage = 5;
+    optional SyncFilesListMessage syncFilesMessage = 6;
+    optional HeartBeatMessage heartBeatMessage = 7;
+    optional SendToMessage sendToMessage = 8;
+    optional ListenFromMessage listenFrom = 9;
+    optional GetFileMessage getFileMessage = 10;
+    optional PutFileMessage putFileMessage = 11;
+    optional DeleteFileMessage deleteFileMessage = 12;
+    optional ReadyToPutFileMessage readyToPutFileMessage = 13;
+    optional ReadyToGetFileMessage readyToGetFileMessage = 14;
+    optional GetMessage getMessage = 15;
+}
+
+
+
+
