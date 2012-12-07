@@ -52,7 +52,8 @@ public class MainEntry {
     }
 
 
-    private static String arg1, arg2;
+//    private static String arg1, arg2;
+    private static String args[];
     /**
      * the main function
      */
@@ -64,14 +65,9 @@ public class MainEntry {
                 continue;
             }
 
-            String[] arr = inputLine.split(" ");
-            String cmd = arr[0];
-            if(arr.length >=2) {
-                arg1 = arr[1];
-            }
-            if(arr.length >=3) {
-                arg2 = arr[2];
-            }
+            args = inputLine.split(" ");
+
+            String cmd = args[0];
 
             String funcName = commandMap.findCommand(cmd);
 
@@ -180,7 +176,7 @@ public class MainEntry {
     private static void putFile() {
 //        String fileName = MiscTool.inputFileName(in);
         long startTime = System.currentTimeMillis();
-        proc.getSDFS().addFileLocally(arg1, arg2);
+        proc.getSDFS().addFileLocally(args[1], args[2]);
         long usingTime = System.currentTimeMillis() - startTime;
 
         logger.info("put command uses " + usingTime + " ms");
@@ -190,7 +186,7 @@ public class MainEntry {
      * command of delete file
      */
     private static void deleteFile() {
-        proc.getSDFS().deleteFile(arg1,true);
+        proc.getSDFS().deleteFile(args[1],true);
     }
 
     /**
@@ -200,8 +196,8 @@ public class MainEntry {
     private static void getFile(){
 //        String remoteFileName = MiscTool.inputFileName(in);
 //        String localFileName = MiscTool.inputFileName(in);
-        String remoteFileName = arg1;
-        String localFileName = arg2;
+        String remoteFileName = args[1];
+        String localFileName = args[2];
         long startTime = System.currentTimeMillis();
         proc.getSDFS().getRemoteFile(remoteFileName, localFileName);
         long usingTime = System.currentTimeMillis() - startTime;
@@ -218,7 +214,7 @@ public class MainEntry {
     }
 
     private static void createFile() {
-        String arg = arg1;
+        String arg = args[1];
         proc.getSDFS().createSDFSFile(arg);
     }
 
