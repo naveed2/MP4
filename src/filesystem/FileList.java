@@ -78,4 +78,15 @@ public class FileList implements Iterable<FileIdentifier> {
     public Integer size() {
         return fileList.size();
     }
+
+    public boolean hasFile(String fileName) {
+        synchronized (this) {
+            for(FileIdentifier fid: fileList) {
+                if(fid.getFileName().equals(fileName)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 }

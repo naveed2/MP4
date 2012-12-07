@@ -43,6 +43,9 @@ public class CommandMap {
     private static final String CMD_MASTER = "master";
     private static final String FUNC_MASTER = "masterNotification";
 
+    private static final String CMD_CREATE_FILE = "createfile";
+    private static final String FUNC_CREATE_FILE = "createFile";
+
     private CommandMap() {
 
     }

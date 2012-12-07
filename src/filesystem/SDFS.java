@@ -398,7 +398,20 @@ public class SDFS {
         System.out.println("Del uses time " + usingTime + " seconds");
     }
 
-    public void createSDFSFile(String fileName) {
+    public boolean createSDFSFile(String fileName) {
+        File newFile = openFile(fileName);
+        try {
+            if(newFile.createNewFile()) {
+                addFileLocally(newFile);
+            }
+        } catch (IOException e) {
+            logger.error("create sdfs file fail " + e);
+            return false;
+        }
+        return true;
+    }
 
+    public boolean hasSDFSFile(String fileName) {
+        return fileList.hasFile(fileName);
     }
 }

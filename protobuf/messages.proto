@@ -28,6 +28,7 @@ enum MessageType{
     readyToGet = 11;
     get = 12;
 
+    //added for mp4
     ImMaster = 13;
 }
 

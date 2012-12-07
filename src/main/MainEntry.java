@@ -217,6 +217,11 @@ public class MainEntry {
                 proc.getMemberList().getList(), MessagesFactory.generateMasterMessage(proc.getIdentifier()));
     }
 
+    private static void createFile() {
+        String arg = arg1;
+        proc.getSDFS().createSDFSFile(arg);
+    }
+
     private static boolean isMySelf(ProcessIdentifier identifier) {
         return identifier.getId().equals(proc.getId());
     }
