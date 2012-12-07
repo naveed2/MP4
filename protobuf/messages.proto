@@ -27,6 +27,8 @@ enum MessageType{
     readyToPut = 10;
     readyToGet = 11;
     get = 12;
+
+    ImMaster = 13;
 }
 
 message HeartBeatMessage {
@@ -95,6 +97,10 @@ message GetMessage {
     optional string fileName = 2;
 }
 
+message ImMasterMessage {
+    required ProcessIdentifier masterProcess = 1;
+}
+
 message Message{
     required MessageType type = 1;
     optional JoinMessage joinMessage = 2;
@@ -111,6 +117,7 @@ message Message{
     optional ReadyToPutFileMessage readyToPutFileMessage = 13;
     optional ReadyToGetFileMessage readyToGetFileMessage = 14;
     optional GetMessage getMessage = 15;
+    optional ImMasterMessage masterMessage = 16;
 }
 
 
