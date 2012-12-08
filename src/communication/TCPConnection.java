@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Arrays;
 
 import static communication.message.Messages.*;
 
@@ -82,7 +83,7 @@ public class TCPConnection {
     public String readID() {
         try {
             is = socket.getInputStream();
-            byte[] bytes = new byte[36];    // 36 is then length of uuid string representation
+            byte[] bytes = new byte[36];    // 36 is the length of uuid string representation
             Integer numberOfBytes = is.read(bytes, 0, 36);
             if(numberOfBytes != 36) {
                 throw new IOException("input stream format error");
@@ -96,6 +97,28 @@ public class TCPConnection {
                 logger.error("Read id from inputstream error ", e);
             }
             return "wrong id";
+        }
+    }
+
+    public String readFileHeader() {
+        try {
+            is = socket.getInputStream();
+            byte[] bytes = new byte[10];    // 10 is the length of file header
+            Integer numberOfBytes = is.read(bytes, 0, 10);
+            if(numberOfBytes != 10) {
+                System.out.println(Arrays.toString(bytes));
+                System.out.println(numberOfBytes);
+                throw new IOException("input stream format error");
+            }
+
+            return new String(bytes);
+        } catch (IOException e) {
+            if(e.getMessage().equals("socket close")){
+                //
+            } else {
+                logger.error("Read header from inputstream error ", e);
+            }
+            return "wrong file header";
         }
     }
 
@@ -254,17 +277,17 @@ public class TCPConnection {
                 break;
 
             case getFile:
-                GetFileMessage getFileMessage = m.getGetFileMessage();
-                prepareToSend(proc.getIdentifier(), getFileMessage.getFilepath());
-                sendReadyToGetMessage(getFileMessage.getFilepath(),
-                        getFileMessage.getRequestingProcess().getIP(),
-                        getFileMessage.getRequestingProcess().getPort());
+//                GetFileMessage getFileMessage = m.getGetFileMessage();
+//                prepareToSend(proc.getIdentifier(), getFileMessage.getFilepath());
+//                sendReadyToGetMessage(getFileMessage.getFilepath(),
+//                        getFileMessage.getRequestingProcess().getIP(),
+//                        getFileMessage.getRequestingProcess().getPort());
                 break;
 
             case putFile:
                 PutFileMessage putFileMessage = m.getPutFileMessage();
-                prepareToGet(putFileMessage.getStoringProcess(), putFileMessage.getFilepath());
-                sendReadytoPutMessage(putFileMessage.getFilepath(),
+                prepareToGet(putFileMessage.getStoringProcess(), putFileMessage.getFid());
+                sendReadyToPutMessage(putFileMessage.getFid(),
                         putFileMessage.getStoringProcess().getIP(),
                         putFileMessage.getStoringProcess().getPort());
                 break;
@@ -369,6 +392,9 @@ public class TCPConnection {
             tcpClient.setProc(proc);
             if(tcpClient.connect()){
                 tcpClient.sendData(proc.getId());
+                Integer hashCode = file.getName().hashCode();
+                String fileHeader = String.format("%010d", hashCode);
+                tcpClient.sendData(fileHeader);
                 BufferedInputStream bis = new BufferedInputStream(in);
                 tcpClient.sendData(bis);
 
@@ -393,21 +419,24 @@ public class TCPConnection {
         tcpClient.setProc(proc);
         if(tcpClient.connect()){
             tcpClient.sendData(proc.getId());
-            tcpClient.receiveAndSaveData(readyToGetFileMessage.getFilepath());
+            Integer hashCode = readyToGetFileMessage.getFid().getFileName().hashCode();
+            String fileHeader = String.format("%010d", hashCode);
+            tcpClient.sendData(fileHeader);
+            tcpClient.receiveAndSaveData(readyToGetFileMessage.getFid().getFileName());
             tcpClient.close();
 
             FileIdentifier fileIdentifier = FileIdentifierFactory.generateFileIdentifier(
-                    proc.getIdentifier(), readyToGetFileMessage.getFilepath(), FileState.available);
+                    proc.getIdentifier(), readyToGetFileMessage.getFid().getFileName(), FileState.available);
 
             proc.getSDFS().addAvailableEntryToFileList(fileIdentifier, proc.getTimeStamp());
         }
 
         long useTime = System.currentTimeMillis() - startTime;
-        logger.info("replicate " + readyToGetFileMessage.getFilepath() + " uses " + useTime + " ms");
+        logger.info("replicate " + readyToGetFileMessage.getFid().getFileName() + " uses " + useTime + " ms");
     }
 
-    private void prepareToGet(ProcessIdentifier storingProcess, String SDFSfilepath){
-        this.proc.getFileServer().prepareToGet(storingProcess, SDFSfilepath);
+    private void prepareToGet(ProcessIdentifier storingProcess, FileIdentifier fid){
+        this.proc.getFileServer().prepareToGet(storingProcess, fid);
 
     }
 
@@ -415,24 +444,24 @@ public class TCPConnection {
         this.proc.getFileServer().prepareToSend(storingProcess, SDFSfilepath);
     }
 
-    private void sendReadyToGetMessage(String SDFSFilepath, String processRequestingFile_IP, int processRequestingFile_port){
-        String address = processRequestingFile_IP + ":" + Integer.toString(processRequestingFile_port);
-        System.out.println(address);
-        TCPClient tcpClient = new TCPClient(address);
-        tcpClient.setProc(proc);
-        if(tcpClient.connect()){
-            Message m = MessagesFactory.generatePutFileMessage(SDFSFilepath, proc.getIdentifier());
-            tcpClient.sendData(m);
-            tcpClient.close();
-        }
-    }
+//    private void sendReadyToGetMessage(String SDFSFilepath, String processRequestingFile_IP, int processRequestingFile_port){
+//        String address = processRequestingFile_IP + ":" + Integer.toString(processRequestingFile_port);
+//        System.out.println(address);
+//        TCPClient tcpClient = new TCPClient(address);
+//        tcpClient.setProc(proc);
+//        if(tcpClient.connect()){
+//            Message m = MessagesFactory.generatePutFileMessage(SDFSFilepath, proc.getIdentifier());
+//            tcpClient.sendData(m);
+//            tcpClient.close();
+//        }
+//    }
 
-    private void sendReadytoPutMessage(String SDFSFilepath, String processStoringFile_IP, int processStoringFile_port){
+    private void sendReadyToPutMessage(FileIdentifier fid, String processStoringFile_IP, int processStoringFile_port){
         String address = processStoringFile_IP + ":" + Integer.toString(processStoringFile_port);
         TCPClient tcpClient = new TCPClient(address);
         tcpClient.setProc(proc);
         if(tcpClient.connect()){
-            Message m = MessagesFactory.generateReadyToPutFileMessage(SDFSFilepath, proc.getIdentifier());
+            Message m = MessagesFactory.generateReadyToPutFileMessage(fid.getFileName(), proc.getIdentifier());
             tcpClient.sendData(m);
             tcpClient.close();
         }

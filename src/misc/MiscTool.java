@@ -163,7 +163,10 @@ public class MiscTool {
 //
 //        Messages.Message m2 = Messages.Message.parseFrom(m1.toByteArray());
 //        System.out.println(m2.toString());
-        Date date = new Date();
-        System.out.println(date.getTime());
+        Integer hashCode = 23;
+        String str = String.format("%010d", hashCode);
+        System.out.println(str);
     }
+
+
 }

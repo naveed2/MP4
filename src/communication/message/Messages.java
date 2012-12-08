@@ -5715,9 +5715,10 @@ public final class Messages {
   public interface ReadyToGetFileMessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // required string filepath = 1;
-    boolean hasFilepath();
-    String getFilepath();
+    // required .communication.message.FileIdentifier fid = 1;
+    boolean hasFid();
+    communication.message.Messages.FileIdentifier getFid();
+    communication.message.Messages.FileIdentifierOrBuilder getFidOrBuilder();
     
     // optional .communication.message.ProcessIdentifier storingProcess = 2;
     boolean hasStoringProcess();
@@ -5753,36 +5754,17 @@ public final class Messages {
     }
     
     private int bitField0_;
-    // required string filepath = 1;
-    public static final int FILEPATH_FIELD_NUMBER = 1;
-    private java.lang.Object filepath_;
-    public boolean hasFilepath() {
+    // required .communication.message.FileIdentifier fid = 1;
+    public static final int FID_FIELD_NUMBER = 1;
+    private communication.message.Messages.FileIdentifier fid_;
+    public boolean hasFid() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public String getFilepath() {
-      java.lang.Object ref = filepath_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          filepath_ = s;
-        }
-        return s;
-      }
+    public communication.message.Messages.FileIdentifier getFid() {
+      return fid_;
     }
-    private com.google.protobuf.ByteString getFilepathBytes() {
-      java.lang.Object ref = filepath_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        filepath_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public communication.message.Messages.FileIdentifierOrBuilder getFidOrBuilder() {
+      return fid_;
     }
     
     // optional .communication.message.ProcessIdentifier storingProcess = 2;
@@ -5799,7 +5781,7 @@ public final class Messages {
     }
     
     private void initFields() {
-      filepath_ = "";
+      fid_ = communication.message.Messages.FileIdentifier.getDefaultInstance();
       storingProcess_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
@@ -5807,7 +5789,11 @@ public final class Messages {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
       
-      if (!hasFilepath()) {
+      if (!hasFid()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getFid().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -5825,7 +5811,7 @@ public final class Messages {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getFilepathBytes());
+        output.writeMessage(1, fid_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeMessage(2, storingProcess_);
@@ -5841,7 +5827,7 @@ public final class Messages {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getFilepathBytes());
+          .computeMessageSize(1, fid_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
@@ -5963,6 +5949,7 @@ public final class Messages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getFidFieldBuilder();
           getStoringProcessFieldBuilder();
         }
       }
@@ -5972,7 +5959,11 @@ public final class Messages {
       
       public Builder clear() {
         super.clear();
-        filepath_ = "";
+        if (fidBuilder_ == null) {
+          fid_ = communication.message.Messages.FileIdentifier.getDefaultInstance();
+        } else {
+          fidBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00000001);
         if (storingProcessBuilder_ == null) {
           storingProcess_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
@@ -6021,7 +6012,11 @@ public final class Messages {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.filepath_ = filepath_;
+        if (fidBuilder_ == null) {
+          result.fid_ = fid_;
+        } else {
+          result.fid_ = fidBuilder_.build();
+        }
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
@@ -6046,8 +6041,8 @@ public final class Messages {
       
       public Builder mergeFrom(communication.message.Messages.ReadyToGetFileMessage other) {
         if (other == communication.message.Messages.ReadyToGetFileMessage.getDefaultInstance()) return this;
-        if (other.hasFilepath()) {
-          setFilepath(other.getFilepath());
+        if (other.hasFid()) {
+          mergeFid(other.getFid());
         }
         if (other.hasStoringProcess()) {
           mergeStoringProcess(other.getStoringProcess());
@@ -6057,7 +6052,11 @@ public final class Messages {
       }
       
       public final boolean isInitialized() {
-        if (!hasFilepath()) {
+        if (!hasFid()) {
+          
+          return false;
+        }
+        if (!getFid().isInitialized()) {
           
           return false;
         }
@@ -6094,8 +6093,12 @@ public final class Messages {
               break;
             }
             case 10: {
-              bitField0_ |= 0x00000001;
-              filepath_ = input.readBytes();
+              communication.message.Messages.FileIdentifier.Builder subBuilder = communication.message.Messages.FileIdentifier.newBuilder();
+              if (hasFid()) {
+                subBuilder.mergeFrom(getFid());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setFid(subBuilder.buildPartial());
               break;
             }
             case 18: {
@@ -6113,40 +6116,94 @@ public final class Messages {
       
       private int bitField0_;
       
-      // required string filepath = 1;
-      private java.lang.Object filepath_ = "";
-      public boolean hasFilepath() {
+      // required .communication.message.FileIdentifier fid = 1;
+      private communication.message.Messages.FileIdentifier fid_ = communication.message.Messages.FileIdentifier.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          communication.message.Messages.FileIdentifier, communication.message.Messages.FileIdentifier.Builder, communication.message.Messages.FileIdentifierOrBuilder> fidBuilder_;
+      public boolean hasFid() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getFilepath() {
-        java.lang.Object ref = filepath_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          filepath_ = s;
-          return s;
+      public communication.message.Messages.FileIdentifier getFid() {
+        if (fidBuilder_ == null) {
+          return fid_;
         } else {
-          return (String) ref;
+          return fidBuilder_.getMessage();
         }
       }
-      public Builder setFilepath(String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        filepath_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearFilepath() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        filepath_ = getDefaultInstance().getFilepath();
-        onChanged();
-        return this;
-      }
-      void setFilepath(com.google.protobuf.ByteString value) {
+      public Builder setFid(communication.message.Messages.FileIdentifier value) {
+        if (fidBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          fid_ = value;
+          onChanged();
+        } else {
+          fidBuilder_.setMessage(value);
+        }
         bitField0_ |= 0x00000001;
-        filepath_ = value;
+        return this;
+      }
+      public Builder setFid(
+          communication.message.Messages.FileIdentifier.Builder builderForValue) {
+        if (fidBuilder_ == null) {
+          fid_ = builderForValue.build();
+          onChanged();
+        } else {
+          fidBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      public Builder mergeFid(communication.message.Messages.FileIdentifier value) {
+        if (fidBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001) &&
+              fid_ != communication.message.Messages.FileIdentifier.getDefaultInstance()) {
+            fid_ =
+              communication.message.Messages.FileIdentifier.newBuilder(fid_).mergeFrom(value).buildPartial();
+          } else {
+            fid_ = value;
+          }
+          onChanged();
+        } else {
+          fidBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      public Builder clearFid() {
+        if (fidBuilder_ == null) {
+          fid_ = communication.message.Messages.FileIdentifier.getDefaultInstance();
+          onChanged();
+        } else {
+          fidBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+      public communication.message.Messages.FileIdentifier.Builder getFidBuilder() {
+        bitField0_ |= 0x00000001;
         onChanged();
+        return getFidFieldBuilder().getBuilder();
+      }
+      public communication.message.Messages.FileIdentifierOrBuilder getFidOrBuilder() {
+        if (fidBuilder_ != null) {
+          return fidBuilder_.getMessageOrBuilder();
+        } else {
+          return fid_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          communication.message.Messages.FileIdentifier, communication.message.Messages.FileIdentifier.Builder, communication.message.Messages.FileIdentifierOrBuilder> 
+          getFidFieldBuilder() {
+        if (fidBuilder_ == null) {
+          fidBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              communication.message.Messages.FileIdentifier, communication.message.Messages.FileIdentifier.Builder, communication.message.Messages.FileIdentifierOrBuilder>(
+                  fid_,
+                  getParentForChildren(),
+                  isClean());
+          fid_ = null;
+        }
+        return fidBuilder_;
       }
       
       // optional .communication.message.ProcessIdentifier storingProcess = 2;
@@ -6253,9 +6310,10 @@ public final class Messages {
   public interface PutFileMessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // required string filepath = 1;
-    boolean hasFilepath();
-    String getFilepath();
+    // required .communication.message.FileIdentifier fid = 1;
+    boolean hasFid();
+    communication.message.Messages.FileIdentifier getFid();
+    communication.message.Messages.FileIdentifierOrBuilder getFidOrBuilder();
     
     // optional .communication.message.ProcessIdentifier storingProcess = 2;
     boolean hasStoringProcess();
@@ -6291,36 +6349,17 @@ public final class Messages {
     }
     
     private int bitField0_;
-    // required string filepath = 1;
-    public static final int FILEPATH_FIELD_NUMBER = 1;
-    private java.lang.Object filepath_;
-    public boolean hasFilepath() {
+    // required .communication.message.FileIdentifier fid = 1;
+    public static final int FID_FIELD_NUMBER = 1;
+    private communication.message.Messages.FileIdentifier fid_;
+    public boolean hasFid() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public String getFilepath() {
-      java.lang.Object ref = filepath_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          filepath_ = s;
-        }
-        return s;
-      }
+    public communication.message.Messages.FileIdentifier getFid() {
+      return fid_;
     }
-    private com.google.protobuf.ByteString getFilepathBytes() {
-      java.lang.Object ref = filepath_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        filepath_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public communication.message.Messages.FileIdentifierOrBuilder getFidOrBuilder() {
+      return fid_;
     }
     
     // optional .communication.message.ProcessIdentifier storingProcess = 2;
@@ -6337,7 +6376,7 @@ public final class Messages {
     }
     
     private void initFields() {
-      filepath_ = "";
+      fid_ = communication.message.Messages.FileIdentifier.getDefaultInstance();
       storingProcess_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
@@ -6345,7 +6384,11 @@ public final class Messages {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
       
-      if (!hasFilepath()) {
+      if (!hasFid()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getFid().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -6363,7 +6406,7 @@ public final class Messages {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getFilepathBytes());
+        output.writeMessage(1, fid_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeMessage(2, storingProcess_);
@@ -6379,7 +6422,7 @@ public final class Messages {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getFilepathBytes());
+          .computeMessageSize(1, fid_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
@@ -6501,6 +6544,7 @@ public final class Messages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getFidFieldBuilder();
           getStoringProcessFieldBuilder();
         }
       }
@@ -6510,7 +6554,11 @@ public final class Messages {
       
       public Builder clear() {
         super.clear();
-        filepath_ = "";
+        if (fidBuilder_ == null) {
+          fid_ = communication.message.Messages.FileIdentifier.getDefaultInstance();
+        } else {
+          fidBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00000001);
         if (storingProcessBuilder_ == null) {
           storingProcess_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
@@ -6559,7 +6607,11 @@ public final class Messages {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.filepath_ = filepath_;
+        if (fidBuilder_ == null) {
+          result.fid_ = fid_;
+        } else {
+          result.fid_ = fidBuilder_.build();
+        }
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
@@ -6584,8 +6636,8 @@ public final class Messages {
       
       public Builder mergeFrom(communication.message.Messages.PutFileMessage other) {
         if (other == communication.message.Messages.PutFileMessage.getDefaultInstance()) return this;
-        if (other.hasFilepath()) {
-          setFilepath(other.getFilepath());
+        if (other.hasFid()) {
+          mergeFid(other.getFid());
         }
         if (other.hasStoringProcess()) {
           mergeStoringProcess(other.getStoringProcess());
@@ -6595,7 +6647,11 @@ public final class Messages {
       }
       
       public final boolean isInitialized() {
-        if (!hasFilepath()) {
+        if (!hasFid()) {
+          
+          return false;
+        }
+        if (!getFid().isInitialized()) {
           
           return false;
         }
@@ -6632,8 +6688,12 @@ public final class Messages {
               break;
             }
             case 10: {
-              bitField0_ |= 0x00000001;
-              filepath_ = input.readBytes();
+              communication.message.Messages.FileIdentifier.Builder subBuilder = communication.message.Messages.FileIdentifier.newBuilder();
+              if (hasFid()) {
+                subBuilder.mergeFrom(getFid());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setFid(subBuilder.buildPartial());
               break;
             }
             case 18: {
@@ -6651,40 +6711,94 @@ public final class Messages {
       
       private int bitField0_;
       
-      // required string filepath = 1;
-      private java.lang.Object filepath_ = "";
-      public boolean hasFilepath() {
+      // required .communication.message.FileIdentifier fid = 1;
+      private communication.message.Messages.FileIdentifier fid_ = communication.message.Messages.FileIdentifier.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          communication.message.Messages.FileIdentifier, communication.message.Messages.FileIdentifier.Builder, communication.message.Messages.FileIdentifierOrBuilder> fidBuilder_;
+      public boolean hasFid() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getFilepath() {
-        java.lang.Object ref = filepath_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          filepath_ = s;
-          return s;
+      public communication.message.Messages.FileIdentifier getFid() {
+        if (fidBuilder_ == null) {
+          return fid_;
         } else {
-          return (String) ref;
+          return fidBuilder_.getMessage();
         }
       }
-      public Builder setFilepath(String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        filepath_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearFilepath() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        filepath_ = getDefaultInstance().getFilepath();
-        onChanged();
-        return this;
-      }
-      void setFilepath(com.google.protobuf.ByteString value) {
+      public Builder setFid(communication.message.Messages.FileIdentifier value) {
+        if (fidBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          fid_ = value;
+          onChanged();
+        } else {
+          fidBuilder_.setMessage(value);
+        }
         bitField0_ |= 0x00000001;
-        filepath_ = value;
+        return this;
+      }
+      public Builder setFid(
+          communication.message.Messages.FileIdentifier.Builder builderForValue) {
+        if (fidBuilder_ == null) {
+          fid_ = builderForValue.build();
+          onChanged();
+        } else {
+          fidBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      public Builder mergeFid(communication.message.Messages.FileIdentifier value) {
+        if (fidBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001) &&
+              fid_ != communication.message.Messages.FileIdentifier.getDefaultInstance()) {
+            fid_ =
+              communication.message.Messages.FileIdentifier.newBuilder(fid_).mergeFrom(value).buildPartial();
+          } else {
+            fid_ = value;
+          }
+          onChanged();
+        } else {
+          fidBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      public Builder clearFid() {
+        if (fidBuilder_ == null) {
+          fid_ = communication.message.Messages.FileIdentifier.getDefaultInstance();
+          onChanged();
+        } else {
+          fidBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+      public communication.message.Messages.FileIdentifier.Builder getFidBuilder() {
+        bitField0_ |= 0x00000001;
         onChanged();
+        return getFidFieldBuilder().getBuilder();
+      }
+      public communication.message.Messages.FileIdentifierOrBuilder getFidOrBuilder() {
+        if (fidBuilder_ != null) {
+          return fidBuilder_.getMessageOrBuilder();
+        } else {
+          return fid_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          communication.message.Messages.FileIdentifier, communication.message.Messages.FileIdentifier.Builder, communication.message.Messages.FileIdentifierOrBuilder> 
+          getFidFieldBuilder() {
+        if (fidBuilder_ == null) {
+          fidBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              communication.message.Messages.FileIdentifier, communication.message.Messages.FileIdentifier.Builder, communication.message.Messages.FileIdentifierOrBuilder>(
+                  fid_,
+                  getParentForChildren(),
+                  isClean());
+          fid_ = null;
+        }
+        return fidBuilder_;
       }
       
       // optional .communication.message.ProcessIdentifier storingProcess = 2;
@@ -13771,66 +13885,68 @@ public final class Messages {
       "(.communication.message.ProcessIdentifie" +
       "r\"g\n\016GetFileMessage\022\020\n\010filepath\030\001 \002(\t\022C\n" +
       "\021requestingProcess\030\002 \001(\0132(.communication" +
-      ".message.ProcessIdentifier\"k\n\025ReadyToGet" +
-      "FileMessage\022\020\n\010filepath\030\001 \002(\t\022@\n\016storing" +
-      "Process\030\002 \001(\0132(.communication.message.Pr",
-      "ocessIdentifier\"d\n\016PutFileMessage\022\020\n\010fil" +
-      "epath\030\001 \002(\t\022@\n\016storingProcess\030\002 \001(\0132(.co" +
-      "mmunication.message.ProcessIdentifier\"k\n" +
-      "\025ReadyToPutFileMessage\022\020\n\010filepath\030\001 \002(\t" +
-      "\022@\n\016storingProcess\030\002 \001(\0132(.communication" +
-      ".message.ProcessIdentifier\"h\n\021DeleteFile" +
-      "Message\022\020\n\010filepath\030\001 \002(\t\022A\n\017deletingPro" +
-      "cess\030\002 \001(\0132(.communication.message.Proce" +
-      "ssIdentifier\"X\n\021ListenFromMessage\022C\n\021lis" +
-      "tenFromMachine\030\001 \002(\0132(.communication.mes",
-      "sage.ProcessIdentifier\"c\n\nGetMessage\022C\n\021" +
-      "requestingProcess\030\001 \002(\0132(.communication." +
-      "message.ProcessIdentifier\022\020\n\010fileName\030\002 " +
-      "\001(\t\"R\n\017ImMasterMessage\022?\n\rmasterProcess\030" +
-      "\001 \002(\0132(.communication.message.ProcessIde" +
-      "ntifier\"\177\n\014MapleMessage\022=\n\013fromMachine\030\001" +
-      " \002(\0132(.communication.message.ProcessIden" +
-      "tifier\022\016\n\006cmdExe\030\002 \001(\t\022\016\n\006prefix\030\003 \001(\t\022\020" +
-      "\n\010fileList\030\004 \003(\t\"t\n\022MapleResultMessage\022=" +
-      "\n\013fromMachine\030\001 \002(\0132(.communication.mess",
-      "age.ProcessIdentifier\022\020\n\010fileName\030\002 \001(\t\022" +
-      "\r\n\005value\030\003 \001(\t\"\215\t\n\007Message\0220\n\004type\030\001 \002(\016" +
-      "2\".communication.message.MessageType\0227\n\013" +
-      "joinMessage\030\002 \001(\0132\".communication.messag" +
-      "e.JoinMessage\0229\n\014leaveMessage\030\003 \001(\0132#.co" +
-      "mmunication.message.LeaveMessage\0227\n\013fail" +
-      "Message\030\004 \001(\0132\".communication.message.Fa" +
-      "ilMessage\022I\n\024syncProcessesMessage\030\005 \001(\0132" +
-      "+.communication.message.SyncProcessesMes" +
-      "sage\022E\n\020syncFilesMessage\030\006 \001(\0132+.communi",
-      "cation.message.SyncFilesListMessage\022A\n\020h" +
-      "eartBeatMessage\030\007 \001(\0132\'.communication.me" +
-      "ssage.HeartBeatMessage\022;\n\rsendToMessage\030" +
-      "\010 \001(\0132$.communication.message.SendToMess" +
-      "age\022<\n\nlistenFrom\030\t \001(\0132(.communication." +
-      "message.ListenFromMessage\022=\n\016getFileMess" +
-      "age\030\n \001(\0132%.communication.message.GetFil" +
-      "eMessage\022=\n\016putFileMessage\030\013 \001(\0132%.commu" +
-      "nication.message.PutFileMessage\022C\n\021delet" +
-      "eFileMessage\030\014 \001(\0132(.communication.messa",
-      "ge.DeleteFileMessage\022K\n\025readyToPutFileMe" +
-      "ssage\030\r \001(\0132,.communication.message.Read" +
-      "yToPutFileMessage\022K\n\025readyToGetFileMessa" +
-      "ge\030\016 \001(\0132,.communication.message.ReadyTo" +
-      "GetFileMessage\0225\n\ngetMessage\030\017 \001(\0132!.com" +
-      "munication.message.GetMessage\022=\n\rmasterM" +
-      "essage\030\020 \001(\0132&.communication.message.ImM" +
-      "asterMessage\0229\n\014mapleMessage\030\021 \001(\0132#.com" +
-      "munication.message.MapleMessage\022E\n\022maple" +
-      "ResultMessage\030\022 \001(\0132).communication.mess",
-      "age.MapleResultMessage*\353\001\n\013MessageType\022\r" +
-      "\n\tHeartbeat\020\000\022\010\n\004Join\020\001\022\010\n\004Fail\020\002\022\021\n\rSyn" +
-      "cProcesses\020\003\022\r\n\tSyncFiles\020\004\022\n\n\006SendTo\020\005\022" +
-      "\016\n\nListenFrom\020\006\022\013\n\007getFile\020\007\022\013\n\007putFile\020" +
-      "\010\022\016\n\ndeleteFile\020\t\022\016\n\nreadyToPut\020\n\022\016\n\nrea" +
-      "dyToGet\020\013\022\007\n\003get\020\014\022\014\n\010ImMaster\020\r\022\t\n\005mapl" +
-      "e\020\016\022\017\n\013mapleResult\020\017"
+      ".message.ProcessIdentifier\"\215\001\n\025ReadyToGe" +
+      "tFileMessage\0222\n\003fid\030\001 \002(\0132%.communicatio" +
+      "n.message.FileIdentifier\022@\n\016storingProce",
+      "ss\030\002 \001(\0132(.communication.message.Process" +
+      "Identifier\"\206\001\n\016PutFileMessage\0222\n\003fid\030\001 \002" +
+      "(\0132%.communication.message.FileIdentifie" +
+      "r\022@\n\016storingProcess\030\002 \001(\0132(.communicatio" +
+      "n.message.ProcessIdentifier\"k\n\025ReadyToPu" +
+      "tFileMessage\022\020\n\010filepath\030\001 \002(\t\022@\n\016storin" +
+      "gProcess\030\002 \001(\0132(.communication.message.P" +
+      "rocessIdentifier\"h\n\021DeleteFileMessage\022\020\n" +
+      "\010filepath\030\001 \002(\t\022A\n\017deletingProcess\030\002 \001(\013" +
+      "2(.communication.message.ProcessIdentifi",
+      "er\"X\n\021ListenFromMessage\022C\n\021listenFromMac" +
+      "hine\030\001 \002(\0132(.communication.message.Proce" +
+      "ssIdentifier\"c\n\nGetMessage\022C\n\021requesting" +
+      "Process\030\001 \002(\0132(.communication.message.Pr" +
+      "ocessIdentifier\022\020\n\010fileName\030\002 \001(\t\"R\n\017ImM" +
+      "asterMessage\022?\n\rmasterProcess\030\001 \002(\0132(.co" +
+      "mmunication.message.ProcessIdentifier\"\177\n" +
+      "\014MapleMessage\022=\n\013fromMachine\030\001 \002(\0132(.com" +
+      "munication.message.ProcessIdentifier\022\016\n\006" +
+      "cmdExe\030\002 \001(\t\022\016\n\006prefix\030\003 \001(\t\022\020\n\010fileList",
+      "\030\004 \003(\t\"t\n\022MapleResultMessage\022=\n\013fromMach" +
+      "ine\030\001 \002(\0132(.communication.message.Proces" +
+      "sIdentifier\022\020\n\010fileName\030\002 \001(\t\022\r\n\005value\030\003" +
+      " \001(\t\"\215\t\n\007Message\0220\n\004type\030\001 \002(\0162\".communi" +
+      "cation.message.MessageType\0227\n\013joinMessag" +
+      "e\030\002 \001(\0132\".communication.message.JoinMess" +
+      "age\0229\n\014leaveMessage\030\003 \001(\0132#.communicatio" +
+      "n.message.LeaveMessage\0227\n\013failMessage\030\004 " +
+      "\001(\0132\".communication.message.FailMessage\022" +
+      "I\n\024syncProcessesMessage\030\005 \001(\0132+.communic",
+      "ation.message.SyncProcessesMessage\022E\n\020sy" +
+      "ncFilesMessage\030\006 \001(\0132+.communication.mes" +
+      "sage.SyncFilesListMessage\022A\n\020heartBeatMe" +
+      "ssage\030\007 \001(\0132\'.communication.message.Hear" +
+      "tBeatMessage\022;\n\rsendToMessage\030\010 \001(\0132$.co" +
+      "mmunication.message.SendToMessage\022<\n\nlis" +
+      "tenFrom\030\t \001(\0132(.communication.message.Li" +
+      "stenFromMessage\022=\n\016getFileMessage\030\n \001(\0132" +
+      "%.communication.message.GetFileMessage\022=" +
+      "\n\016putFileMessage\030\013 \001(\0132%.communication.m",
+      "essage.PutFileMessage\022C\n\021deleteFileMessa" +
+      "ge\030\014 \001(\0132(.communication.message.DeleteF" +
+      "ileMessage\022K\n\025readyToPutFileMessage\030\r \001(" +
+      "\0132,.communication.message.ReadyToPutFile" +
+      "Message\022K\n\025readyToGetFileMessage\030\016 \001(\0132," +
+      ".communication.message.ReadyToGetFileMes" +
+      "sage\0225\n\ngetMessage\030\017 \001(\0132!.communication" +
+      ".message.GetMessage\022=\n\rmasterMessage\030\020 \001" +
+      "(\0132&.communication.message.ImMasterMessa" +
+      "ge\0229\n\014mapleMessage\030\021 \001(\0132#.communication",
+      ".message.MapleMessage\022E\n\022mapleResultMess" +
+      "age\030\022 \001(\0132).communication.message.MapleR" +
+      "esultMessage*\353\001\n\013MessageType\022\r\n\tHeartbea" +
+      "t\020\000\022\010\n\004Join\020\001\022\010\n\004Fail\020\002\022\021\n\rSyncProcesses" +
+      "\020\003\022\r\n\tSyncFiles\020\004\022\n\n\006SendTo\020\005\022\016\n\nListenF" +
+      "rom\020\006\022\013\n\007getFile\020\007\022\013\n\007putFile\020\010\022\016\n\ndelet" +
+      "eFile\020\t\022\016\n\nreadyToPut\020\n\022\016\n\nreadyToGet\020\013\022" +
+      "\007\n\003get\020\014\022\014\n\010ImMaster\020\r\022\t\n\005maple\020\016\022\017\n\013map" +
+      "leResult\020\017"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -13922,7 +14038,7 @@ public final class Messages {
           internal_static_communication_message_ReadyToGetFileMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_communication_message_ReadyToGetFileMessage_descriptor,
-              new java.lang.String[] { "Filepath", "StoringProcess", },
+              new java.lang.String[] { "Fid", "StoringProcess", },
               communication.message.Messages.ReadyToGetFileMessage.class,
               communication.message.Messages.ReadyToGetFileMessage.Builder.class);
           internal_static_communication_message_PutFileMessage_descriptor =
@@ -13930,7 +14046,7 @@ public final class Messages {
           internal_static_communication_message_PutFileMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_communication_message_PutFileMessage_descriptor,
-              new java.lang.String[] { "Filepath", "StoringProcess", },
+              new java.lang.String[] { "Fid", "StoringProcess", },
               communication.message.Messages.PutFileMessage.class,
               communication.message.Messages.PutFileMessage.Builder.class);
           internal_static_communication_message_ReadyToPutFileMessage_descriptor =

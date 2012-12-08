@@ -75,9 +75,9 @@ public class TCPFileServer {
         addMission(mission, identifier);
     }
 
-    public void prepareToGet(ProcessIdentifier identifier, String fileName) {
+    public void prepareToGet(ProcessIdentifier identifier, FileIdentifier fid) {
         FileMission mission = new FileMission(FileMission.MissionType.get);
-        mission.init(fileName);
+        mission.init(fid);
 
         addMission(mission, identifier);
     }
@@ -101,7 +101,8 @@ public class TCPFileServer {
             @Override
             public void run() {
                 String key = conn.readID();
-                FileMission mission = getMissionByKey(key);
+                String fileHeader = conn.readFileHeader();
+                FileMission mission = getMissionByKey(key, fileHeader);
 
                 long startTime = System.currentTimeMillis();
 
@@ -116,11 +117,17 @@ public class TCPFileServer {
         }).start();
     }
 
-    private FileMission getMissionByKey(String key) {
+    private FileMission getMissionByKey(String key, String fileHeader) {
         synchronized (this) {
             try {
                 LinkedList<FileMission> list = missions.get(key);
-                return list.pop();
+
+                for(FileMission fm : list) {
+                    if(fm.getFileHeader().equals(fileHeader)) {
+                        return fm;
+                    }
+                }
+                throw new NoSuchElementException("file header doesn't exist");
             } catch(NoSuchElementException e) {
                 logger.error("no such element in mission list " + e);
                 return null;
@@ -140,11 +147,11 @@ public class TCPFileServer {
 
     private void getFile(FileMission mission, TCPConnection conn) {
         FileIdentifier f = FileIdentifierFactory.generateFileIdentifier(
-                proc.getIdentifier(), mission.getFileName(), FileState.syncing);
+                proc.getIdentifier(), mission.getFileName(), FileState.syncing, mission.getLastTimeWrite());
         proc.getSDFS().addSyncEntryToFileList(f, proc.getTimeStamp());
         conn.readAndWriteToFile(mission.getFileName());
-        proc.getSDFS().addFileLocally(mission.getFileName(), mission.getFileName());
-
+//        proc.getSDFS().addFileLocally(mission.getFileName(), mission.getFileName());
+        proc.getSDFS().addAvailableEntryToFileList(f, proc.getTimeStamp());
         try {
             conn.close();
         } catch (IOException e) {

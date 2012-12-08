@@ -159,29 +159,32 @@ public class SDFS {
      * @param sourceFileName local file name
      */
     public void addFileLocally(String sourceFileName, String savedName) {
-        File file = new File(sourceFileName);
-        if(!file.exists()) {
-            return;
+        synchronized (this) {
+            File file = new File(sourceFileName);
+            if(!file.exists()) {
+                return;
+            }
+
+            FileIdentifier fileIdentifier = FileIdentifierFactory.generateFileIdentifier(
+                    proc.getIdentifier(), savedName, FileState.available);
+
+            copyFile(file, rootDirectory + savedName);
+            System.out.println("add available entry: " + file.getName() + ", " + proc.getTimeStamp());
+            addAvailableEntryToFileList(fileIdentifier, proc.getTimeStamp());
         }
-        System.out.println(sourceFileName +", " + savedName);
-
-        FileIdentifier fileIdentifier = FileIdentifierFactory.generateFileIdentifier(
-                proc.getIdentifier(), savedName, FileState.available);
-
-        copyFile(file, rootDirectory + savedName);
-        addAvailableEntryToFileList(fileIdentifier, proc.getTimeStamp());
     }
 
     public void loadFileFromRootDirectory(File file) {
+        synchronized (this) {
+            String fileName = file.getName();
+            FileIdentifier fileIdentifier = FileIdentifierFactory.generateFileIdentifier(
+                    proc.getIdentifier(), fileName, FileState.available);
 
-        String fileName = file.getName();
-        FileIdentifier fileIdentifier = FileIdentifierFactory.generateFileIdentifier(
-                proc.getIdentifier(), fileName, FileState.available);
+            copyFile(file, rootDirectory + fileName);
+            addAvailableEntryToFileList(fileIdentifier, proc.getTimeStamp());
 
-        copyFile(file, rootDirectory + fileName);
-        addAvailableEntryToFileList(fileIdentifier, proc.getTimeStamp());
-
-        addFileLocally(file.getName(), file.getName());
+            addFileLocally(file.getName(), file.getName());
+        }
     }
 
     private void copyFile(File sourceFile, String destination) {
@@ -236,13 +239,15 @@ public class SDFS {
         }
     }
 
-    public void addEntryToFileList(FileIdentifier fileIdentifier, Integer timeStamp, FileState state) {
+    public void
+    addEntryToFileList(FileIdentifier fileIdentifier, Integer timeStamp, FileState state) {
         synchronized (this) {
             fileList.addFile(fileIdentifier);
             String key = generateKey(fileIdentifier);
             timeStampMap.put(key, timeStamp);
             localTimeMap.put(key, TimeMachine.getTime());
             stateMap.put(key, state);
+            lastWriteTime.put(key, fileIdentifier.getLastWriteTime());
         }
     }
 
@@ -251,7 +256,7 @@ public class SDFS {
             if(fileList.find(fileIdentifier)!=-1){
                 return;
             }
-
+            System.out.println("add syncing: " + fileIdentifier.getFileName() + ", " + timeStamp);
             addEntryToFileList(fileIdentifier, timeStamp, FileState.syncing);
         }
     }

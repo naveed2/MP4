@@ -90,9 +90,9 @@ public class ReplicationManager {
         }
     }
 
-    public void createReplicas(Integer requiredReplicas, FileIdentifier identifier){
+    public void createReplicas(Integer requiredReplicas, FileIdentifier fid){
 
-        String fileName = identifier.getFileName();
+        String fileName = fid.getFileName();
 
         List<ProcessIdentifier> replicateTo = new ArrayList<ProcessIdentifier>(requiredReplicas);
 
@@ -101,9 +101,9 @@ public class ReplicationManager {
             if(!replicateTo.contains(randomProcess)
                     && notMySelf(randomProcess) && notStoredOnProcess(randomProcess, fileName)){
                 replicateTo.add(randomProcess);
-                new FileOperations().setProc(proc).sendPutMessage(fileName, randomProcess.getIP(), randomProcess.getPort());
+                new FileOperations().setProc(proc).sendPutMessage(fid, randomProcess.getIP(), randomProcess.getPort());
                 FileIdentifier f = FileIdentifierFactory.generateFileIdentifier
-                        (randomProcess, fileName, FileState.syncing, identifier.getLastWriteTime());
+                        (randomProcess, fileName, FileState.syncing, fid.getLastWriteTime());
                 proc.getSDFS().addSyncEntryToFileList(f, proc.getTimeStamp());
                 i++;
             }

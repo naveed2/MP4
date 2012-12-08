@@ -13,6 +13,7 @@ import misc.TimeMachine;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -156,6 +157,7 @@ public class MainEntry {
             Integer timeStamp;
             Long localTime;
             FileState fileState;
+            Long lastWriteTime;
 
             if(isMySelf(identifier)) {
                 address = "127.0.0.1:" + proc.getTcpPort();
@@ -168,8 +170,16 @@ public class MainEntry {
                 localTime = proc.getSDFS().getFileLocalTime(fileIdentifier);
             }
             fileState = proc.getSDFS().getFileState(fileIdentifier);
+            lastWriteTime = proc.getSDFS().getLastWriteTime(fileIdentifier);
+//            SimpleDateFormat sdf = new SimpleDateFormat();
+//            sdf.applyPattern("yyyy-mm-dd hh:mm:ss");
             System.out.println(
-                    fileIdentifier.getFileName() + '\t' + address + '\t' + timeStamp + '\t' + localTime + '\t' +fileState);
+                    fileIdentifier.getFileName() +
+                            '\t' + address +
+                            '\t' + timeStamp +
+                            '\t' + localTime +
+                            '\t' +fileState +
+                            '\t' + lastWriteTime);
         }
     }
 

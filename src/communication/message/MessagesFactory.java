@@ -1,6 +1,7 @@
 package communication.message;
 
 import communication.FileIdentifierFactory;
+import filesystem.FileState;
 import filesystem.SDFS;
 import membership.MemberList;
 import membership.ProcState;
@@ -121,9 +122,12 @@ public class MessagesFactory {
     }
 
     //    this method generates message which is used when process wants to put file.
-    public static Message generatePutFileMessage(String SDFSfilepath, ProcessIdentifier storingProcess){
+    public static Message generatePutFileMessage(String SDFSFileName, FileState fileState, Long lastWriteTime,
+                                                 ProcessIdentifier storingProcess){
+        FileIdentifier fid = FileIdentifierFactory.generateFileIdentifier(
+                storingProcess, SDFSFileName, fileState, lastWriteTime);
         PutFileMessage putFileMessage = PutFileMessage.newBuilder()
-                .setFilepath(SDFSfilepath)
+                .setFid(fid)
                 .setStoringProcess(storingProcess).build();
 
         return Message.newBuilder()
@@ -151,9 +155,9 @@ public class MessagesFactory {
     }
 
     // this method is used to generate messages that are send by the remote process when local process sends get request
-    public static Message generateReadyToGetFileMessage(String SDFSfilename, ProcessIdentifier storingProcess){
+    public static Message generateReadyToGetFileMessage(FileIdentifier fid, ProcessIdentifier storingProcess){
         ReadyToGetFileMessage readytoGetFileMessage = ReadyToGetFileMessage.newBuilder()
-                .setFilepath(SDFSfilename)
+                .setFid(fid)
                 .setStoringProcess(storingProcess).build();
 
         return Message.newBuilder()

@@ -20,21 +20,23 @@ public class FileOperations {
         sendGetMessage(SDFSFilename, processHavingFile_IP, processHavingFile_port);
     }
 
-    public void put(String SDFSFilename, String localFilename, ProcessIdentifier storingProcessID){
-        sendPutMessage(SDFSFilename, storingProcessID.getIP(), storingProcessID.getPort());
-        //TODO code for sending file
-    }
+//    public void put(String SDFSFilename, String localFilename, ProcessIdentifier storingProcessID){
+//        sendPutMessage(SDFSFilename, storingProcessID.getIP(), storingProcessID.getPort());
+//        TODO code for sending file
+//    }
 
     public void delete(String SDFSFilename, ProcessIdentifier storingProcessID){
         sendDeleteMessage(SDFSFilename, storingProcessID.getIP(), storingProcessID.getPort());
     }
 
-    public void sendPutMessage(String SDFSFilename, String processStroingFile_IP, int processStoringFile_port){
+    public void sendPutMessage(FileIdentifier fid, String processStroingFile_IP, int processStoringFile_port){
+        String fileName = fid.getFileName();
         String address = processStroingFile_IP + ":" + Integer.toString(processStoringFile_port);
         TCPClient tcpClient = new TCPClient(address);
         tcpClient.setProc(proc);
         if(tcpClient.connect()){
-            Message m = MessagesFactory.generatePutFileMessage(SDFSFilename, proc.getIdentifier());
+            Message m = MessagesFactory.generatePutFileMessage(
+                    fileName, proc.getSDFS().getFileState(fid), proc.getSDFS().getLastWriteTime(fid),proc.getIdentifier());
             tcpClient.sendData(m);
             tcpClient.close();
         }
