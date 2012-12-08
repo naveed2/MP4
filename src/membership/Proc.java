@@ -5,6 +5,7 @@ import communication.*;
 import filesystem.FileListScanning;
 import filesystem.ReplicationManager;
 import filesystem.SDFS;
+import filesystem.UpdateManager;
 import misc.MiscTool;
 import misc.TimeMachine;
 import org.apache.log4j.Logger;
@@ -37,6 +38,7 @@ public class Proc {
     private SDFS SDFileSystem;
 
     private ReplicationManager replicationManager;
+    private UpdateManager updateManager;
 
     private Logger logger = Logger.getLogger(Proc.class);
     private Integer timeStamp;
@@ -105,6 +107,7 @@ public class Proc {
         initFileListScan();
 
         initReplicaManger();
+        initUpdateManager();
 
         initMultiCast();
 
@@ -173,6 +176,12 @@ public class Proc {
         replicationManager = new ReplicationManager();
         replicationManager.setProc(this);
         replicationManager.start();
+    }
+
+    private void initUpdateManager() {
+        updateManager = new UpdateManager();
+        updateManager.setProc(this);
+        updateManager.start();
     }
 
     public void initTCPServer() {

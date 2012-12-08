@@ -13,11 +13,9 @@ import misc.TimeMachine;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static communication.message.Messages.*;
 
@@ -171,15 +169,16 @@ public class MainEntry {
             }
             fileState = proc.getSDFS().getFileState(fileIdentifier);
             lastWriteTime = proc.getSDFS().getLastWriteTime(fileIdentifier);
-//            SimpleDateFormat sdf = new SimpleDateFormat();
-//            sdf.applyPattern("yyyy-mm-dd hh:mm:ss");
+            Date date = new Date(lastWriteTime);
+            SimpleDateFormat sdf = new SimpleDateFormat();
+            sdf.applyPattern("yyyy-mm-dd hh:mm:ss");
             System.out.println(
                     fileIdentifier.getFileName() +
                             '\t' + address +
                             '\t' + timeStamp +
                             '\t' + localTime +
                             '\t' +fileState +
-                            '\t' + lastWriteTime);
+                            '\t' + sdf.format(date));
         }
     }
 

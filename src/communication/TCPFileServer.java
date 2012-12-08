@@ -69,17 +69,21 @@ public class TCPFileServer {
     }
 
     public void prepareToSend(ProcessIdentifier identifier, String fileName) {
-        FileMission mission = new FileMission(FileMission.MissionType.send);
-        mission.init(fileName);
+        synchronized (this) {
+            FileMission mission = new FileMission(FileMission.MissionType.send);
+            mission.init(fileName);
 
-        addMission(mission, identifier);
+            addMission(mission, identifier);
+        }
     }
 
     public void prepareToGet(ProcessIdentifier identifier, FileIdentifier fid) {
-        FileMission mission = new FileMission(FileMission.MissionType.get);
-        mission.init(fid);
+        synchronized (this) {
+            FileMission mission = new FileMission(FileMission.MissionType.get);
+            mission.init(fid);
 
-        addMission(mission, identifier);
+            addMission(mission, identifier);
+        }
     }
 
     private void addMission(FileMission mission, ProcessIdentifier identifier) {
@@ -123,10 +127,12 @@ public class TCPFileServer {
                 LinkedList<FileMission> list = missions.get(key);
 
                 for(FileMission fm : list) {
+                    System.out.println(fm.getFileName() + ", " + fm.getFileHeader());
                     if(fm.getFileHeader().equals(fileHeader)) {
                         return fm;
                     }
                 }
+                System.out.println("wrong fileHeader: " + fileHeader);
                 throw new NoSuchElementException("file header doesn't exist");
             } catch(NoSuchElementException e) {
                 logger.error("no such element in mission list " + e);

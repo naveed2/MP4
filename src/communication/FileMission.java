@@ -23,6 +23,7 @@ public class FileMission {
     public void init(String fileName) {
         this.fileName = fileName;
         Integer hashCode = fileName.hashCode();
+        hashCode = Math.abs(hashCode);
         this.fileHeader = String.format("%010d", hashCode);
     }
 

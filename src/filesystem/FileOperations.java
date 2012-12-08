@@ -29,9 +29,9 @@ public class FileOperations {
         sendDeleteMessage(SDFSFilename, storingProcessID.getIP(), storingProcessID.getPort());
     }
 
-    public void sendPutMessage(FileIdentifier fid, String processStroingFile_IP, int processStoringFile_port){
+    public void sendPutMessage(FileIdentifier fid, String remoteIP, int remotePort){
         String fileName = fid.getFileName();
-        String address = processStroingFile_IP + ":" + Integer.toString(processStoringFile_port);
+        String address = remoteIP + ":" + Integer.toString(remotePort);
         TCPClient tcpClient = new TCPClient(address);
         tcpClient.setProc(proc);
         if(tcpClient.connect()){

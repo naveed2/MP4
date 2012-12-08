@@ -3,6 +3,7 @@ package filesystem;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import communication.message.Messages;
 import communication.message.Messages.FileIdentifier;
 
 //This class is used to implement filelist
@@ -59,6 +60,18 @@ public class FileList implements Iterable<FileIdentifier> {
                 }
             }
             return -1;
+        }
+    }
+
+    public FileIdentifier find(Messages.ProcessIdentifier pid, String fileName) {
+        synchronized (this) {
+            for (FileIdentifier cur : fileList) {
+                if (pid.getId().equals(cur.getFileStoringProcess().getId()) &&
+                        fileName.equals(cur.getFileName())) {
+                    return cur;
+                }
+            }
+            return null;
         }
     }
 

@@ -352,7 +352,8 @@ public class TCPConnection {
 
             case mapleResult:
                 MapleResultMessage mapleResultMessage = m.getMapleResultMessage();
-
+                aggregateMapleResult(mapleResultMessage);
+                break;
             default:
                 break;
         }
@@ -371,8 +372,7 @@ public class TCPConnection {
             if(!proc.getSDFS().hasSDFSFile(fileName)) {
                 proc.getSDFS().createSDFSFile(fileName);
             }
-
-
+            proc.getSDFS().appendDataToLocalFile(fileName, value);
         }
     }
 
@@ -393,6 +393,7 @@ public class TCPConnection {
             if(tcpClient.connect()){
                 tcpClient.sendData(proc.getId());
                 Integer hashCode = file.getName().hashCode();
+                hashCode = Math.abs(hashCode);
                 String fileHeader = String.format("%010d", hashCode);
                 tcpClient.sendData(fileHeader);
                 BufferedInputStream bis = new BufferedInputStream(in);
@@ -420,6 +421,7 @@ public class TCPConnection {
         if(tcpClient.connect()){
             tcpClient.sendData(proc.getId());
             Integer hashCode = readyToGetFileMessage.getFid().getFileName().hashCode();
+            hashCode = Math.abs(hashCode);
             String fileHeader = String.format("%010d", hashCode);
             tcpClient.sendData(fileHeader);
             tcpClient.receiveAndSaveData(readyToGetFileMessage.getFid().getFileName());

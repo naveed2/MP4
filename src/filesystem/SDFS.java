@@ -11,9 +11,7 @@ import org.apache.log4j.Logger;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 import static communication.message.Messages.*;
 
@@ -438,11 +436,23 @@ public class SDFS {
         return fileList.hasFile(fileName);
     }
 
+    public void updateLastWriteTime(String fileName, ProcessIdentifier pid, Long time) {
+        synchronized (this) {
+            FileIdentifier fid = fileList.find(pid, fileName);
+            String key = generateKey(fid);
+            lastWriteTime.put(key, time);
+        }
+    }
+
+
     public boolean appendDataToLocalFile(String fileName, String data) {
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName, true));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(rootDirectory + fileName, true));
             bw.write(data);
+            bw.write('\n');
             bw.close();
+            updateLastWriteTime(fileName, proc.getIdentifier(), new Date().getTime());
+
         } catch (IOException e) {
             logger.error("error in appending data to local file ", e);
             return false;
