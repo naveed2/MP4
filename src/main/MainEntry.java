@@ -5,7 +5,7 @@ import communication.message.Messages;
 import communication.message.MessagesFactory;
 import communication.TCPClient;
 import filesystem.FileState;
-import maplereduce.MapleForMaster;
+import maplejuice.MapleForMaster;
 import membership.Proc;
 import membership.ProcState;
 import misc.MiscTool;
@@ -13,7 +13,6 @@ import misc.TimeMachine;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
 import java.util.*;
 

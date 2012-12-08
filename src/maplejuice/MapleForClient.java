@@ -1,10 +1,7 @@
-package maplereduce;
+package maplejuice;
 
 import communication.MultiCast;
-import communication.TCPConnection;
-import communication.message.Messages;
 import communication.message.MessagesFactory;
-import membership.PIDComparator;
 import membership.Proc;
 import misc.MiscTool;
 import org.apache.log4j.Logger;
@@ -14,7 +11,6 @@ import java.util.*;
 
 import static communication.message.Messages.MapleMessage;
 import static communication.message.Messages.Message;
-import static communication.message.Messages.ProcessIdentifier;
 
 public class MapleForClient {
 
@@ -49,6 +45,7 @@ public class MapleForClient {
         final List<String> command = new LinkedList<String>();
         command.add("./" + cmdExe);
         for(String file: inputFileList) {
+            proc.getSDFS().getRemoteFile(file, file);
             command.add(file);
         }
 

@@ -4,7 +4,7 @@ import communication.message.Messages;
 import communication.message.MessagesFactory;
 import filesystem.FileState;
 import filesystem.SDFS;
-import maplereduce.MapleForClient;
+import maplejuice.MapleForClient;
 import membership.Proc;
 import misc.MiscTool;
 import org.apache.log4j.Logger;

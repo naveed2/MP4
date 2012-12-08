@@ -1,4 +1,4 @@
-package maplereduce;
+package maplejuice;
 
 import communication.MultiCast;
 import communication.ProcessIdentifierFactory;
