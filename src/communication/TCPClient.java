@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
+import static communication.message.Messages.ProcessIdentifier;
+
 public class TCPClient {
 
     private String remoteIP;
@@ -27,13 +29,17 @@ public class TCPClient {
         remotePort = Integer.parseInt(str[1]);
     }
 
+    public TCPClient(ProcessIdentifier pid) {
+        this(pid.getIP() +":" + pid.getPort());
+    }
+
 //    this method set parameters for the remote host
     public TCPClient(String remoteIP, Integer remotePort) {
         this.remoteIP = remoteIP;
         this.remotePort = remotePort;
     }
 
-//  this method conencts to the remote host
+//  this method connects to the remote host
     public boolean connect() {
         try {
             Socket socket = new Socket(remoteIP, remotePort);

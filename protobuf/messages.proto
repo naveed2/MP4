@@ -30,6 +30,7 @@ enum MessageType{
 
     //added for mp4
     ImMaster = 13;
+    maple = 14;
 }
 
 message HeartBeatMessage {
@@ -102,6 +103,13 @@ message ImMasterMessage {
     required ProcessIdentifier masterProcess = 1;
 }
 
+message MapleMessage {
+    required ProcessIdentifier targetMachine = 1;
+    optional string cmdExe = 2;
+    optional string prefix = 3;
+    repeated string fileList = 4;
+}
+
 message Message{
     required MessageType type = 1;
     optional JoinMessage joinMessage = 2;
@@ -119,6 +127,7 @@ message Message{
     optional ReadyToGetFileMessage readyToGetFileMessage = 14;
     optional GetMessage getMessage = 15;
     optional ImMasterMessage masterMessage = 16;
+    optional MapleMessage mapleMessage = 17;
 }
 
 

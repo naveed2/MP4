@@ -319,7 +319,12 @@ public class TCPConnection {
             case ImMaster:
                 ImMasterMessage masterMessage = m.getMasterMessage();
                 setMaster(masterMessage.getMasterProcess());
+                break;
 
+            case maple:
+                MapleMessage mapleMessage = m.getMapleMessage();
+
+                break;
             default:
                 break;
         }

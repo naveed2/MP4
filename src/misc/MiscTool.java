@@ -126,4 +126,12 @@ public class MiscTool {
     public static boolean isTheSameIdentifier(ProcessIdentifier p1, ProcessIdentifier p2) {
         return p1.getId().equals(p2.getId());
     }
+
+    public static void sleep(Integer ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            //do nothing
+        }
+    }
 }

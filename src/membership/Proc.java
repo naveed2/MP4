@@ -108,6 +108,29 @@ public class Proc {
 
         initMultiCast();
 
+        //TODO: this is for debug
+        initTestFailureListeners();
+    }
+
+    private void initTestFailureListeners() {
+        AbstractProcFailureListener testListener = new AbstractProcFailureListener(-1) {
+            @Override
+            public void run(ProcessIdentifier pid) {
+                System.out.println("detecting a failure, this is test failure listeners");
+            }
+        };
+        getMemberList().registerFailureListener(testListener);
+
+        AbstractProcFailureListener testListener2 = new AbstractProcFailureListener(-1) {
+            @Override
+            public void run(ProcessIdentifier pid) {
+                System.out.println("This sentence shouldn't appear in the screen");
+            }
+        };
+        getMemberList().registerFailureListener(testListener2);
+        getMemberList().unregisterFailureListener(testListener2);
+
+
     }
 
     public void stop() {

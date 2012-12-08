@@ -7,6 +7,8 @@ import membership.MemberList;
 import membership.ProcState;
 import misc.MiscTool;
 
+import java.util.List;
+
 import static communication.message.Messages.*;
 
 public class MessagesFactory {
@@ -174,6 +176,21 @@ public class MessagesFactory {
         return Message.newBuilder()
                 .setType(MessageType.ImMaster)
                 .setMasterMessage(masterMessage).build();
+    }
+
+    public static Message generateMapleMessage(ProcessIdentifier targetMachine, String cmdExe, String prefix, List<String> fileList) {
+        MapleMessage.Builder mapleMessageBuilder = MapleMessage.newBuilder()
+                .setTargetMachine(targetMachine)
+                .setCmdExe(cmdExe).setPrefix(prefix);
+        for(String file : fileList) {
+            mapleMessageBuilder.addFileList(file);
+        }
+
+        MapleMessage mapleMessage = mapleMessageBuilder.build();
+
+        return Message.newBuilder()
+                .setType(MessageType.maple)
+                .setMapleMessage(mapleMessage).build();
     }
 
 

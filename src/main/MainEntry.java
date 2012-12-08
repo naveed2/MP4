@@ -5,6 +5,7 @@ import communication.message.Messages;
 import communication.message.MessagesFactory;
 import communication.TCPClient;
 import filesystem.FileState;
+import maplereduce.MapleForMaster;
 import membership.Proc;
 import membership.ProcState;
 import misc.MiscTool;
@@ -12,6 +13,8 @@ import misc.TimeMachine;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 import static communication.message.Messages.*;
@@ -203,6 +206,19 @@ public class MainEntry {
         long usingTime = System.currentTimeMillis() - startTime;
 
         logger.info("Get command uses " + usingTime + " ms");
+    }
+
+    private static void maple() {
+        String mapleExe = args[1];
+        String prefix = args[2];
+        List<String> files = new LinkedList<String>();
+        for(int i=2; i<args.length; ++i) {
+            files.add(args[i]);
+        }
+
+        MapleForMaster maple = new MapleForMaster();
+        maple.setProc(proc);
+
     }
 
     /**

@@ -39,6 +39,9 @@ public class CommandMap {
     private static final String CMD_DEL = "del";
     private static final String FUNC_DEL = "deleteFile";
 
+    private static final String CMD_MAPLE = "maple";
+    private static final String FUNC_MAPLE = "maple";
+
     /*---------Those commands below are used for debug----------*/
     private static final String CMD_MASTER = "master";
     private static final String FUNC_MASTER = "masterNotification";

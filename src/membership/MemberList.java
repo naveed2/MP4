@@ -19,10 +19,13 @@ public class MemberList implements Iterable<ProcessIdentifier>{
 
     private Proc proc;
 
+    private List<AbstractProcFailureListener> failureListeners;
+
     public MemberList() {
         list = new LinkedList<ProcessIdentifier>();
         stateMap = new HashMap<String, ProcState>();
         timeMap = new HashMap<String, Long>();
+        failureListeners = new LinkedList<AbstractProcFailureListener>();
     }
 
     public Integer remove(ProcessIdentifier processIdentifier){
@@ -32,6 +35,7 @@ public class MemberList implements Iterable<ProcessIdentifier>{
                 list.remove(pos);
                 stateMap.remove(processIdentifier.getId());
                 timeMap.remove(processIdentifier.getId());
+                triggerListener(processIdentifier);
                 return pos;
             } else {
                 return -1;
@@ -180,4 +184,26 @@ public class MemberList implements Iterable<ProcessIdentifier>{
     public void setProc(Proc proc) {
         this.proc = proc;
     }
+
+    public void registerFailureListener(AbstractProcFailureListener listener) {
+        failureListeners.add(listener);
+    }
+
+    public void triggerListener(ProcessIdentifier pid) {
+        synchronized (this) {
+            List<AbstractProcFailureListener> listeners =
+                    new LinkedList<AbstractProcFailureListener>(failureListeners);
+            for(AbstractProcFailureListener listener : listeners) {
+                listener.apply(pid);
+                if(listener.canRemove()) {
+                    failureListeners.remove(listener);
+                }
+            }
+        }
+    }
+
+    public void unregisterFailureListener(AbstractProcFailureListener listener) {
+        failureListeners.remove(listener);
+    }
+
 }
