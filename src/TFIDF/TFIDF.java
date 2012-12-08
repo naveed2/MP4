@@ -1,4 +1,4 @@
-package TFIDF;
+//package TFIDF;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,34 +13,37 @@ import java.util.ArrayList;
 public class TFIDF {
 
     private ArrayList<String> keyValuePairs;
-//    private File TFIDFOutputFile;
+    private String outputFile;
     private File inputFile;
 
-    public TFIDF(String filepath){
-        inputFile = getFile(filepath);
+    public TFIDF(String inputFile, String outputFile){
+        this.inputFile = getFile(inputFile);
+        this.outputFile = outputFile;
+    }
+
+    public static void main(String[] args){
+
+        //String inputFile = "/Users/naveed/Desktop/Courses/CS425/MP4/src/TFIDF/sampleFile.txt";
+        //String outputFile = "/Users/naveed/Desktop/Courses/CS425/MP4/src/TFIDF/1";
+        String inputFile = args[0]; String outputFile = args[1];
+        TFIDF tf = new TFIDF(inputFile, outputFile);
+        tf.writeTFIDF();
     }
 
     public File getFile(String filepath){
         return new File(filepath);
     }
 
-    public void write(String string){
-        BufferedWriter bufferedWriter = null;
-
-        try {
-            bufferedWriter = new BufferedWriter(new FileWriter("TFIDFOutputFile"));
-            bufferedWriter.write(string + '\n');
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-
-    }
-
     public void writeTFIDF(){
 
         getKeyValuePairs(inputFile);
+        BufferedWriter bufferedWriter = null;
 
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(outputFile));
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         for(String pair:keyValuePairs){
             String doc = getKey(pair); String word = getValue(pair);
             Double tfidf = computeWordTFIDF(
@@ -48,13 +51,20 @@ public class TFIDF {
                     getTotalWordCountInDoc(doc),
                     getDocCountInCorpus(word));
 
-            System.out.println(pair + tfidf.toString());
-            System.out.println(getSingleWordCountInDoc(pair) + " " +
-                    getTotalWordCountInDoc(doc) + " " +
-                    getDocCountInCorpus(word));
-            //System.out.println(getKey(pair) + " " + getValue(pair));
+            System.out.println(pair + " " + tfidf.toString());
 
-            write(pair + tfidf.toString());
+            try {
+                bufferedWriter.write( pair + "," + tfidf.toString() + '\n');
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+        }
+
+        try {
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
     }
