@@ -25,8 +25,7 @@ public class MultiCast {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    String remoteAddress = procID.getIP() + ":" + procID.getPort();
-                    TCPClient tcpClient = new TCPClient(remoteAddress);
+                    TCPClient tcpClient = new TCPClient(procID);
                     tcpClient.setProc(proc);
                     if(tcpClient.connect()) {
                         tcpClient.sendData(m);

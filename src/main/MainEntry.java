@@ -13,6 +13,7 @@ import misc.TimeMachine;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -189,7 +190,7 @@ public class MainEntry {
      * command of delete file
      */
     private static void deleteFile() {
-        proc.getSDFS().deleteFile(args[1],true);
+        proc.getSDFS().deleteFile(args[1], true);
     }
 
     /**
@@ -209,15 +210,15 @@ public class MainEntry {
     }
 
     private static void maple() {
-        String mapleExe = args[1];
+        String cmdExe = args[1];
         String prefix = args[2];
         List<String> files = new LinkedList<String>();
-        for(int i=2; i<args.length; ++i) {
-            files.add(args[i]);
-        }
+        files.addAll(Arrays.asList(args).subList(3, args.length));
 
         MapleForMaster maple = new MapleForMaster();
         maple.setProc(proc);
+
+        maple.run(cmdExe, prefix, files);
 
     }
 

@@ -2,6 +2,8 @@ package misc;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import communication.message.Messages;
+import membership.PIDComparator;
+import membership.Proc;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -9,7 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Scanner;
+import java.util.*;
 
 import static communication.message.Messages.ProcessIdentifier;
 
@@ -112,17 +114,6 @@ public class MiscTool {
         os.close();
     }
 
-    public static void main(String[] args) throws InvalidProtocolBufferException {
-        ProcessIdentifier identifier = ProcessIdentifier.newBuilder()
-                .setId("1").setIP("127.0.0.1").setPort(1234).build();
-        Messages.JoinMessage joinMessage = Messages.JoinMessage.newBuilder().setJoinedMachine(identifier).build();
-        Messages.Message m1 = Messages.Message.newBuilder().
-                setType(Messages.MessageType.Join).setJoinMessage(joinMessage).build();
-
-        Messages.Message m2 = Messages.Message.parseFrom(m1.toByteArray());
-        System.out.println(m2.toString());
-    }
-
     public static boolean isTheSameIdentifier(ProcessIdentifier p1, ProcessIdentifier p2) {
         return p1.getId().equals(p2.getId());
     }
@@ -133,5 +124,46 @@ public class MiscTool {
         } catch (InterruptedException e) {
             //do nothing
         }
+    }
+
+    public static boolean requireToCreateFile(Proc proc, String fileName) {
+
+        List<ProcessIdentifier> procIds = new LinkedList<ProcessIdentifier>(proc.getMemberList().getList());
+
+        Collections.sort(procIds, new PIDComparator());
+
+        Integer numProcs = procIds.size();
+        Integer position = findPosition(procIds, proc.getIdentifier());
+
+        int fileHashCode = fileName.hashCode() % numProcs;
+        if(fileHashCode<0) fileHashCode += numProcs;
+
+        System.out.println(
+                String.format("(fileName, numProcs, hashCode) = (%s, %s, %s)\n", fileName, numProcs, fileHashCode));
+        return fileHashCode == position;
+    }
+
+    public static Integer findPosition(List<ProcessIdentifier> procIds, ProcessIdentifier pid) {
+        Integer pos=0;
+        for(ProcessIdentifier procId : procIds) {
+            if(procId.getId().equals(pid.getId())) {
+                return pos;
+            }
+            ++pos;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) throws InvalidProtocolBufferException {
+//        ProcessIdentifier identifier = ProcessIdentifier.newBuilder()
+//                .setId("1").setIP("127.0.0.1").setPort(1234).build();
+//        Messages.JoinMessage joinMessage = Messages.JoinMessage.newBuilder().setJoinedMachine(identifier).build();
+//        Messages.Message m1 = Messages.Message.newBuilder().
+//                setType(Messages.MessageType.Join).setJoinMessage(joinMessage).build();
+//
+//        Messages.Message m2 = Messages.Message.parseFrom(m1.toByteArray());
+//        System.out.println(m2.toString());
+        Date date = new Date();
+        System.out.println(date.getTime());
     }
 }

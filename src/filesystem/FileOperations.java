@@ -14,7 +14,7 @@ public class FileOperations {
     private static int localClientPort;
 
     public void get(String localFilename, String SDFSFilename, FileList fileList){
-        FileIdentifier requiredFileID =  fileList.getFileLocation(SDFSFilename);
+        FileIdentifier requiredFileID =  fileList.getFileIdentifier(SDFSFilename);
         String processHavingFile_IP = requiredFileID.getFileStoringProcess().getIP();
         int processHavingFile_port = requiredFileID.getFileStoringProcess().getPort();
         sendGetMessage(SDFSFilename, processHavingFile_IP, processHavingFile_port);

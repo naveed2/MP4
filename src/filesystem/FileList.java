@@ -35,7 +35,7 @@ public class FileList implements Iterable<FileIdentifier> {
         return this;
     }
 
-    public FileIdentifier getFileLocation(String filename){
+    public FileIdentifier getFileIdentifier(String filename){
         for( FileIdentifier f : this.fileList) {
             if(f.getFileName().equals(filename))
                 return f;

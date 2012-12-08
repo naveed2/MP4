@@ -1,7 +1,6 @@
 package communication.message;
 
 import communication.FileIdentifierFactory;
-import communication.message.Messages;
 import filesystem.SDFS;
 import membership.MemberList;
 import membership.ProcState;
@@ -73,7 +72,7 @@ public class MessagesFactory {
 
             FileIdentifier newFileIdentifier = FileIdentifierFactory.generateFileIdentifier(
                     fileIdentifier.getFileStoringProcess(), fileIdentifier.getFileName(),
-                    sdfs.getFileState(fileIdentifier)
+                    sdfs.getFileState(fileIdentifier), sdfs.getLastWriteTime(fileIdentifier)
             );
 
             if(fileIdentifier.getFileStoringProcess().getId().equals(syncMachine.getId())) {
@@ -178,9 +177,9 @@ public class MessagesFactory {
                 .setMasterMessage(masterMessage).build();
     }
 
-    public static Message generateMapleMessage(ProcessIdentifier targetMachine, String cmdExe, String prefix, List<String> fileList) {
+    public static Message generateMapleMessage(ProcessIdentifier fromMachine, String cmdExe, String prefix, List<String> fileList) {
         MapleMessage.Builder mapleMessageBuilder = MapleMessage.newBuilder()
-                .setTargetMachine(targetMachine)
+                .setFromMachine(fromMachine)
                 .setCmdExe(cmdExe).setPrefix(prefix);
         for(String file : fileList) {
             mapleMessageBuilder.addFileList(file);
@@ -191,6 +190,15 @@ public class MessagesFactory {
         return Message.newBuilder()
                 .setType(MessageType.maple)
                 .setMapleMessage(mapleMessage).build();
+    }
+
+    public static Message generateMapleResultMessage(ProcessIdentifier fromMachine, String fileName, String value) {
+        MapleResultMessage mapleResult = MapleResultMessage.newBuilder()
+                .setFromMachine(fromMachine)
+                .setFileName(fileName).setValue(value).build();
+        return Message.newBuilder()
+                .setType(MessageType.mapleResult)
+                .setMapleResultMessage(mapleResult).build();
     }
 
 

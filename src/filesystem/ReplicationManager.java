@@ -102,7 +102,8 @@ public class ReplicationManager {
                     && notMySelf(randomProcess) && notStoredOnProcess(randomProcess, fileName)){
                 replicateTo.add(randomProcess);
                 new FileOperations().setProc(proc).sendPutMessage(fileName, randomProcess.getIP(), randomProcess.getPort());
-                FileIdentifier f = FileIdentifierFactory.generateFileIdentifier(randomProcess, fileName, FileState.syncing);
+                FileIdentifier f = FileIdentifierFactory.generateFileIdentifier
+                        (randomProcess, fileName, FileState.syncing, identifier.getLastWriteTime());
                 proc.getSDFS().addSyncEntryToFileList(f, proc.getTimeStamp());
                 i++;
             }
@@ -113,9 +114,10 @@ public class ReplicationManager {
         return ! identifier.getId().equals(proc.getId());
     }
 
-    private boolean notStoredOnProcess(ProcessIdentifier identifier, String filePath) {
-        FileIdentifier fileIdentifier = FileIdentifierFactory.generateFileIdentifier(identifier, filePath, FileState.available);
-        return proc.getSDFS().getFileList().find(fileIdentifier) == -1;
+    private boolean notStoredOnProcess(ProcessIdentifier identifier, String fileName) {
+//        FileIdentifier fileIdentifier = FileIdentifierFactory.generateFileIdentifier(identifier, fileName, FileState.available);
+//        return proc.getSDFS().getFileList().find(fileIdentifier) == -1;
+        return ! proc.getSDFS().isStoredOnProcess(identifier, fileName);
     }
 
     public ProcessIdentifier selectRandomProcess(){

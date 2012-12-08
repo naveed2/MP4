@@ -2,6 +2,9 @@ package communication;
 
 import filesystem.FileState;
 
+import javax.xml.crypto.Data;
+import java.util.Date;
+
 import static communication.message.Messages.*;
 
 
@@ -12,7 +15,13 @@ public class FileIdentifierFactory {
     }
 
     public static FileIdentifier generateFileIdentifier(ProcessIdentifier identifier, String fileName, FileState fileState) {
+        return generateFileIdentifier(identifier, fileName, fileState, new Date().getTime());
+    }
+
+    public static FileIdentifier generateFileIdentifier(ProcessIdentifier identifier, String fileName,
+                                                        FileState fileState, long lastWriteTime) {
         return FileIdentifier.newBuilder().
-                setFileName(fileName).setFileStoringProcess(identifier).setFileState(fileState.toString()).build();
+                setFileName(fileName).setFileStoringProcess(identifier).
+                setFileState(fileState.toString()).setLastWriteTime(lastWriteTime).build();
     }
 }

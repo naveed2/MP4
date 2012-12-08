@@ -4,6 +4,7 @@ import communication.message.Messages;
 import communication.message.MessagesFactory;
 import filesystem.FileState;
 import filesystem.SDFS;
+import maplereduce.MapleForClient;
 import membership.Proc;
 import misc.MiscTool;
 import org.apache.log4j.Logger;
@@ -323,10 +324,32 @@ public class TCPConnection {
 
             case maple:
                 MapleMessage mapleMessage = m.getMapleMessage();
-
+                doMapleJob(mapleMessage);
                 break;
+
+            case mapleResult:
+                MapleResultMessage mapleResultMessage = m.getMapleResultMessage();
+
             default:
                 break;
+        }
+    }
+
+    private void doMapleJob(MapleMessage mapleMessage) {
+        MapleForClient maple = new MapleForClient();
+        maple.setProc(proc).setMapleMessage(mapleMessage).init();
+        maple.doMaple();
+    }
+
+    private void aggregateMapleResult(MapleResultMessage mapleResult) {
+        String fileName = mapleResult.getFileName();
+        String value = mapleResult.getValue();
+        if(MiscTool.requireToCreateFile(proc, fileName)) {
+            if(!proc.getSDFS().hasSDFSFile(fileName)) {
+                proc.getSDFS().createSDFSFile(fileName);
+            }
+
+
         }
     }
 

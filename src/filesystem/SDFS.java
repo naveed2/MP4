@@ -28,6 +28,7 @@ public class SDFS {
     private Map<String, Integer> timeStampMap;
     private Map<String, Long> localTimeMap;
     private Map<String, FileState> stateMap;
+    private Map<String, Long> lastWriteTime;
 
     private static Logger logger = Logger.getLogger(SDFS.class);
     private String rootDirectory;
@@ -40,6 +41,7 @@ public class SDFS {
         timeStampMap = new HashMap<String, Integer>();  //heartbeat counting of file
         localTimeMap = new HashMap<String, Long>(); //localtime of file
         stateMap = new HashMap<String, FileState>();    // file state
+        lastWriteTime = new HashMap<String, Long>();
         this.rootDirectory = rootDirectory;
     }
 
@@ -66,7 +68,7 @@ public class SDFS {
             return;
         }
         for(File f : files) {
-            addFileLocally(f);
+            loadFileFromRootDirectory(f);
         }
     }
 
@@ -170,7 +172,7 @@ public class SDFS {
         addAvailableEntryToFileList(fileIdentifier, proc.getTimeStamp());
     }
 
-    public void addFileLocally(File file) {
+    public void loadFileFromRootDirectory(File file) {
 
         String fileName = file.getName();
         FileIdentifier fileIdentifier = FileIdentifierFactory.generateFileIdentifier(
@@ -178,6 +180,8 @@ public class SDFS {
 
         copyFile(file, rootDirectory + fileName);
         addAvailableEntryToFileList(fileIdentifier, proc.getTimeStamp());
+
+        addFileLocally(file.getName(), file.getName());
     }
 
     private void copyFile(File sourceFile, String destination) {
@@ -266,6 +270,11 @@ public class SDFS {
     public FileState getFileState(FileIdentifier fileIdentifier) {
         String key =generateKey(fileIdentifier);
         return stateMap.get(key);
+    }
+
+    public Long getLastWriteTime(FileIdentifier fileIdentifier) {
+        String key = generateKey(fileIdentifier);
+        return lastWriteTime.get(key);
     }
 
     public Long getFileLocalTime(FileIdentifier fileIdentifier) {
@@ -402,7 +411,7 @@ public class SDFS {
         File newFile = openFile(fileName);
         try {
             if(newFile.createNewFile()) {
-                addFileLocally(newFile);
+                loadFileFromRootDirectory(newFile);
             }
         } catch (IOException e) {
             logger.error("create sdfs file fail " + e);
@@ -411,7 +420,28 @@ public class SDFS {
         return true;
     }
 
+    public boolean isStoredOnProcess(ProcessIdentifier pid, String fileName) {
+        for(FileIdentifier fid : fileList) {
+            if(fid.getFileName().equals(fileName) && fid.getFileStoringProcess().equals(pid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean hasSDFSFile(String fileName) {
         return fileList.hasFile(fileName);
+    }
+
+    public boolean appendDataToLocalFile(String fileName, String data) {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName, true));
+            bw.write(data);
+            bw.close();
+        } catch (IOException e) {
+            logger.error("error in appending data to local file ", e);
+            return false;
+        }
+        return true;
     }
 }

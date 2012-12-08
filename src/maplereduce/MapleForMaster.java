@@ -111,8 +111,9 @@ public class MapleForMaster {
 
     public void sendMapleMessageToProc(ProcessIdentifier pid, List<String> fileList) {
         Message mapleMessage =
-                MessagesFactory.generateMapleMessage(pid,cmdExe, filePrefix, fileList);
+                MessagesFactory.generateMapleMessage(proc.getIdentifier(),cmdExe, filePrefix, fileList);
         TCPClient client = new TCPClient(pid);
+        client.setProc(proc);
         if(client.connect()) {
             client.sendData(mapleMessage);
             client.close();
