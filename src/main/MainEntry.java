@@ -14,6 +14,7 @@ import misc.TimeMachine;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -221,8 +222,23 @@ public class MainEntry {
     private static void maple() {
         String cmdExe = args[1];
         String prefix = args[2];
+
         List<String> files = new LinkedList<String>();
-        files.addAll(Arrays.asList(args).subList(3, args.length));
+        if(!args[3].contains("*")) {
+            files.addAll(Arrays.asList(args).subList(3, args.length));
+        } else {
+            args[3] = "^" + args[3].replace("*", ".*") + "$";
+            File root = new File(proc.getSDFS().getRootDirectory());
+            File[] filesInRoot = root.listFiles();
+            if(filesInRoot == null) {
+                return;
+            }
+            for(File file : filesInRoot) {
+                if(file.getName().matches(args[3])) {
+                    files.add(file.getName());
+                }
+            }
+        }
 
         MapleForMaster maple = new MapleForMaster();
         maple.setProc(proc);

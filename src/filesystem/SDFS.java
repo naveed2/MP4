@@ -472,4 +472,8 @@ public class SDFS {
         }
         return true;
     }
+
+    public String getRootDirectory() {
+        return rootDirectory;
+    }
 }

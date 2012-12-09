@@ -171,17 +171,9 @@ public class MiscTool {
     }
 
     public static void main(String[] args) throws InvalidProtocolBufferException {
-//        ProcessIdentifier identifier = ProcessIdentifier.newBuilder()
-//                .setId("1").setIP("127.0.0.1").setPort(1234).build();
-//        Messages.JoinMessage joinMessage = Messages.JoinMessage.newBuilder().setJoinedMachine(identifier).build();
-//        Messages.Message m1 = Messages.Message.newBuilder().
-//                setType(Messages.MessageType.Join).setJoinMessage(joinMessage).build();
-//
-//        Messages.Message m2 = Messages.Message.parseFrom(m1.toByteArray());
-//        System.out.println(m2.toString());
-        Integer hashCode = 23;
-        String str = String.format("%010d", hashCode);
-        System.out.println(str);
+        String regex = "^.*$";
+        String str = "124";
+        System.out.println(str.matches(regex));
     }
 
 
