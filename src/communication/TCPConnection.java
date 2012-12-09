@@ -354,9 +354,18 @@ public class TCPConnection {
                 MapleResultMessage mapleResultMessage = m.getMapleResultMessage();
                 aggregateMapleResult(mapleResultMessage);
                 break;
+
+            case juice:
+                JuiceMessage juiceMessage = m.getJuiceMessage();
+                doJuiceJob(juiceMessage);
+                break;
             default:
                 break;
         }
+    }
+
+    private void doJuiceJob(JuiceMessage juiceMessage) {
+
     }
 
     private void doMapleJob(MapleMessage mapleMessage) {

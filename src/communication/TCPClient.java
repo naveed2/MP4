@@ -90,10 +90,11 @@ public class TCPClient {
         sendData(m.toByteArray());
     }
 
-    public void setProc(Proc proc) {
+    public TCPClient setProc(Proc proc) {
         if(proc == null) {
             throw new NullPointerException("null argument!");
         }
         this.proc = proc;
+        return  this;
     }
 }

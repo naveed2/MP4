@@ -205,6 +205,22 @@ public class MessagesFactory {
                 .setMapleResultMessage(mapleResult).build();
     }
 
+    public static Message generateJuiceMessage(ProcessIdentifier fromMachine, String cmdExe, String destFileName,
+                                               List<String> fileList) {
+        JuiceMessage.Builder juiceMessageBuilder = JuiceMessage.newBuilder()
+                .setFromMachine(fromMachine)
+                .setCmdExe(cmdExe).setDestFileName(destFileName);
+        for(String file : fileList) {
+            juiceMessageBuilder.addFileList(file);
+        }
+
+        JuiceMessage juiceMessage = juiceMessageBuilder.build();
+
+        return Message.newBuilder()
+                .setType(MessageType.juice)
+                .setJuiceMessage(juiceMessage).build();
+    }
+
 
 
 }

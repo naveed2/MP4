@@ -33,6 +33,7 @@ enum MessageType{
     ImMaster = 13;
     maple = 14;
     mapleResult = 15;
+    juice = 16;
 }
 
 message HeartBeatMessage {
@@ -118,6 +119,13 @@ message MapleResultMessage {
     optional string value = 3;
 }
 
+message JuiceMessage {
+    required ProcessIdentifier fromMachine = 1;
+    optional string cmdExe = 2;
+    optional string destFileName = 3;
+    repeated string fileList = 4;
+}
+
 message Message{
     required MessageType type = 1;
     optional JoinMessage joinMessage = 2;
@@ -134,9 +142,12 @@ message Message{
     optional ReadyToPutFileMessage readyToPutFileMessage = 13;
     optional ReadyToGetFileMessage readyToGetFileMessage = 14;
     optional GetMessage getMessage = 15;
+
+    //for mp4
     optional ImMasterMessage masterMessage = 16;
     optional MapleMessage mapleMessage = 17;
     optional MapleResultMessage mapleResultMessage = 18;
+    optional JuiceMessage juiceMessage = 19;
 }
 
 
