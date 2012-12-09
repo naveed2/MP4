@@ -1,1 +1,1 @@
-sort -r -t"," -k3 -n $1 | head -$2
+sort -t"," -k3 -n $1 | head -$2
