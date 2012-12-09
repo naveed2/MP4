@@ -69,7 +69,10 @@ public class MapleForClient {
 
             String strLine;
             while((strLine = reader.readLine()) != null) {
-                String[] pair=strLine.split(",");
+//                String[] pair=strLine.split(",");
+                String[] pair = new String[2];
+                int commaPos = strLine.indexOf(",");
+                pair[0] = strLine.substring(0, commaPos);
                 //TODO: need to solve special characters right here
                 mapleResult.put(pair[0], strLine);
 //                System.out.println(pair[0]+ ", " + pair[1]);

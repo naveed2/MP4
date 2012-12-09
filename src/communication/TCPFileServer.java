@@ -113,7 +113,7 @@ public class TCPFileServer {
                 if(mission.isGetMission()) {
                     getFile(mission, conn);
                     float usingTime = System.currentTimeMillis() - startTime;
-                    logger.info("Replicate " + mission.getFileName() + " uses " + usingTime + " ms");
+//                    logger.info("Replicate " + mission.getFileName() + " uses " + usingTime + " ms");
                 } else {    //send mission
                     sendFile(mission, conn);
                 }
@@ -131,7 +131,7 @@ public class TCPFileServer {
                         return fm;
                     }
                 }
-                System.out.println("wrong fileHeader: " + fileHeader);
+                logger.error("wrong fileHeader: " + fileHeader);
                 throw new NoSuchElementException("file header doesn't exist");
             } catch(NoSuchElementException e) {
                 logger.error("no such element in mission list " + e);

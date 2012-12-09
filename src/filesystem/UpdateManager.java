@@ -73,11 +73,12 @@ public class UpdateManager {
             if(remoteFileMap.containsKey(fileName)) {
                 FileIdentifier remoteFid = remoteFileMap.get(fileName);
                 if(proc.getSDFS().getLastWriteTime(remoteFid) < proc.getSDFS().getLastWriteTime(fid)) {
-                    System.out.println("need to update remote file: " +
-                            remoteFid.getFileStoringProcess().getIP()+":"+remoteFid.getFileStoringProcess().getPort()
-                            + "/" + remoteFid.getFileName());
-                    System.out.println("remote: " + proc.getSDFS().getLastWriteTime(remoteFid));
-                    System.out.println("local: " + proc.getSDFS().getLastWriteTime(fid));
+//                    System.out.println("need to update remote file: " +
+//                            remoteFid.getFileStoringProcess().getIP()+":"+remoteFid.getFileStoringProcess().getPort()
+//                            + "/" + remoteFid.getFileName());
+//                    System.out.println("remote: " + proc.getSDFS().getLastWriteTime(remoteFid));
+//                    System.out.println("local: " + proc.getSDFS().getLastWriteTime(fid));
+                    
                     new FileOperations().setProc(proc).sendPutMessage(
                             fid, remoteFid.getFileStoringProcess().getIP(), remoteFid.getFileStoringProcess().getPort());
                     proc.getSDFS().updateLastWriteTime(fileName, remoteFid.getFileStoringProcess(),

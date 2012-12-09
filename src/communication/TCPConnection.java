@@ -67,7 +67,7 @@ public class TCPConnection {
                 byte[] bytes = new byte[num];
                 System.arraycopy(tmpBytes, 0, bytes, 0, num);
                 Message message = Message.parseFrom(bytes);
-                logger.info("Received Message: " + message.toString() + ", size: " + message.toByteArray().length);
+//                logger.info("Received Message: " + message.toString() + ", size: " + message.toByteArray().length);
                 handle(message);
             } catch(IOException e) {
                 if(e.getMessage().equals("socket close")) {
