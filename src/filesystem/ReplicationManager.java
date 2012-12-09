@@ -17,8 +17,8 @@ public class ReplicationManager {
     private AtomicBoolean shouldStop;
     private Thread sleepThread;
 
-//    private static final Integer SCAN_INTERVAL = 35000; //scanning interval
-    private static final Integer SCAN_INTERVAL = 99999999; //scanning interval
+    private static final Integer SCAN_INTERVAL = 35000; //scanning interval
+//    private static final Integer SCAN_INTERVAL = 99999999; //scanning interval
     private static final Integer REPLICA_COUNT = 2;     //how many replicas each file should have, this is a constant
 
     public ReplicationManager(){
