@@ -6,6 +6,9 @@ import filesystem.FileListScanning;
 import filesystem.ReplicationManager;
 import filesystem.SDFS;
 import filesystem.UpdateManager;
+import maplejuice.JuiceForMaster;
+import maplejuice.MapleForClient;
+import maplejuice.MapleForMaster;
 import misc.MiscTool;
 import misc.TimeMachine;
 import org.apache.log4j.Logger;
@@ -39,6 +42,11 @@ public class Proc {
 
     private ReplicationManager replicationManager;
     private UpdateManager updateManager;
+
+    private MapleForMaster mapleMaster;
+    private MapleForClient mapleClient;
+
+    private JuiceForMaster juiceMaster;
 
     private Logger logger = Logger.getLogger(Proc.class);
     private Integer timeStamp;
@@ -169,7 +177,7 @@ public class Proc {
     private void initFileListScan() {
         fileListScanning = new FileListScanning();
         fileListScanning.setProc(this);
-        fileListScanning.startScan();
+//        fileListScanning.startScan();
     }
 
     private void initReplicaManger(){
@@ -298,6 +306,24 @@ public class Proc {
             master = masterProcess;
         }
         return this;
+    }
+
+    public Proc setMapleMaster(MapleForMaster mapleMaster) {
+        this.mapleMaster = mapleMaster;
+        return this;
+    }
+
+    public Proc setMapleClient(MapleForClient mapleClient) {
+        this.mapleClient = mapleClient;
+        return this;
+    }
+
+    public MapleForMaster getMapleMaster() {
+        return mapleMaster;
+    }
+
+    public MapleForClient getMapleClient() {
+        return mapleClient;
     }
 
 }
