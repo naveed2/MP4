@@ -370,7 +370,7 @@ public class TCPConnection {
         String value = mapleResult.getValue();
         if(MiscTool.requireToCreateFile(proc, fileName)) {
             if(!proc.getSDFS().hasSDFSFile(fileName)) {
-                proc.getSDFS().createSDFSFile(fileName);
+                proc.getSDFS().createLocalSDFSFile(fileName);
             }
             proc.getSDFS().appendDataToLocalFile(fileName, value);
         }

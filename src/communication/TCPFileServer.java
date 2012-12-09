@@ -127,7 +127,6 @@ public class TCPFileServer {
                 LinkedList<FileMission> list = missions.get(key);
 
                 for(FileMission fm : list) {
-                    System.out.println(fm.getFileName() + ", " + fm.getFileHeader());
                     if(fm.getFileHeader().equals(fileHeader)) {
                         return fm;
                     }

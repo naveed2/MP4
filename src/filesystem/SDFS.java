@@ -3,6 +3,7 @@ package filesystem;
 import communication.FileIdentifierFactory;
 import communication.message.MessagesFactory;
 import communication.TCPClient;
+import main.MainEntry;
 import membership.Proc;
 import misc.MiscTool;
 import misc.TimeMachine;
@@ -178,10 +179,10 @@ public class SDFS {
             FileIdentifier fileIdentifier = FileIdentifierFactory.generateFileIdentifier(
                     proc.getIdentifier(), fileName, FileState.available);
 
-            copyFile(file, rootDirectory + fileName);
+//            copyFile(file, rootDirectory + fileName);
             addAvailableEntryToFileList(fileIdentifier, proc.getTimeStamp());
 
-            addFileLocally(file.getName(), file.getName());
+//            addFileLocally(file.getName(), file.getName());
         }
     }
 
@@ -352,6 +353,7 @@ public class SDFS {
                 return;
             }
             stateMap.put(key, newState);
+            lastWriteTime.put(key, identifier.getLastWriteTime());
         }
     }
 
@@ -410,10 +412,10 @@ public class SDFS {
         System.out.println("Del uses time " + usingTime + " seconds");
     }
 
-    public boolean createSDFSFile(String fileName) {
+    public boolean createLocalSDFSFile(String fileName) {
         File newFile = openFile(fileName);
         try {
-            if(newFile.createNewFile()) {
+            if(!newFile.exists() && newFile.createNewFile()) {
                 loadFileFromRootDirectory(newFile);
             }
         } catch (IOException e) {
@@ -439,8 +441,19 @@ public class SDFS {
     public void updateLastWriteTime(String fileName, ProcessIdentifier pid, Long time) {
         synchronized (this) {
             FileIdentifier fid = fileList.find(pid, fileName);
-            String key = generateKey(fid);
-            lastWriteTime.put(key, time);
+            try {
+                String key = generateKey(fid);
+                lastWriteTime.put(key, time);
+            } catch (NullPointerException ex) {
+                System.out.println("fileName = " + fileName);
+                System.out.println("Process = " + pid.getId() + ":" + pid.getPort());
+
+                for(FileIdentifier tmpfid : proc.getSDFS().getFileList()) {
+                    System.out.println(tmpfid.getFileName() + "\t" + tmpfid.getFileStoringProcess().getIP()
+                        + ":" + tmpfid.getFileStoringProcess().getPort());
+                }
+
+            }
         }
     }
 

@@ -240,7 +240,7 @@ public class MainEntry {
 
     private static void createFile() {
         String arg = args[1];
-        proc.getSDFS().createSDFSFile(arg);
+        proc.getSDFS().createLocalSDFSFile(arg);
     }
 
     private static boolean isMySelf(ProcessIdentifier identifier) {

@@ -1,6 +1,7 @@
 package misc;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.sun.corba.se.spi.protocol.LocalClientRequestDispatcher;
 import communication.message.Messages;
 import membership.PIDComparator;
 import membership.Proc;
@@ -12,6 +13,8 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static communication.message.Messages.ProcessIdentifier;
 
@@ -126,21 +129,28 @@ public class MiscTool {
         }
     }
 
+    private static Lock lock = new ReentrantLock();
+
     public static boolean requireToCreateFile(Proc proc, String fileName) {
 
-        List<ProcessIdentifier> procIds = new LinkedList<ProcessIdentifier>(proc.getMemberList().getList());
+        lock.lock();
+        try {
+            List<ProcessIdentifier> procIds = new LinkedList<ProcessIdentifier>(proc.getMemberList().getList());
 
-        Collections.sort(procIds, new PIDComparator());
+            Collections.sort(procIds, new PIDComparator());
 
-        Integer numProcs = procIds.size();
-        Integer position = findPosition(procIds, proc.getIdentifier());
+            Integer numProcs = procIds.size();
+            Integer position = findPosition(procIds, proc.getIdentifier());
 
-        int fileHashCode = fileName.hashCode() % numProcs;
-        if(fileHashCode<0) fileHashCode += numProcs;
+            int fileHashCode = fileName.hashCode() % numProcs;
+            if(fileHashCode<0) fileHashCode += numProcs;
 
-        System.out.println(
-                String.format("(fileName, numProcs, hashCode) = (%s, %s, %s)\n", fileName, numProcs, fileHashCode));
-        return fileHashCode == position;
+    //        System.out.println(
+    //                String.format("(fileName, numProcs, hashCode) = (%s, %s, %s)\n", fileName, numProcs, fileHashCode));
+            return fileHashCode == position || fileHashCode == (position+1) % numProcs;
+        } finally {
+            lock.unlock();
+        }
     }
 
     public static Integer findPosition(List<ProcessIdentifier> procIds, ProcessIdentifier pid) {

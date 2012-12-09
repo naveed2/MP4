@@ -2,6 +2,7 @@ package filesystem;
 
 import communication.message.Messages;
 import membership.Proc;
+import misc.MiscTool;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,10 +56,13 @@ public class UpdateManager {
             if(fid.getFileStoringProcess().getId().equals(proc.getId())) {
                 localFIds.add(fid);
             } else {
+                if(MiscTool.requireToCreateFile(proc, fid.getFileName())) {
+                    continue;
+                }
                 String fileName = fid.getFileName();
                 if(remoteFileMap.containsKey(fileName)) {
-                    Long lastTime = remoteFileMap.get(fileName).getLastWriteTime();
-                    if(fid.getLastWriteTime() > lastTime) {
+                    Long lastTime = proc.getSDFS().getLastWriteTime(remoteFileMap.get(fileName));
+                    if(proc.getSDFS().getLastWriteTime(fid) > lastTime) {
                         remoteFileMap.put(fid.getFileName(), fid);
                     }
                 } else {
@@ -71,9 +75,16 @@ public class UpdateManager {
             String fileName = fid.getFileName();
             if(remoteFileMap.containsKey(fileName)) {
                 FileIdentifier remoteFid = remoteFileMap.get(fileName);
-                if(remoteFid.getLastWriteTime() < fid.getLastWriteTime()) {
+                if(proc.getSDFS().getLastWriteTime(remoteFid) < proc.getSDFS().getLastWriteTime(fid)) {
+                    System.out.println("need to update remote file: " +
+                            remoteFid.getFileStoringProcess().getIP()+":"+remoteFid.getFileStoringProcess().getPort()
+                            + "/" + remoteFid.getFileName());
+                    System.out.println("remote: " + proc.getSDFS().getLastWriteTime(remoteFid));
+                    System.out.println("local: " + proc.getSDFS().getLastWriteTime(fid));
                     new FileOperations().setProc(proc).sendPutMessage(
                             fid, remoteFid.getFileStoringProcess().getIP(), remoteFid.getFileStoringProcess().getPort());
+                    proc.getSDFS().updateLastWriteTime(fileName, remoteFid.getFileStoringProcess(),
+                            proc.getSDFS().getLastWriteTime(fid));
                 }
             }
         }
