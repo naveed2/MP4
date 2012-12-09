@@ -111,7 +111,7 @@ public class JuiceForMaster {
     private List<FileIdentifier> getInputFiles(Proc proc, String prefix) {
         Set<String> fileNames = new HashSet<String>();
         List<FileIdentifier> res = new LinkedList<FileIdentifier>();
-        for(FileIdentifier fid : proc.getSDFS().getFileList()) {
+        for(FileIdentifier fid : proc.getSDFS().getFileList().getList()) {
             if(fid.getFileName().startsWith(prefix + "_") && !fileNames.contains(fid.getFileName())) {
                 fileNames.add(fid.getFileName());
                 res.add(fid);

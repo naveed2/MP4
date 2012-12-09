@@ -460,13 +460,14 @@ public class SDFS {
                 String key = generateKey(fid);
                 lastWriteTime.put(key, time);
             } catch (NullPointerException ex) {
-                System.out.println("fileName = " + fileName);
-                System.out.println("Process = " + pid.getId() + ":" + pid.getPort());
-
-                for(FileIdentifier tmpfid : proc.getSDFS().getFileList()) {
-                    System.out.println(tmpfid.getFileName() + "\t" + tmpfid.getFileStoringProcess().getIP()
-                        + ":" + tmpfid.getFileStoringProcess().getPort());
-                }
+                logger.error("not found file to update last write time");
+//                System.out.println("fileName = " + fileName);
+//                System.out.println("Process = " + pid.getId() + ":" + pid.getPort());
+//
+//                for(FileIdentifier tmpfid : proc.getSDFS().getFileList()) {
+//                    System.out.println(tmpfid.getFileName() + "\t" + tmpfid.getFileStoringProcess().getIP()
+//                        + ":" + tmpfid.getFileStoringProcess().getPort());
+//                }
 
             }
         }

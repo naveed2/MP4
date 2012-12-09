@@ -108,8 +108,6 @@ public class TCPConnection {
             byte[] bytes = new byte[10];    // 10 is the length of file header
             Integer numberOfBytes = is.read(bytes, 0, 10);
             if(numberOfBytes != 10) {
-                System.out.println(Arrays.toString(bytes));
-                System.out.println(numberOfBytes);
                 throw new IOException("input stream format error");
             }
 

@@ -66,7 +66,8 @@ public class FileList implements Iterable<FileIdentifier> {
 
     public FileIdentifier find(Messages.ProcessIdentifier pid, String fileName) {
         synchronized (this) {
-            for (FileIdentifier cur : fileList) {
+            List<FileIdentifier> list = new LinkedList<FileIdentifier>(fileList);
+            for (FileIdentifier cur : list) {
                 if (pid.getId().equals(cur.getFileStoringProcess().getId()) &&
                         fileName.equals(cur.getFileName())) {
                     return cur;
