@@ -1,4 +1,4 @@
-//package TFIDF;
+package TFIDF;
 
 import java.io.*;
 import java.util.ArrayList;

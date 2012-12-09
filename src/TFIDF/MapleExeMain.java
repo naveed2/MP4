@@ -1,4 +1,4 @@
-//package TFIDF;
+package TFIDF;
 
 public class MapleExeMain {
 
