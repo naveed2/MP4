@@ -53,13 +53,14 @@ public class UpdateManager {
             if(fid.getFileStoringProcess().getId().equals(proc.getId())) {
                 localFIds.add(fid);
             } else {
-                if(MiscTool.requireToCreateFile(proc.getMemberList(), fid.getFileStoringProcess(), fid.getFileName())) {
-                    continue;
-                }
+//                if(MiscTool.requireToCreateFile(proc.getMemberList().getList(), fid.getFileStoringProcess(), fid.getFileName())) {
+//                    continue;
+//                }
                 String fileName = fid.getFileName();
                 if(remoteFileMap.containsKey(fileName)) {
                     Long lastTime = proc.getSDFS().getLastWriteTime(remoteFileMap.get(fileName));
-                    if(proc.getSDFS().getLastWriteTime(fid) > lastTime) {
+//                    if(proc.getSDFS().getLastWriteTime(fid) > lastTime) {
+                    if(Math.abs(proc.getSDFS().getLastWriteTime(fid) - lastTime) > 200) {
                         remoteFileMap.put(fid.getFileName(), fid);
                     }
                 } else {

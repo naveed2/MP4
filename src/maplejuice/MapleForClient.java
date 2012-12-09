@@ -1,6 +1,8 @@
 package maplejuice;
 
 import communication.MultiCast;
+import communication.TCPClient;
+import communication.message.Messages;
 import communication.message.MessagesFactory;
 import membership.Proc;
 import misc.MiscTool;
@@ -11,6 +13,7 @@ import java.util.*;
 
 import static communication.message.Messages.MapleMessage;
 import static communication.message.Messages.Message;
+import static communication.message.Messages.ProcessIdentifier;
 
 public class MapleForClient {
 
@@ -19,9 +22,11 @@ public class MapleForClient {
     private Proc proc;
 
     private MapleMessage mapleMessage;
+    private ProcessIdentifier master;
     private String cmdExe;
     private String preFix;
     private List<String> inputFileList;
+    private List<ProcessIdentifier> pidList;
 
 
     private Map<String, String> mapleResult;
@@ -39,6 +44,20 @@ public class MapleForClient {
         cmdExe = mapleMessage.getCmdExe();
         preFix = mapleMessage.getPrefix();
         inputFileList = mapleMessage.getFileListList();
+        pidList = mapleMessage.getMachinesList();
+        master = mapleMessage.getFromMachine();
+
+        System.out.println("Received maple command: " + cmdExe + ", " + preFix + ", " + inputFileList);
+
+        sendReceivedMapleMessage(master);
+    }
+
+    private void sendReceivedMapleMessage(ProcessIdentifier master) {
+        TCPClient tcpClient = new TCPClient(master).setProc(proc);
+        if(tcpClient.connect()) {
+            tcpClient.sendData(MessagesFactory.generateReceivedMapleMessage(proc.getIdentifier()));
+            tcpClient.close();
+        }
     }
 
     public void doMaple() {
@@ -90,7 +109,7 @@ public class MapleForClient {
         for(Map.Entry<String, String> result : mapleResult.entrySet()) {
             String key = result.getKey();
             String fileName = preFix + "_" + key;
-            if(MiscTool.requireToCreateFile(proc.getMemberList(), proc.getIdentifier(), fileName)) {
+            if(MiscTool.requireToCreateFile(pidList, proc.getIdentifier(), fileName)) {
                 proc.getSDFS().createLocalSDFSFile(fileName);
 //                createFile(fileName);
             }
@@ -121,7 +140,9 @@ public class MapleForClient {
         return this;
     }
 
-
+    public List<ProcessIdentifier> getPidList() {
+        return pidList;
+    }
 
 
     public static void main(String[] args) throws IOException {

@@ -147,7 +147,7 @@ public class MainEntry {
      * command of show file list
      */
     private static void showFileList() {
-        for(FileIdentifier fileIdentifier : proc.getSDFS().getFileList()) {
+        for(FileIdentifier fileIdentifier : proc.getSDFS().getFileList().getList()) {
             ProcessIdentifier identifier = fileIdentifier.getFileStoringProcess();
             if(!proc.getSDFS().isValid(fileIdentifier)) {
                 continue;
@@ -242,6 +242,7 @@ public class MainEntry {
 
         MapleForMaster maple = new MapleForMaster();
         maple.setProc(proc);
+        proc.setMapleMaster(maple);
 
         maple.run(cmdExe, prefix, files);
 

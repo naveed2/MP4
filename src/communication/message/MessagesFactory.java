@@ -181,10 +181,14 @@ public class MessagesFactory {
                 .setMasterMessage(masterMessage).build();
     }
 
-    public static Message generateMapleMessage(ProcessIdentifier fromMachine, String cmdExe, String prefix, List<String> fileList) {
+    public static Message generateMapleMessage(ProcessIdentifier fromMachine, List<ProcessIdentifier> pidList, String cmdExe, String prefix, List<String> fileList) {
         MapleMessage.Builder mapleMessageBuilder = MapleMessage.newBuilder()
                 .setFromMachine(fromMachine)
                 .setCmdExe(cmdExe).setPrefix(prefix);
+        for(ProcessIdentifier pid: pidList) {
+            mapleMessageBuilder.addMachines(pid);
+        }
+
         for(String file : fileList) {
             mapleMessageBuilder.addFileList(file);
         }
@@ -194,6 +198,18 @@ public class MessagesFactory {
         return Message.newBuilder()
                 .setType(MessageType.maple)
                 .setMapleMessage(mapleMessage).build();
+    }
+
+    public static Message generateReceivedMapleMessage(ProcessIdentifier fromMachine) {
+        return Message.newBuilder()
+                .setType(MessageType.receivedMaple)
+                .setReceivedMapleMessage(ReceivedMapleMessage.newBuilder().setFromMachine(fromMachine).build()).build();
+    }
+
+    public static Message generateDoMapleMessage(ProcessIdentifier fromMachine) {
+        return Message.newBuilder()
+                .setType(MessageType.doMaple)
+                .setDoMapleMessage(DoMapleMessage.newBuilder().setFromMachine(fromMachine).build()).build();
     }
 
     public static Message generateMapleResultMessage(ProcessIdentifier fromMachine, String fileName, String value) {

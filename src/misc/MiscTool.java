@@ -132,16 +132,16 @@ public class MiscTool {
 
     private static Lock lock = new ReentrantLock();
 
-    public static boolean requireToCreateFile(MemberList memberList, ProcessIdentifier pid, String fileName) {
-        return requireToCreateFile(memberList, pid, fileName,  memberList.getList().size());
+    public static boolean requireToCreateFile(List<ProcessIdentifier> pidList, ProcessIdentifier pid, String fileName) {
+        return requireToCreateFile(pidList, pid, fileName, pidList.size());
     }
 
     public static boolean requireToCreateFile(
-            MemberList memberList, ProcessIdentifier pid, String fileName, Integer numJuice) {
+            List<ProcessIdentifier> pidList, ProcessIdentifier pid, String fileName, Integer numJuice) {
 
         lock.lock();
         try {
-            List<ProcessIdentifier> procIds = new LinkedList<ProcessIdentifier>(memberList.getList());
+            List<ProcessIdentifier> procIds = new LinkedList<ProcessIdentifier>(pidList);
 
             Collections.sort(procIds, new PIDComparator());
 

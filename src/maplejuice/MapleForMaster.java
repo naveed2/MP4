@@ -111,7 +111,7 @@ public class MapleForMaster {
 
     public void sendMapleMessageToProc(ProcessIdentifier pid, List<String> fileList) {
         Message mapleMessage =
-                MessagesFactory.generateMapleMessage(proc.getIdentifier(),cmdExe, filePrefix, fileList);
+                MessagesFactory.generateMapleMessage(proc.getIdentifier(), proc.getMemberList().getList(),cmdExe, filePrefix, fileList);
         TCPClient client = new TCPClient(pid);
         client.setProc(proc);
         if(client.connect()) {
@@ -187,5 +187,28 @@ public class MapleForMaster {
         System.out.println(maple.assignedFiles);
     }
 
+    private Integer received = 0;
+    public void onReceived() {
+        synchronized (this) {
+            received++;
+            if(received == procIDs.size()) {
+                sendDoMapleMessage();
+            }
+        }
+    }
+
+    private void sendDoMapleMessage() {
+        for(final ProcessIdentifier pid : procIDs) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    TCPClient tcpClient = new TCPClient(pid).setProc(proc);
+                    if(tcpClient.connect()) {
+                        tcpClient.sendData(MessagesFactory.generateDoMapleMessage(proc.getIdentifier()));
+                    }
+                }
+            }).start();
+        }
+    }
 
 }

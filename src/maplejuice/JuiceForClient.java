@@ -92,7 +92,7 @@ public class JuiceForClient {
     private void saveResults() {
         for(Map.Entry<String, String> result : juiceResult.entrySet()) {
 
-            if(MiscTool.requireToCreateFile(proc.getMemberList(), proc.getIdentifier(), destFileName, numJuice)) {
+            if(MiscTool.requireToCreateFile(proc.getMemberList().getList(), proc.getIdentifier(), destFileName, numJuice)) {
                 proc.getSDFS().createLocalSDFSFile(destFileName);
             }
 
