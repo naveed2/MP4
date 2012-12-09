@@ -76,7 +76,10 @@ public class JuiceForClient {
 
             String strLine;
             while((strLine = br.readLine()) != null) {
-                String[] pair = strLine.split(",");
+                String[] pair = new String[2];
+                int commaPos = strLine.indexOf(",");
+                pair[0] = strLine.substring(0, commaPos);
+                pair[1] = strLine.substring(commaPos+1, strLine.length());
                 juiceResult.put(pair[0], pair[1]);
             }
 
