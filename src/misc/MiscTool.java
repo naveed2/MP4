@@ -3,6 +3,7 @@ package misc;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.sun.corba.se.spi.protocol.LocalClientRequestDispatcher;
 import communication.message.Messages;
+import membership.MemberList;
 import membership.PIDComparator;
 import membership.Proc;
 import org.apache.log4j.Logger;
@@ -131,27 +132,28 @@ public class MiscTool {
 
     private static Lock lock = new ReentrantLock();
 
-    public static boolean requireToCreateFile(Proc proc, String fileName) {
+    public static boolean requireToCreateFile(MemberList memberList, ProcessIdentifier pid, String fileName) {
 
         lock.lock();
         try {
-            List<ProcessIdentifier> procIds = new LinkedList<ProcessIdentifier>(proc.getMemberList().getList());
+            List<ProcessIdentifier> procIds = new LinkedList<ProcessIdentifier>(memberList.getList());
 
             Collections.sort(procIds, new PIDComparator());
 
             Integer numProcs = procIds.size();
-            Integer position = findPosition(procIds, proc.getIdentifier());
+            Integer position = findPosition(procIds, pid);
 
             int fileHashCode = fileName.hashCode() % numProcs;
             if(fileHashCode<0) fileHashCode += numProcs;
 
-    //        System.out.println(
-    //                String.format("(fileName, numProcs, hashCode) = (%s, %s, %s)\n", fileName, numProcs, fileHashCode));
+            //        System.out.println(
+            //                String.format("(fileName, numProcs, hashCode) = (%s, %s, %s)\n", fileName, numProcs, fileHashCode));
             return fileHashCode == position || fileHashCode == (position+1) % numProcs;
         } finally {
             lock.unlock();
         }
     }
+
 
     public static Integer findPosition(List<ProcessIdentifier> procIds, ProcessIdentifier pid) {
         Integer pos=0;

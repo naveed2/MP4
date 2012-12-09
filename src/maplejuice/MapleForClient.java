@@ -87,7 +87,7 @@ public class MapleForClient {
         for(Map.Entry<String, String> result : mapleResult.entrySet()) {
             String key = result.getKey();
             String fileName = preFix + "_" + key;
-            if(MiscTool.requireToCreateFile(proc, fileName)) {
+            if(MiscTool.requireToCreateFile(proc.getMemberList(), proc.getIdentifier(), fileName)) {
                 proc.getSDFS().createLocalSDFSFile(fileName);
 //                createFile(fileName);
             }

@@ -368,7 +368,7 @@ public class TCPConnection {
     private void aggregateMapleResult(MapleResultMessage mapleResult) {
         String fileName = mapleResult.getFileName();
         String value = mapleResult.getValue();
-        if(MiscTool.requireToCreateFile(proc, fileName)) {
+        if(MiscTool.requireToCreateFile(proc.getMemberList(), proc.getIdentifier(), fileName)) {
             if(!proc.getSDFS().hasSDFSFile(fileName)) {
                 proc.getSDFS().createLocalSDFSFile(fileName);
             }

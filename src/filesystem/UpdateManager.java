@@ -56,7 +56,7 @@ public class UpdateManager {
             if(fid.getFileStoringProcess().getId().equals(proc.getId())) {
                 localFIds.add(fid);
             } else {
-                if(MiscTool.requireToCreateFile(proc, fid.getFileName())) {
+                if(MiscTool.requireToCreateFile(proc.getMemberList(), fid.getFileStoringProcess(), fid.getFileName())) {
                     continue;
                 }
                 String fileName = fid.getFileName();
