@@ -147,39 +147,43 @@ public class MainEntry {
      * command of show file list
      */
     private static void showFileList() {
-        for(FileIdentifier fileIdentifier : proc.getSDFS().getFileList().getList()) {
-            ProcessIdentifier identifier = fileIdentifier.getFileStoringProcess();
-            if(!proc.getSDFS().isValid(fileIdentifier)) {
-                continue;
-            }
-            String address;
-            Integer timeStamp;
-            Long localTime;
-            FileState fileState;
-            Long lastWriteTime;
+        try {
+            for(FileIdentifier fileIdentifier : proc.getSDFS().getFileList().getList()) {
+                ProcessIdentifier identifier = fileIdentifier.getFileStoringProcess();
+                if(!proc.getSDFS().isValid(fileIdentifier)) {
+                    continue;
+                }
+                String address;
+                Integer timeStamp;
+                Long localTime;
+                FileState fileState;
+                Long lastWriteTime;
 
-            if(isMySelf(identifier)) {
-                address = "127.0.0.1:" + proc.getTcpPort();
-                timeStamp = proc.getTimeStamp();
-//                localTime = TimeMachine.getTime();
-                localTime = proc.getSDFS().getFileLocalTime(fileIdentifier);
-            } else {
-                address = identifier.getIP()+":"+identifier.getPort();
-                timeStamp = proc.getSDFS().getFileTimeStamp(fileIdentifier);
-                localTime = proc.getSDFS().getFileLocalTime(fileIdentifier);
+                if(isMySelf(identifier)) {
+                    address = "127.0.0.1:" + proc.getTcpPort();
+                    timeStamp = proc.getTimeStamp();
+    //                localTime = TimeMachine.getTime();
+                    localTime = proc.getSDFS().getFileLocalTime(fileIdentifier);
+                } else {
+                    address = identifier.getIP()+":"+identifier.getPort();
+                    timeStamp = proc.getSDFS().getFileTimeStamp(fileIdentifier);
+                    localTime = proc.getSDFS().getFileLocalTime(fileIdentifier);
+                }
+                fileState = proc.getSDFS().getFileState(fileIdentifier);
+                lastWriteTime = proc.getSDFS().getLastWriteTime(fileIdentifier);
+                Date date = new Date(lastWriteTime);
+                SimpleDateFormat sdf = new SimpleDateFormat();
+                sdf.applyPattern("yyyy-mm-dd hh:mm:ss");
+                System.out.println(
+                        fileIdentifier.getFileName() +
+                                '\t' + address +
+                                '\t' + timeStamp +
+                                '\t' + localTime +
+                                '\t' +fileState +
+                                '\t' + sdf.format(date));
             }
-            fileState = proc.getSDFS().getFileState(fileIdentifier);
-            lastWriteTime = proc.getSDFS().getLastWriteTime(fileIdentifier);
-            Date date = new Date(lastWriteTime);
-            SimpleDateFormat sdf = new SimpleDateFormat();
-            sdf.applyPattern("yyyy-mm-dd hh:mm:ss");
-            System.out.println(
-                    fileIdentifier.getFileName() +
-                            '\t' + address +
-                            '\t' + timeStamp +
-                            '\t' + localTime +
-                            '\t' +fileState +
-                            '\t' + sdf.format(date));
+        } catch (Exception ex) {
+            logger.error("showfile error " + ex);
         }
     }
 
