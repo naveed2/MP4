@@ -103,6 +103,11 @@ public class SDFS {
             return;
         }
 
+
+        if(remote == null) {
+            logger.error("remote file doesn't exist: " + SDFSFileName);
+            return;
+        }
         sendGetMessage(remote);
         startReceivingFile(remote, localFileName);
     }
