@@ -133,6 +133,9 @@ public class ReplicationManager {
     }
 
     public void interruptSleep() {
+        if(sleepThread == null) {
+            return;
+        }
         sleepThread.interrupt();
     }
 
