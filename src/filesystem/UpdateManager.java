@@ -4,10 +4,7 @@ import communication.message.Messages;
 import membership.Proc;
 import misc.MiscTool;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static communication.message.Messages.FileIdentifier;
@@ -45,7 +42,7 @@ public class UpdateManager {
     }
 
     private void scanList() {
-        FileList fileList = proc.getSDFS().getFileList();
+        List<FileIdentifier> fileList = proc.getSDFS().getFileList().getList();
         Set<FileIdentifier> localFIds = new HashSet<FileIdentifier>();
         Map<String, FileIdentifier> remoteFileMap = new HashMap<String, FileIdentifier>();
 

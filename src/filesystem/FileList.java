@@ -2,6 +2,7 @@ package filesystem;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import communication.message.Messages;
 import communication.message.Messages.FileIdentifier;
@@ -100,6 +101,12 @@ public class FileList implements Iterable<FileIdentifier> {
                 }
             }
             return false;
+        }
+    }
+
+    public List<FileIdentifier> getList() {
+        synchronized (this) {
+            return new LinkedList<FileIdentifier>(fileList);
         }
     }
 }
