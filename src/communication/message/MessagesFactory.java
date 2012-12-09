@@ -62,11 +62,11 @@ public class MessagesFactory {
     }
 
 //    This method is used to generate message used to sync filelists
-    public static Message generateSyncFileListMessage(Integer timeStamp, ProcessIdentifier syncMachine,
+    public static Message generateSyncFileListMessage(List<FileIdentifier> fidList, Integer timeStamp, ProcessIdentifier syncMachine,
                                                       SDFS sdfs) {
         SyncFilesListMessage.Builder syncFileListMessageBuilder = SyncFilesListMessage.newBuilder();
 
-        for(FileIdentifier fileIdentifier : sdfs.getFileList().getList()) {
+        for(FileIdentifier fileIdentifier : fidList) {
             if(!sdfs.isValid(fileIdentifier)) {
                 continue;
             }

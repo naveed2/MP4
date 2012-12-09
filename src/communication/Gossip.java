@@ -7,8 +7,12 @@ import communication.message.Messages.ProcessIdentifier;
 import membership.Proc;
 import org.apache.log4j.Logger;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static communication.message.Messages.FileIdentifier;
 
 
 //This class implements the gossip
@@ -90,10 +94,24 @@ public class Gossip {
         udpClient.sendMessage(message.toByteArray());
     }
 
+    private List<FileIdentifier> fidList = new LinkedList<FileIdentifier>();
+    private static final Integer MAX_NUM_FILES_TO_SYNC = 20;
+
 //    This method sends syncs message to sync filelist
     private void sendSyncFileListMessage(ProcessIdentifier remoteProcess) {
+        List<FileIdentifier> filesNeedToSync;
+        int numToSync;
+
+        if(fidList.size() == 0) {
+            fidList = proc.getSDFS().getFileList().getList();
+        }
+        numToSync = Math.min(fidList.size(), MAX_NUM_FILES_TO_SYNC);
+
+        filesNeedToSync = fidList.subList(0, numToSync);
+        fidList = fidList.subList(numToSync, fidList.size());
+
         Messages.Message message = MessagesFactory.generateSyncFileListMessage(
-                proc.getTimeStamp(),proc.getIdentifier(), proc.getSDFS());
+                filesNeedToSync, proc.getTimeStamp(),proc.getIdentifier(), proc.getSDFS());
         UDPClient udpClient = new UDPClient(remoteProcess);
         udpClient.sendMessage(message.toByteArray());
     }

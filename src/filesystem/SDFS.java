@@ -32,8 +32,8 @@ public class SDFS {
     private static Logger logger = Logger.getLogger(SDFS.class);
     private String rootDirectory;
 
-    private static final Integer MAX_TIME_DIFFERENCE = 150;
-    private static final Integer MIN_TIME_DIFFERENCE = 80;
+    private static final Integer MAX_TIME_DIFFERENCE = 500;
+    private static final Integer MIN_TIME_DIFFERENCE = 200;
 
     public SDFS(String rootDirectory) {
         fileList = new FileList();  //file list
