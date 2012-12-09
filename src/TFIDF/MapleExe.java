@@ -26,7 +26,7 @@ public class MapleExe {
 
     public static void main(String[] args){
 
-        //String inputFile = "/Users/naveed/Downloads/data/wtslv10.txt";
+//        String inputFile = "/Users/naveed/Downloads/data/wtslv10.txt";
         //String outputFile = "/Users/naveed/Desktop/Courses/CS425/MP4/src/TFIDF/1";
         String inputFile = args[0];
         MapleExe mapleExe = new MapleExe(inputFile);
@@ -52,6 +52,8 @@ public class MapleExe {
 
             String line = null;
             while( ( line = bufferedReader.readLine()) != null){
+                //line = line.replaceAll("[^A-Za-z0-9\\-\\_]", " ");
+                line = line.replaceAll("[^A-Za-z\\-\\_]", " ");
                 Scanner wordScanner = new Scanner(line);
                 while(wordScanner.hasNext()){
                     words.add(wordScanner.next());
@@ -76,7 +78,7 @@ public class MapleExe {
             if(!processedWords.contains(word)){
                 processedWords.add(word);
                 int frequency = Collections.frequency(words, word);
-                pairs.add(word + ",(" + inputFileName + "," + Integer.toString(frequency) + "," + this.words.size() + ")");
+                pairs.add(word + ",(" + inputFileName + "," + Integer.toString(frequency) + "," + this.words.size() + ",1)");
             }
         }
         this.keyValuePairs = pairs;
