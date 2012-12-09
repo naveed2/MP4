@@ -78,7 +78,7 @@ public class UpdateManager {
 //                            + "/" + remoteFid.getFileName());
 //                    System.out.println("remote: " + proc.getSDFS().getLastWriteTime(remoteFid));
 //                    System.out.println("local: " + proc.getSDFS().getLastWriteTime(fid));
-                    
+
                     new FileOperations().setProc(proc).sendPutMessage(
                             fid, remoteFid.getFileStoringProcess().getIP(), remoteFid.getFileStoringProcess().getPort());
                     proc.getSDFS().updateLastWriteTime(fileName, remoteFid.getFileStoringProcess(),

@@ -107,6 +107,16 @@ public class SDFS {
         startReceivingFile(remote, localFileName);
     }
 
+    public boolean isLocalFile(String fileName) {
+        List<FileIdentifier> list = fileList.getList();
+        for(FileIdentifier fid : list) {
+            if(fid.getFileName().equals(fileName) && fid.getFileStoringProcess().getId().equals(proc.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void sendGetMessage(FileIdentifier remote) {
         String address = remote.getFileStoringProcess().getIP() + ":"
                 + remote.getFileStoringProcess().getPort();
