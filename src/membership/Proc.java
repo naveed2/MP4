@@ -175,7 +175,7 @@ public class Proc {
     private void initReplicaManger(){
         replicationManager = new ReplicationManager();
         replicationManager.setProc(this);
-        replicationManager.start();
+//        replicationManager.start();
     }
 
     private void initUpdateManager() {
