@@ -25,7 +25,7 @@ public class UDPServer {
     private static Logger logger = Logger.getLogger(UDPServer.class);
     private Proc proc;
 
-    private static final Integer BUFFER_SIZE = 4096;
+    private static final Integer BUFFER_SIZE = 8192;
 
     public UDPServer(Integer udpPort) {
         this.udpPort = udpPort;

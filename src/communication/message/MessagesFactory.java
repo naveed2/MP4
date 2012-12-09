@@ -209,7 +209,7 @@ public class MessagesFactory {
                                                Integer numJuice, List<String> fileList) {
         JuiceMessage.Builder juiceMessageBuilder = JuiceMessage.newBuilder()
                 .setFromMachine(fromMachine)
-                .setCmdExe(cmdExe).setDestFileName(destFileName);
+                .setCmdExe(cmdExe).setDestFileName(destFileName).setNumJuice(numJuice);
         for(String file : fileList) {
             juiceMessageBuilder.addFileList(file);
         }
