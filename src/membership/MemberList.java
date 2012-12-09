@@ -58,7 +58,7 @@ public class MemberList implements Iterable<ProcessIdentifier>{
     }
 
     public LinkedList<ProcessIdentifier> getList(){
-        return this.list;
+        return new LinkedList<ProcessIdentifier>(list);
     }
 
     public ProcessIdentifier get(Integer pos){

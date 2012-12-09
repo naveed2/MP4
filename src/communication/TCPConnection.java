@@ -4,6 +4,7 @@ import communication.message.Messages;
 import communication.message.MessagesFactory;
 import filesystem.FileState;
 import filesystem.SDFS;
+import maplejuice.JuiceForClient;
 import maplejuice.MapleForClient;
 import membership.Proc;
 import misc.MiscTool;
@@ -359,13 +360,32 @@ public class TCPConnection {
                 JuiceMessage juiceMessage = m.getJuiceMessage();
                 doJuiceJob(juiceMessage);
                 break;
+
+            case juiceResult:
+                JuiceResultMessage juiceResultMessage = m.getJuiceResultMessage();
+                aggregateJuiceResult(juiceResultMessage);
             default:
                 break;
         }
     }
 
     private void doJuiceJob(JuiceMessage juiceMessage) {
+        JuiceForClient juice = new JuiceForClient();
+        juice.setProc(proc).setJuiceMessage(juiceMessage).init();
+        juice.doJuice();
+    }
 
+    private void aggregateJuiceResult(JuiceResultMessage juiceResult) {
+        String fileName = juiceResult.getFileName();
+        Integer numJuice = juiceResult.getNumJuice();
+
+        if(MiscTool.requireToCreateFile(proc.getMemberList(), proc.getIdentifier(), fileName, numJuice)) {
+            if(!proc.getSDFS().hasSDFSFile(fileName)) {
+                proc.getSDFS().createLocalSDFSFile(fileName);
+            }
+            String data = juiceResult.getKey() + "," + juiceResult.getValue();
+            proc.getSDFS().appendDataToLocalFile(fileName, data);
+        }
     }
 
     private void doMapleJob(MapleMessage mapleMessage) {

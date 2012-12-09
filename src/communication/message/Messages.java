@@ -27,6 +27,7 @@ public final class Messages {
     maple(14, 14),
     mapleResult(15, 15),
     juice(16, 16),
+    juiceResult(17, 17),
     ;
     
     public static final int Heartbeat_VALUE = 0;
@@ -46,6 +47,7 @@ public final class Messages {
     public static final int maple_VALUE = 14;
     public static final int mapleResult_VALUE = 15;
     public static final int juice_VALUE = 16;
+    public static final int juiceResult_VALUE = 17;
     
     
     public final int getNumber() { return value; }
@@ -69,6 +71,7 @@ public final class Messages {
         case 14: return maple;
         case 15: return mapleResult;
         case 16: return juice;
+        case 17: return juiceResult;
         default: return null;
       }
     }
@@ -99,7 +102,7 @@ public final class Messages {
     }
     
     private static final MessageType[] VALUES = {
-      Heartbeat, Join, Fail, SyncProcesses, SyncFiles, SendTo, ListenFrom, getFile, putFile, deleteFile, readyToPut, readyToGet, get, ImMaster, maple, mapleResult, juice, 
+      Heartbeat, Join, Fail, SyncProcesses, SyncFiles, SendTo, ListenFrom, getFile, putFile, deleteFile, readyToPut, readyToGet, get, ImMaster, maple, mapleResult, juice, juiceResult, 
     };
     
     public static MessageType valueOf(
@@ -10778,7 +10781,11 @@ public final class Messages {
     boolean hasDestFileName();
     String getDestFileName();
     
-    // repeated string fileList = 4;
+    // optional int32 numJuice = 4;
+    boolean hasNumJuice();
+    int getNumJuice();
+    
+    // repeated string fileList = 5;
     java.util.List<String> getFileListList();
     int getFileListCount();
     String getFileList(int index);
@@ -10889,8 +10896,18 @@ public final class Messages {
       }
     }
     
-    // repeated string fileList = 4;
-    public static final int FILELIST_FIELD_NUMBER = 4;
+    // optional int32 numJuice = 4;
+    public static final int NUMJUICE_FIELD_NUMBER = 4;
+    private int numJuice_;
+    public boolean hasNumJuice() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public int getNumJuice() {
+      return numJuice_;
+    }
+    
+    // repeated string fileList = 5;
+    public static final int FILELIST_FIELD_NUMBER = 5;
     private com.google.protobuf.LazyStringList fileList_;
     public java.util.List<String>
         getFileListList() {
@@ -10907,6 +10924,7 @@ public final class Messages {
       fromMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
       cmdExe_ = "";
       destFileName_ = "";
+      numJuice_ = 0;
       fileList_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
@@ -10938,8 +10956,11 @@ public final class Messages {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, getDestFileNameBytes());
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(4, numJuice_);
+      }
       for (int i = 0; i < fileList_.size(); i++) {
-        output.writeBytes(4, fileList_.getByteString(i));
+        output.writeBytes(5, fileList_.getByteString(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -10961,6 +10982,10 @@ public final class Messages {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(3, getDestFileNameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, numJuice_);
       }
       {
         int dataSize = 0;
@@ -11106,8 +11131,10 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000002);
         destFileName_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        fileList_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        numJuice_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
+        fileList_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
@@ -11162,10 +11189,14 @@ public final class Messages {
           to_bitField0_ |= 0x00000004;
         }
         result.destFileName_ = destFileName_;
-        if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.numJuice_ = numJuice_;
+        if (((bitField0_ & 0x00000010) == 0x00000010)) {
           fileList_ = new com.google.protobuf.UnmodifiableLazyStringList(
               fileList_);
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ = (bitField0_ & ~0x00000010);
         }
         result.fileList_ = fileList_;
         result.bitField0_ = to_bitField0_;
@@ -11193,10 +11224,13 @@ public final class Messages {
         if (other.hasDestFileName()) {
           setDestFileName(other.getDestFileName());
         }
+        if (other.hasNumJuice()) {
+          setNumJuice(other.getNumJuice());
+        }
         if (!other.fileList_.isEmpty()) {
           if (fileList_.isEmpty()) {
             fileList_ = other.fileList_;
-            bitField0_ = (bitField0_ & ~0x00000008);
+            bitField0_ = (bitField0_ & ~0x00000010);
           } else {
             ensureFileListIsMutable();
             fileList_.addAll(other.fileList_);
@@ -11261,7 +11295,12 @@ public final class Messages {
               destFileName_ = input.readBytes();
               break;
             }
-            case 34: {
+            case 32: {
+              bitField0_ |= 0x00000008;
+              numJuice_ = input.readInt32();
+              break;
+            }
+            case 42: {
               ensureFileListIsMutable();
               fileList_.add(input.readBytes());
               break;
@@ -11434,12 +11473,33 @@ public final class Messages {
         onChanged();
       }
       
-      // repeated string fileList = 4;
+      // optional int32 numJuice = 4;
+      private int numJuice_ ;
+      public boolean hasNumJuice() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public int getNumJuice() {
+        return numJuice_;
+      }
+      public Builder setNumJuice(int value) {
+        bitField0_ |= 0x00000008;
+        numJuice_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearNumJuice() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        numJuice_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // repeated string fileList = 5;
       private com.google.protobuf.LazyStringList fileList_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureFileListIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
           fileList_ = new com.google.protobuf.LazyStringArrayList(fileList_);
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000010;
          }
       }
       public java.util.List<String>
@@ -11480,7 +11540,7 @@ public final class Messages {
       }
       public Builder clearFileList() {
         fileList_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000010);
         onChanged();
         return this;
       }
@@ -11499,6 +11559,785 @@ public final class Messages {
     }
     
     // @@protoc_insertion_point(class_scope:communication.message.JuiceMessage)
+  }
+  
+  public interface JuiceResultMessageOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required .communication.message.ProcessIdentifier fromMachine = 1;
+    boolean hasFromMachine();
+    communication.message.Messages.ProcessIdentifier getFromMachine();
+    communication.message.Messages.ProcessIdentifierOrBuilder getFromMachineOrBuilder();
+    
+    // optional string fileName = 2;
+    boolean hasFileName();
+    String getFileName();
+    
+    // optional string key = 3;
+    boolean hasKey();
+    String getKey();
+    
+    // optional string value = 4;
+    boolean hasValue();
+    String getValue();
+    
+    // optional int32 numJuice = 5;
+    boolean hasNumJuice();
+    int getNumJuice();
+  }
+  public static final class JuiceResultMessage extends
+      com.google.protobuf.GeneratedMessage
+      implements JuiceResultMessageOrBuilder {
+    // Use JuiceResultMessage.newBuilder() to construct.
+    private JuiceResultMessage(Builder builder) {
+      super(builder);
+    }
+    private JuiceResultMessage(boolean noInit) {}
+    
+    private static final JuiceResultMessage defaultInstance;
+    public static JuiceResultMessage getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public JuiceResultMessage getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return communication.message.Messages.internal_static_communication_message_JuiceResultMessage_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return communication.message.Messages.internal_static_communication_message_JuiceResultMessage_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required .communication.message.ProcessIdentifier fromMachine = 1;
+    public static final int FROMMACHINE_FIELD_NUMBER = 1;
+    private communication.message.Messages.ProcessIdentifier fromMachine_;
+    public boolean hasFromMachine() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public communication.message.Messages.ProcessIdentifier getFromMachine() {
+      return fromMachine_;
+    }
+    public communication.message.Messages.ProcessIdentifierOrBuilder getFromMachineOrBuilder() {
+      return fromMachine_;
+    }
+    
+    // optional string fileName = 2;
+    public static final int FILENAME_FIELD_NUMBER = 2;
+    private java.lang.Object fileName_;
+    public boolean hasFileName() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getFileName() {
+      java.lang.Object ref = fileName_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          fileName_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getFileNameBytes() {
+      java.lang.Object ref = fileName_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        fileName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // optional string key = 3;
+    public static final int KEY_FIELD_NUMBER = 3;
+    private java.lang.Object key_;
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          key_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // optional string value = 4;
+    public static final int VALUE_FIELD_NUMBER = 4;
+    private java.lang.Object value_;
+    public boolean hasValue() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public String getValue() {
+      java.lang.Object ref = value_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          value_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getValueBytes() {
+      java.lang.Object ref = value_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        value_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // optional int32 numJuice = 5;
+    public static final int NUMJUICE_FIELD_NUMBER = 5;
+    private int numJuice_;
+    public boolean hasNumJuice() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public int getNumJuice() {
+      return numJuice_;
+    }
+    
+    private void initFields() {
+      fromMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
+      fileName_ = "";
+      key_ = "";
+      value_ = "";
+      numJuice_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasFromMachine()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getFromMachine().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeMessage(1, fromMachine_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getFileNameBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getKeyBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, getValueBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(5, numJuice_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, fromMachine_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getFileNameBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getKeyBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, getValueBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, numJuice_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static communication.message.Messages.JuiceResultMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static communication.message.Messages.JuiceResultMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static communication.message.Messages.JuiceResultMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static communication.message.Messages.JuiceResultMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static communication.message.Messages.JuiceResultMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static communication.message.Messages.JuiceResultMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static communication.message.Messages.JuiceResultMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static communication.message.Messages.JuiceResultMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static communication.message.Messages.JuiceResultMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static communication.message.Messages.JuiceResultMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(communication.message.Messages.JuiceResultMessage prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements communication.message.Messages.JuiceResultMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return communication.message.Messages.internal_static_communication_message_JuiceResultMessage_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return communication.message.Messages.internal_static_communication_message_JuiceResultMessage_fieldAccessorTable;
+      }
+      
+      // Construct using communication.message.Messages.JuiceResultMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getFromMachineFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        if (fromMachineBuilder_ == null) {
+          fromMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
+        } else {
+          fromMachineBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        fileName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        key_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        value_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
+        numJuice_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return communication.message.Messages.JuiceResultMessage.getDescriptor();
+      }
+      
+      public communication.message.Messages.JuiceResultMessage getDefaultInstanceForType() {
+        return communication.message.Messages.JuiceResultMessage.getDefaultInstance();
+      }
+      
+      public communication.message.Messages.JuiceResultMessage build() {
+        communication.message.Messages.JuiceResultMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private communication.message.Messages.JuiceResultMessage buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        communication.message.Messages.JuiceResultMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public communication.message.Messages.JuiceResultMessage buildPartial() {
+        communication.message.Messages.JuiceResultMessage result = new communication.message.Messages.JuiceResultMessage(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        if (fromMachineBuilder_ == null) {
+          result.fromMachine_ = fromMachine_;
+        } else {
+          result.fromMachine_ = fromMachineBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.fileName_ = fileName_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.key_ = key_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.value_ = value_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.numJuice_ = numJuice_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof communication.message.Messages.JuiceResultMessage) {
+          return mergeFrom((communication.message.Messages.JuiceResultMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(communication.message.Messages.JuiceResultMessage other) {
+        if (other == communication.message.Messages.JuiceResultMessage.getDefaultInstance()) return this;
+        if (other.hasFromMachine()) {
+          mergeFromMachine(other.getFromMachine());
+        }
+        if (other.hasFileName()) {
+          setFileName(other.getFileName());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
+        }
+        if (other.hasValue()) {
+          setValue(other.getValue());
+        }
+        if (other.hasNumJuice()) {
+          setNumJuice(other.getNumJuice());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasFromMachine()) {
+          
+          return false;
+        }
+        if (!getFromMachine().isInitialized()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              communication.message.Messages.ProcessIdentifier.Builder subBuilder = communication.message.Messages.ProcessIdentifier.newBuilder();
+              if (hasFromMachine()) {
+                subBuilder.mergeFrom(getFromMachine());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setFromMachine(subBuilder.buildPartial());
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              fileName_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
+              key_ = input.readBytes();
+              break;
+            }
+            case 34: {
+              bitField0_ |= 0x00000008;
+              value_ = input.readBytes();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              numJuice_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required .communication.message.ProcessIdentifier fromMachine = 1;
+      private communication.message.Messages.ProcessIdentifier fromMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          communication.message.Messages.ProcessIdentifier, communication.message.Messages.ProcessIdentifier.Builder, communication.message.Messages.ProcessIdentifierOrBuilder> fromMachineBuilder_;
+      public boolean hasFromMachine() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public communication.message.Messages.ProcessIdentifier getFromMachine() {
+        if (fromMachineBuilder_ == null) {
+          return fromMachine_;
+        } else {
+          return fromMachineBuilder_.getMessage();
+        }
+      }
+      public Builder setFromMachine(communication.message.Messages.ProcessIdentifier value) {
+        if (fromMachineBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          fromMachine_ = value;
+          onChanged();
+        } else {
+          fromMachineBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      public Builder setFromMachine(
+          communication.message.Messages.ProcessIdentifier.Builder builderForValue) {
+        if (fromMachineBuilder_ == null) {
+          fromMachine_ = builderForValue.build();
+          onChanged();
+        } else {
+          fromMachineBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      public Builder mergeFromMachine(communication.message.Messages.ProcessIdentifier value) {
+        if (fromMachineBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001) &&
+              fromMachine_ != communication.message.Messages.ProcessIdentifier.getDefaultInstance()) {
+            fromMachine_ =
+              communication.message.Messages.ProcessIdentifier.newBuilder(fromMachine_).mergeFrom(value).buildPartial();
+          } else {
+            fromMachine_ = value;
+          }
+          onChanged();
+        } else {
+          fromMachineBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      public Builder clearFromMachine() {
+        if (fromMachineBuilder_ == null) {
+          fromMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
+          onChanged();
+        } else {
+          fromMachineBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+      public communication.message.Messages.ProcessIdentifier.Builder getFromMachineBuilder() {
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return getFromMachineFieldBuilder().getBuilder();
+      }
+      public communication.message.Messages.ProcessIdentifierOrBuilder getFromMachineOrBuilder() {
+        if (fromMachineBuilder_ != null) {
+          return fromMachineBuilder_.getMessageOrBuilder();
+        } else {
+          return fromMachine_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          communication.message.Messages.ProcessIdentifier, communication.message.Messages.ProcessIdentifier.Builder, communication.message.Messages.ProcessIdentifierOrBuilder> 
+          getFromMachineFieldBuilder() {
+        if (fromMachineBuilder_ == null) {
+          fromMachineBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              communication.message.Messages.ProcessIdentifier, communication.message.Messages.ProcessIdentifier.Builder, communication.message.Messages.ProcessIdentifierOrBuilder>(
+                  fromMachine_,
+                  getParentForChildren(),
+                  isClean());
+          fromMachine_ = null;
+        }
+        return fromMachineBuilder_;
+      }
+      
+      // optional string fileName = 2;
+      private java.lang.Object fileName_ = "";
+      public boolean hasFileName() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public String getFileName() {
+        java.lang.Object ref = fileName_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          fileName_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setFileName(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        fileName_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearFileName() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        fileName_ = getDefaultInstance().getFileName();
+        onChanged();
+        return this;
+      }
+      void setFileName(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        fileName_ = value;
+        onChanged();
+      }
+      
+      // optional string key = 3;
+      private java.lang.Object key_ = "";
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setKey(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      void setKey(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000004;
+        key_ = value;
+        onChanged();
+      }
+      
+      // optional string value = 4;
+      private java.lang.Object value_ = "";
+      public boolean hasValue() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public String getValue() {
+        java.lang.Object ref = value_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          value_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setValue(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        value_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearValue() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        value_ = getDefaultInstance().getValue();
+        onChanged();
+        return this;
+      }
+      void setValue(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000008;
+        value_ = value;
+        onChanged();
+      }
+      
+      // optional int32 numJuice = 5;
+      private int numJuice_ ;
+      public boolean hasNumJuice() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public int getNumJuice() {
+        return numJuice_;
+      }
+      public Builder setNumJuice(int value) {
+        bitField0_ |= 0x00000010;
+        numJuice_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearNumJuice() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        numJuice_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:communication.message.JuiceResultMessage)
+    }
+    
+    static {
+      defaultInstance = new JuiceResultMessage(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:communication.message.JuiceResultMessage)
   }
   
   public interface MessageOrBuilder
@@ -11597,6 +12436,11 @@ public final class Messages {
     boolean hasJuiceMessage();
     communication.message.Messages.JuiceMessage getJuiceMessage();
     communication.message.Messages.JuiceMessageOrBuilder getJuiceMessageOrBuilder();
+    
+    // optional .communication.message.JuiceResultMessage juiceResultMessage = 20;
+    boolean hasJuiceResultMessage();
+    communication.message.Messages.JuiceResultMessage getJuiceResultMessage();
+    communication.message.Messages.JuiceResultMessageOrBuilder getJuiceResultMessageOrBuilder();
   }
   public static final class Message extends
       com.google.protobuf.GeneratedMessage
@@ -11871,6 +12715,19 @@ public final class Messages {
       return juiceMessage_;
     }
     
+    // optional .communication.message.JuiceResultMessage juiceResultMessage = 20;
+    public static final int JUICERESULTMESSAGE_FIELD_NUMBER = 20;
+    private communication.message.Messages.JuiceResultMessage juiceResultMessage_;
+    public boolean hasJuiceResultMessage() {
+      return ((bitField0_ & 0x00080000) == 0x00080000);
+    }
+    public communication.message.Messages.JuiceResultMessage getJuiceResultMessage() {
+      return juiceResultMessage_;
+    }
+    public communication.message.Messages.JuiceResultMessageOrBuilder getJuiceResultMessageOrBuilder() {
+      return juiceResultMessage_;
+    }
+    
     private void initFields() {
       type_ = communication.message.Messages.MessageType.Heartbeat;
       joinMessage_ = communication.message.Messages.JoinMessage.getDefaultInstance();
@@ -11891,6 +12748,7 @@ public final class Messages {
       mapleMessage_ = communication.message.Messages.MapleMessage.getDefaultInstance();
       mapleResultMessage_ = communication.message.Messages.MapleResultMessage.getDefaultInstance();
       juiceMessage_ = communication.message.Messages.JuiceMessage.getDefaultInstance();
+      juiceResultMessage_ = communication.message.Messages.JuiceResultMessage.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -12009,6 +12867,12 @@ public final class Messages {
           return false;
         }
       }
+      if (hasJuiceResultMessage()) {
+        if (!getJuiceResultMessage().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -12072,6 +12936,9 @@ public final class Messages {
       }
       if (((bitField0_ & 0x00040000) == 0x00040000)) {
         output.writeMessage(19, juiceMessage_);
+      }
+      if (((bitField0_ & 0x00080000) == 0x00080000)) {
+        output.writeMessage(20, juiceResultMessage_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -12157,6 +13024,10 @@ public final class Messages {
       if (((bitField0_ & 0x00040000) == 0x00040000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(19, juiceMessage_);
+      }
+      if (((bitField0_ & 0x00080000) == 0x00080000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(20, juiceResultMessage_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -12292,6 +13163,7 @@ public final class Messages {
           getMapleMessageFieldBuilder();
           getMapleResultMessageFieldBuilder();
           getJuiceMessageFieldBuilder();
+          getJuiceResultMessageFieldBuilder();
         }
       }
       private static Builder create() {
@@ -12410,6 +13282,12 @@ public final class Messages {
           juiceMessageBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00040000);
+        if (juiceResultMessageBuilder_ == null) {
+          juiceResultMessage_ = communication.message.Messages.JuiceResultMessage.getDefaultInstance();
+        } else {
+          juiceResultMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00080000);
         return this;
       }
       
@@ -12596,6 +13474,14 @@ public final class Messages {
         } else {
           result.juiceMessage_ = juiceMessageBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
+          to_bitField0_ |= 0x00080000;
+        }
+        if (juiceResultMessageBuilder_ == null) {
+          result.juiceResultMessage_ = juiceResultMessage_;
+        } else {
+          result.juiceResultMessage_ = juiceResultMessageBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -12668,6 +13554,9 @@ public final class Messages {
         }
         if (other.hasJuiceMessage()) {
           mergeJuiceMessage(other.getJuiceMessage());
+        }
+        if (other.hasJuiceResultMessage()) {
+          mergeJuiceResultMessage(other.getJuiceResultMessage());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -12782,6 +13671,12 @@ public final class Messages {
         }
         if (hasJuiceMessage()) {
           if (!getJuiceMessage().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasJuiceResultMessage()) {
+          if (!getJuiceResultMessage().isInitialized()) {
             
             return false;
           }
@@ -12983,6 +13878,15 @@ public final class Messages {
               }
               input.readMessage(subBuilder, extensionRegistry);
               setJuiceMessage(subBuilder.buildPartial());
+              break;
+            }
+            case 162: {
+              communication.message.Messages.JuiceResultMessage.Builder subBuilder = communication.message.Messages.JuiceResultMessage.newBuilder();
+              if (hasJuiceResultMessage()) {
+                subBuilder.mergeFrom(getJuiceResultMessage());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setJuiceResultMessage(subBuilder.buildPartial());
               break;
             }
           }
@@ -14635,6 +15539,96 @@ public final class Messages {
         return juiceMessageBuilder_;
       }
       
+      // optional .communication.message.JuiceResultMessage juiceResultMessage = 20;
+      private communication.message.Messages.JuiceResultMessage juiceResultMessage_ = communication.message.Messages.JuiceResultMessage.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          communication.message.Messages.JuiceResultMessage, communication.message.Messages.JuiceResultMessage.Builder, communication.message.Messages.JuiceResultMessageOrBuilder> juiceResultMessageBuilder_;
+      public boolean hasJuiceResultMessage() {
+        return ((bitField0_ & 0x00080000) == 0x00080000);
+      }
+      public communication.message.Messages.JuiceResultMessage getJuiceResultMessage() {
+        if (juiceResultMessageBuilder_ == null) {
+          return juiceResultMessage_;
+        } else {
+          return juiceResultMessageBuilder_.getMessage();
+        }
+      }
+      public Builder setJuiceResultMessage(communication.message.Messages.JuiceResultMessage value) {
+        if (juiceResultMessageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          juiceResultMessage_ = value;
+          onChanged();
+        } else {
+          juiceResultMessageBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00080000;
+        return this;
+      }
+      public Builder setJuiceResultMessage(
+          communication.message.Messages.JuiceResultMessage.Builder builderForValue) {
+        if (juiceResultMessageBuilder_ == null) {
+          juiceResultMessage_ = builderForValue.build();
+          onChanged();
+        } else {
+          juiceResultMessageBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00080000;
+        return this;
+      }
+      public Builder mergeJuiceResultMessage(communication.message.Messages.JuiceResultMessage value) {
+        if (juiceResultMessageBuilder_ == null) {
+          if (((bitField0_ & 0x00080000) == 0x00080000) &&
+              juiceResultMessage_ != communication.message.Messages.JuiceResultMessage.getDefaultInstance()) {
+            juiceResultMessage_ =
+              communication.message.Messages.JuiceResultMessage.newBuilder(juiceResultMessage_).mergeFrom(value).buildPartial();
+          } else {
+            juiceResultMessage_ = value;
+          }
+          onChanged();
+        } else {
+          juiceResultMessageBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00080000;
+        return this;
+      }
+      public Builder clearJuiceResultMessage() {
+        if (juiceResultMessageBuilder_ == null) {
+          juiceResultMessage_ = communication.message.Messages.JuiceResultMessage.getDefaultInstance();
+          onChanged();
+        } else {
+          juiceResultMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00080000);
+        return this;
+      }
+      public communication.message.Messages.JuiceResultMessage.Builder getJuiceResultMessageBuilder() {
+        bitField0_ |= 0x00080000;
+        onChanged();
+        return getJuiceResultMessageFieldBuilder().getBuilder();
+      }
+      public communication.message.Messages.JuiceResultMessageOrBuilder getJuiceResultMessageOrBuilder() {
+        if (juiceResultMessageBuilder_ != null) {
+          return juiceResultMessageBuilder_.getMessageOrBuilder();
+        } else {
+          return juiceResultMessage_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          communication.message.Messages.JuiceResultMessage, communication.message.Messages.JuiceResultMessage.Builder, communication.message.Messages.JuiceResultMessageOrBuilder> 
+          getJuiceResultMessageFieldBuilder() {
+        if (juiceResultMessageBuilder_ == null) {
+          juiceResultMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              communication.message.Messages.JuiceResultMessage, communication.message.Messages.JuiceResultMessage.Builder, communication.message.Messages.JuiceResultMessageOrBuilder>(
+                  juiceResultMessage_,
+                  getParentForChildren(),
+                  isClean());
+          juiceResultMessage_ = null;
+        }
+        return juiceResultMessageBuilder_;
+      }
+      
       // @@protoc_insertion_point(builder_scope:communication.message.Message)
     }
     
@@ -14747,6 +15741,11 @@ public final class Messages {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_communication_message_JuiceMessage_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_communication_message_JuiceResultMessage_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_communication_message_JuiceResultMessage_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_communication_message_Message_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -14813,47 +15812,53 @@ public final class Messages {
       "\030\004 \003(\t\"t\n\022MapleResultMessage\022=\n\013fromMach" +
       "ine\030\001 \002(\0132(.communication.message.Proces" +
       "sIdentifier\022\020\n\010fileName\030\002 \001(\t\022\r\n\005value\030\003" +
-      " \001(\t\"\205\001\n\014JuiceMessage\022=\n\013fromMachine\030\001 \002" +
+      " \001(\t\"\227\001\n\014JuiceMessage\022=\n\013fromMachine\030\001 \002" +
       "(\0132(.communication.message.ProcessIdenti" +
       "fier\022\016\n\006cmdExe\030\002 \001(\t\022\024\n\014destFileName\030\003 \001" +
-      "(\t\022\020\n\010fileList\030\004 \003(\t\"\310\t\n\007Message\0220\n\004type" +
-      "\030\001 \002(\0162\".communication.message.MessageTy" +
-      "pe\0227\n\013joinMessage\030\002 \001(\0132\".communication." +
-      "message.JoinMessage\0229\n\014leaveMessage\030\003 \001(",
-      "\0132#.communication.message.LeaveMessage\0227" +
-      "\n\013failMessage\030\004 \001(\0132\".communication.mess" +
-      "age.FailMessage\022I\n\024syncProcessesMessage\030" +
-      "\005 \001(\0132+.communication.message.SyncProces" +
-      "sesMessage\022E\n\020syncFilesMessage\030\006 \001(\0132+.c" +
-      "ommunication.message.SyncFilesListMessag" +
-      "e\022A\n\020heartBeatMessage\030\007 \001(\0132\'.communicat" +
-      "ion.message.HeartBeatMessage\022;\n\rsendToMe" +
-      "ssage\030\010 \001(\0132$.communication.message.Send" +
-      "ToMessage\022<\n\nlistenFrom\030\t \001(\0132(.communic",
-      "ation.message.ListenFromMessage\022=\n\016getFi" +
-      "leMessage\030\n \001(\0132%.communication.message." +
-      "GetFileMessage\022=\n\016putFileMessage\030\013 \001(\0132%" +
-      ".communication.message.PutFileMessage\022C\n" +
-      "\021deleteFileMessage\030\014 \001(\0132(.communication" +
-      ".message.DeleteFileMessage\022K\n\025readyToPut" +
-      "FileMessage\030\r \001(\0132,.communication.messag" +
-      "e.ReadyToPutFileMessage\022K\n\025readyToGetFil" +
-      "eMessage\030\016 \001(\0132,.communication.message.R" +
-      "eadyToGetFileMessage\0225\n\ngetMessage\030\017 \001(\013",
-      "2!.communication.message.GetMessage\022=\n\rm" +
-      "asterMessage\030\020 \001(\0132&.communication.messa" +
-      "ge.ImMasterMessage\0229\n\014mapleMessage\030\021 \001(\013" +
-      "2#.communication.message.MapleMessage\022E\n" +
-      "\022mapleResultMessage\030\022 \001(\0132).communicatio" +
-      "n.message.MapleResultMessage\0229\n\014juiceMes" +
-      "sage\030\023 \001(\0132#.communication.message.Juice" +
-      "Message*\366\001\n\013MessageType\022\r\n\tHeartbeat\020\000\022\010" +
-      "\n\004Join\020\001\022\010\n\004Fail\020\002\022\021\n\rSyncProcesses\020\003\022\r\n" +
-      "\tSyncFiles\020\004\022\n\n\006SendTo\020\005\022\016\n\nListenFrom\020\006",
-      "\022\013\n\007getFile\020\007\022\013\n\007putFile\020\010\022\016\n\ndeleteFile" +
-      "\020\t\022\016\n\nreadyToPut\020\n\022\016\n\nreadyToGet\020\013\022\007\n\003ge" +
-      "t\020\014\022\014\n\010ImMaster\020\r\022\t\n\005maple\020\016\022\017\n\013mapleRes" +
-      "ult\020\017\022\t\n\005juice\020\020"
+      "(\t\022\020\n\010numJuice\030\004 \001(\005\022\020\n\010fileList\030\005 \003(\t\"\223" +
+      "\001\n\022JuiceResultMessage\022=\n\013fromMachine\030\001 \002" +
+      "(\0132(.communication.message.ProcessIdenti" +
+      "fier\022\020\n\010fileName\030\002 \001(\t\022\013\n\003key\030\003 \001(\t\022\r\n\005v",
+      "alue\030\004 \001(\t\022\020\n\010numJuice\030\005 \001(\005\"\217\n\n\007Message" +
+      "\0220\n\004type\030\001 \002(\0162\".communication.message.M" +
+      "essageType\0227\n\013joinMessage\030\002 \001(\0132\".commun" +
+      "ication.message.JoinMessage\0229\n\014leaveMess" +
+      "age\030\003 \001(\0132#.communication.message.LeaveM" +
+      "essage\0227\n\013failMessage\030\004 \001(\0132\".communicat" +
+      "ion.message.FailMessage\022I\n\024syncProcesses" +
+      "Message\030\005 \001(\0132+.communication.message.Sy" +
+      "ncProcessesMessage\022E\n\020syncFilesMessage\030\006" +
+      " \001(\0132+.communication.message.SyncFilesLi",
+      "stMessage\022A\n\020heartBeatMessage\030\007 \001(\0132\'.co" +
+      "mmunication.message.HeartBeatMessage\022;\n\r" +
+      "sendToMessage\030\010 \001(\0132$.communication.mess" +
+      "age.SendToMessage\022<\n\nlistenFrom\030\t \001(\0132(." +
+      "communication.message.ListenFromMessage\022" +
+      "=\n\016getFileMessage\030\n \001(\0132%.communication." +
+      "message.GetFileMessage\022=\n\016putFileMessage" +
+      "\030\013 \001(\0132%.communication.message.PutFileMe" +
+      "ssage\022C\n\021deleteFileMessage\030\014 \001(\0132(.commu" +
+      "nication.message.DeleteFileMessage\022K\n\025re",
+      "adyToPutFileMessage\030\r \001(\0132,.communicatio" +
+      "n.message.ReadyToPutFileMessage\022K\n\025ready" +
+      "ToGetFileMessage\030\016 \001(\0132,.communication.m" +
+      "essage.ReadyToGetFileMessage\0225\n\ngetMessa" +
+      "ge\030\017 \001(\0132!.communication.message.GetMess" +
+      "age\022=\n\rmasterMessage\030\020 \001(\0132&.communicati" +
+      "on.message.ImMasterMessage\0229\n\014mapleMessa" +
+      "ge\030\021 \001(\0132#.communication.message.MapleMe" +
+      "ssage\022E\n\022mapleResultMessage\030\022 \001(\0132).comm" +
+      "unication.message.MapleResultMessage\0229\n\014",
+      "juiceMessage\030\023 \001(\0132#.communication.messa" +
+      "ge.JuiceMessage\022E\n\022juiceResultMessage\030\024 " +
+      "\001(\0132).communication.message.JuiceResultM" +
+      "essage*\207\002\n\013MessageType\022\r\n\tHeartbeat\020\000\022\010\n" +
+      "\004Join\020\001\022\010\n\004Fail\020\002\022\021\n\rSyncProcesses\020\003\022\r\n\t" +
+      "SyncFiles\020\004\022\n\n\006SendTo\020\005\022\016\n\nListenFrom\020\006\022" +
+      "\013\n\007getFile\020\007\022\013\n\007putFile\020\010\022\016\n\ndeleteFile\020" +
+      "\t\022\016\n\nreadyToPut\020\n\022\016\n\nreadyToGet\020\013\022\007\n\003get" +
+      "\020\014\022\014\n\010ImMaster\020\r\022\t\n\005maple\020\016\022\017\n\013mapleResu" +
+      "lt\020\017\022\t\n\005juice\020\020\022\017\n\013juiceResult\020\021"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -15017,15 +16022,23 @@ public final class Messages {
           internal_static_communication_message_JuiceMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_communication_message_JuiceMessage_descriptor,
-              new java.lang.String[] { "FromMachine", "CmdExe", "DestFileName", "FileList", },
+              new java.lang.String[] { "FromMachine", "CmdExe", "DestFileName", "NumJuice", "FileList", },
               communication.message.Messages.JuiceMessage.class,
               communication.message.Messages.JuiceMessage.Builder.class);
-          internal_static_communication_message_Message_descriptor =
+          internal_static_communication_message_JuiceResultMessage_descriptor =
             getDescriptor().getMessageTypes().get(20);
+          internal_static_communication_message_JuiceResultMessage_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_communication_message_JuiceResultMessage_descriptor,
+              new java.lang.String[] { "FromMachine", "FileName", "Key", "Value", "NumJuice", },
+              communication.message.Messages.JuiceResultMessage.class,
+              communication.message.Messages.JuiceResultMessage.Builder.class);
+          internal_static_communication_message_Message_descriptor =
+            getDescriptor().getMessageTypes().get(21);
           internal_static_communication_message_Message_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_communication_message_Message_descriptor,
-              new java.lang.String[] { "Type", "JoinMessage", "LeaveMessage", "FailMessage", "SyncProcessesMessage", "SyncFilesMessage", "HeartBeatMessage", "SendToMessage", "ListenFrom", "GetFileMessage", "PutFileMessage", "DeleteFileMessage", "ReadyToPutFileMessage", "ReadyToGetFileMessage", "GetMessage", "MasterMessage", "MapleMessage", "MapleResultMessage", "JuiceMessage", },
+              new java.lang.String[] { "Type", "JoinMessage", "LeaveMessage", "FailMessage", "SyncProcessesMessage", "SyncFilesMessage", "HeartBeatMessage", "SendToMessage", "ListenFrom", "GetFileMessage", "PutFileMessage", "DeleteFileMessage", "ReadyToPutFileMessage", "ReadyToGetFileMessage", "GetMessage", "MasterMessage", "MapleMessage", "MapleResultMessage", "JuiceMessage", "JuiceResultMessage", },
               communication.message.Messages.Message.class,
               communication.message.Messages.Message.Builder.class);
           return null;

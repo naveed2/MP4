@@ -5,6 +5,7 @@ import communication.message.Messages;
 import communication.message.MessagesFactory;
 import communication.TCPClient;
 import filesystem.FileState;
+import maplejuice.JuiceForMaster;
 import maplejuice.MapleForMaster;
 import membership.Proc;
 import membership.ProcState;
@@ -228,6 +229,16 @@ public class MainEntry {
 
         maple.run(cmdExe, prefix, files);
 
+    }
+
+    private static void juice() {
+        String cmdExe = args[1];
+        Integer numJuice = Integer.valueOf(args[2]);
+        String prefix = args[3];
+        String destFileName = args[4];
+
+        JuiceForMaster juice = new JuiceForMaster().setProc(proc);
+        juice.run(cmdExe, numJuice, prefix, destFileName);
     }
 
     /**

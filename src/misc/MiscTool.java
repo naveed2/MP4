@@ -133,6 +133,11 @@ public class MiscTool {
     private static Lock lock = new ReentrantLock();
 
     public static boolean requireToCreateFile(MemberList memberList, ProcessIdentifier pid, String fileName) {
+        return requireToCreateFile(memberList, pid, fileName,  memberList.getList().size());
+    }
+
+    public static boolean requireToCreateFile(
+            MemberList memberList, ProcessIdentifier pid, String fileName, Integer numJuice) {
 
         lock.lock();
         try {
@@ -140,15 +145,14 @@ public class MiscTool {
 
             Collections.sort(procIds, new PIDComparator());
 
-            Integer numProcs = procIds.size();
             Integer position = findPosition(procIds, pid);
 
-            int fileHashCode = fileName.hashCode() % numProcs;
-            if(fileHashCode<0) fileHashCode += numProcs;
+            int fileHashCode = fileName.hashCode() % numJuice;
+            if(fileHashCode<0) fileHashCode += numJuice;
 
             //        System.out.println(
             //                String.format("(fileName, numProcs, hashCode) = (%s, %s, %s)\n", fileName, numProcs, fileHashCode));
-            return fileHashCode == position || fileHashCode == (position+1) % numProcs;
+            return fileHashCode == position || fileHashCode == (position+1) % numJuice;
         } finally {
             lock.unlock();
         }

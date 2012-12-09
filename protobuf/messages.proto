@@ -34,6 +34,7 @@ enum MessageType{
     maple = 14;
     mapleResult = 15;
     juice = 16;
+    juiceResult = 17;
 }
 
 message HeartBeatMessage {
@@ -123,7 +124,16 @@ message JuiceMessage {
     required ProcessIdentifier fromMachine = 1;
     optional string cmdExe = 2;
     optional string destFileName = 3;
-    repeated string fileList = 4;
+    optional int32 numJuice = 4;
+    repeated string fileList = 5;
+}
+
+message JuiceResultMessage {
+    required ProcessIdentifier fromMachine = 1;
+    optional string fileName = 2;
+    optional string key = 3;
+    optional string value = 4;
+    optional int32 numJuice = 5;
 }
 
 message Message{
@@ -148,6 +158,7 @@ message Message{
     optional MapleMessage mapleMessage = 17;
     optional MapleResultMessage mapleResultMessage = 18;
     optional JuiceMessage juiceMessage = 19;
+    optional JuiceResultMessage juiceResultMessage = 20;
 }
 
 

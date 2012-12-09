@@ -426,7 +426,7 @@ public class SDFS {
     }
 
     public boolean isStoredOnProcess(ProcessIdentifier pid, String fileName) {
-        for(FileIdentifier fid : fileList) {
+        for(FileIdentifier fid : fileList.getList()) {
             if(fid.getFileName().equals(fileName) && fid.getFileStoringProcess().equals(pid)) {
                 return true;
             }

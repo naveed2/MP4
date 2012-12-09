@@ -66,7 +66,7 @@ public class MessagesFactory {
                                                       SDFS sdfs) {
         SyncFilesListMessage.Builder syncFileListMessageBuilder = SyncFilesListMessage.newBuilder();
 
-        for(FileIdentifier fileIdentifier : sdfs.getFileList()) {
+        for(FileIdentifier fileIdentifier : sdfs.getFileList().getList()) {
             if(!sdfs.isValid(fileIdentifier)) {
                 continue;
             }
@@ -206,7 +206,7 @@ public class MessagesFactory {
     }
 
     public static Message generateJuiceMessage(ProcessIdentifier fromMachine, String cmdExe, String destFileName,
-                                               List<String> fileList) {
+                                               Integer numJuice, List<String> fileList) {
         JuiceMessage.Builder juiceMessageBuilder = JuiceMessage.newBuilder()
                 .setFromMachine(fromMachine)
                 .setCmdExe(cmdExe).setDestFileName(destFileName);
@@ -219,6 +219,17 @@ public class MessagesFactory {
         return Message.newBuilder()
                 .setType(MessageType.juice)
                 .setJuiceMessage(juiceMessage).build();
+    }
+
+    public static Message generateJuiceResultMessage(ProcessIdentifier fromMachine, String fileName,
+                                                     String key, String value, Integer numJuice) {
+        JuiceResultMessage juiceResultMessage = JuiceResultMessage.newBuilder()
+                .setFromMachine(fromMachine).setFileName(fileName)
+                .setKey(key).setValue(value).setNumJuice(numJuice).build();
+
+        return Message.newBuilder()
+                .setType(MessageType.juiceResult)
+                .setJuiceResultMessage(juiceResultMessage).build();
     }
 
 

@@ -42,6 +42,9 @@ public class CommandMap {
     private static final String CMD_MAPLE = "maple";
     private static final String FUNC_MAPLE = "maple";
 
+    private static final String CMD_JUICE = "juice";
+    private static final String FUNC_JUICE = "juice";
+
     /*---------Those commands below are used for debug----------*/
     private static final String CMD_MASTER = "master";
     private static final String FUNC_MASTER = "masterNotification";

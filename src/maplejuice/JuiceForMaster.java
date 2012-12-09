@@ -63,7 +63,7 @@ public class JuiceForMaster {
 
     private void sendJuiceMessageToProc(ProcessIdentifier pid, List<String> fileList) {
         Message juiceMessage = MessagesFactory.generateJuiceMessage(
-                proc.getIdentifier(), cmdExe, destFileName, fileList);
+                proc.getIdentifier(), cmdExe, destFileName, numJuice, fileList);
         TCPClient tcpClient = new TCPClient(pid).setProc(proc);
         if(tcpClient.connect()) {
             tcpClient.sendData(juiceMessage);
@@ -111,7 +111,7 @@ public class JuiceForMaster {
     private List<FileIdentifier> getInputFiles(Proc proc, String prefix) {
         List<FileIdentifier> res = new LinkedList<FileIdentifier>();
         for(FileIdentifier fid : proc.getSDFS().getFileList()) {
-            if(fid.getFileName().startsWith(prefix)) {
+            if(fid.getFileName().startsWith(prefix + "_")) {
                 res.add(fid);
             }
         }

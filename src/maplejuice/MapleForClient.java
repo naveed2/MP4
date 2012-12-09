@@ -72,7 +72,7 @@ public class MapleForClient {
                 String[] pair=strLine.split(",");
                 //TODO: need to solve special characters right here
                 mapleResult.put(pair[0], strLine);
-                System.out.println(pair[0]+ ", " + pair[1]);
+//                System.out.println(pair[0]+ ", " + pair[1]);
             }
 
 //            System.out.println(mapleResult);
