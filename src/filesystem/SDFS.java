@@ -85,7 +85,7 @@ public class SDFS {
         FileIdentifier remote, local;
         remote = local = null;
 
-        for(FileIdentifier fileIdentifier : fileList) {
+        for(FileIdentifier fileIdentifier : fileList.getList()) {
             if(!isAvailable(fileIdentifier)) {
                 continue;
             }
