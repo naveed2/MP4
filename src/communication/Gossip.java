@@ -95,7 +95,7 @@ public class Gossip {
     }
 
     private List<FileIdentifier> fidList = new LinkedList<FileIdentifier>();
-    private static final Integer MAX_NUM_FILES_TO_SYNC = 20;
+    private static final Integer MAX_NUM_FILES_TO_SYNC = 40;
 
 //    This method sends syncs message to sync filelist
     private void sendSyncFileListMessage(ProcessIdentifier remoteProcess) {

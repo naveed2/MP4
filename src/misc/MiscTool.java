@@ -21,7 +21,7 @@ import static communication.message.Messages.ProcessIdentifier;
 
 public class MiscTool {
 
-    public static final Integer BUFFER_SIZE = 4096;
+    public static final Integer BUFFER_SIZE = 65536 *4;
 
     private static Logger logger = Logger.getLogger(MiscTool.class);
 

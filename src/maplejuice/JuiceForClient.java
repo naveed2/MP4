@@ -7,10 +7,7 @@ import membership.Proc;
 import misc.MiscTool;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,8 +50,11 @@ public class JuiceForClient {
         final List<String> command = new LinkedList<String>();
         command.add("./" + cmdExe);
         for(String file: inputFileList) {
-            proc.getSDFS().getRemoteFile(file, file);
-            command.add(file);
+            if(!proc.getSDFS().isLocalFile(file)) {
+                proc.getSDFS().getRemoteFile(file, proc.getSDFS().getRootDirectory() + file);
+                proc.getSDFS().loadFileFromRootDirectory(new File(file));
+            }
+            command.add(proc.getSDFS().getRootDirectory() + file);
         }
 
         new Thread(new Runnable() {

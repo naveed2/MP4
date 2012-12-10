@@ -69,6 +69,7 @@ public class SDFS {
         for(File f : files) {
             loadFileFromRootDirectory(f);
         }
+        logger.info("Load files from root directory finshed");
     }
 
     public File getFile(String fileName) {
@@ -108,18 +109,15 @@ public class SDFS {
             logger.error("remote file doesn't exist: " + SDFSFileName);
             return;
         }
+
+
         sendGetMessage(remote);
         startReceivingFile(remote, localFileName);
     }
 
     public boolean isLocalFile(String fileName) {
-        List<FileIdentifier> list = fileList.getList();
-        for(FileIdentifier fid : list) {
-            if(fid.getFileName().equals(fileName) && fid.getFileStoringProcess().getId().equals(proc.getId())) {
-                return true;
-            }
-        }
-        return false;
+        File file = getFile(fileName);
+        return file.exists();
     }
 
     private void sendGetMessage(FileIdentifier remote) {
