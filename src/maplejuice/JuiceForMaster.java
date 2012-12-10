@@ -65,12 +65,18 @@ public class JuiceForMaster {
     }
 
     private void sendJuiceMessageToProc(ProcessIdentifier pid, List<String> fileList) {
-        Message juiceMessage = MessagesFactory.generateJuiceMessage(
-                proc.getIdentifier(), cmdExe, destFileName, numJuice, fileList);
-        TCPClient tcpClient = new TCPClient(pid).setProc(proc);
-        if(tcpClient.connect()) {
-            tcpClient.sendData(juiceMessage);
-            tcpClient.close();
+        while(fileList.size()>0) {
+            Integer subSize = Math.min(fileList.size(), 1000);
+            List<String> subList = fileList.subList(0, subSize);
+            fileList = fileList.subList(subSize, fileList.size());
+
+            Message juiceMessage = MessagesFactory.generateJuiceMessage(
+                    proc.getIdentifier(), cmdExe, destFileName, numJuice, subList);
+            TCPClient tcpClient = new TCPClient(pid).setProc(proc);
+            if(tcpClient.connect()) {
+                tcpClient.sendData(juiceMessage);
+                tcpClient.close();
+            }
         }
     }
 

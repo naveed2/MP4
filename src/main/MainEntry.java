@@ -138,7 +138,9 @@ public class MainEntry {
                 procState = proc.getMemberList().getState(identifier);
             }
             System.out.println(
-                    identifier.getId() + '\t' + address + '\t' + timeStamp + '\t' + localTime + '\t' + procState);
+                    identifier.getId() + '\t' + address + '\t' + timeStamp + '\t' + localTime
+//                            + '\t'
+                            + procState);
             ++pos;
         }
     }

@@ -34,6 +34,7 @@ public class MapleForClient {
 
     private boolean hasReceivedDoMaple = false;
 
+    private Set<String> confirmPid = new HashSet<String>();
 
 
     private Map<String, String> mapleResult;
@@ -136,14 +137,14 @@ public class MapleForClient {
             String key = result.getKey();
             String fileName = preFix + "_" + key;
             if(MiscTool.requireToCreateFile(pidList, proc.getIdentifier(), fileName)) {
-                proc.getSDFS().createLocalSDFSFile(fileName);
+//                proc.getSDFS().createLocalSDFSFile(fileName);
 //                createFile(fileName);
             }
             fileNames.add(fileName);
             values.add(result.getValue());
 
-            if(fileNames.size() == 300) {
-                cur+=300;
+            if(fileNames.size() == 800) {
+                cur+=800;
                 sendResult(fileNames, values);
                 fileNames.clear();
                 values.clear();
@@ -192,9 +193,11 @@ public class MapleForClient {
             failureListener = new AbstractProcFailureListener(-1) {
                 @Override
                 public void run(ProcessIdentifier pid) {
-                    logger.info("Detecting failure, starts to reassign and rollback");
-                    rollback(pid.getId());
-                    reassignFiles(pid.getId());
+                    if(!confirmPid.contains(pid.getId())) {
+                        logger.info("Detecting failure, starts to reassign and rollback");
+                        rollback(pid.getId());
+                        reassignFiles(pid.getId());
+                    }
                 }
             };
             proc.getMemberList().registerFailureListener(failureListener);
@@ -287,39 +290,81 @@ public class MapleForClient {
         }
     }
 
-
+    private boolean isConfirming = false;
     public void confirm(String id) {
-        File rootDir = new File(proc.getSDFS().getRootDirectory());
-        File[] files;
-        if((files=rootDir.listFiles()) == null) {
-            logger.error("wrong root dir");
+        System.out.println(MiscTool.getDate() + ":" + "Start committing...");
+        confirmPid.add(id);
+
+        if(!isConfirming) {
+            isConfirming = true;
+        } else {
             return;
         }
-        for (File file : files) {
-            String header = "_tmp_" + id + "_";
-            if(file.getName().startsWith(header)) {
-                BufferedReader br;
-                try {
-                    br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-                } catch (FileNotFoundException e) {
-                    logger.error("file not found", e);
+        File rootDir = new File(proc.getSDFS().getRootDirectory());
+        File[] files;
+        boolean flag = true;
+        while(true) {
+            flag = true;
+            if((files=rootDir.listFiles()) == null) {
+                logger.error("wrong root dir");
+                return;
+            }
+            for (File file : files) {
+                String header;
+                Integer prefixPos = file.getName().indexOf(preFix);
+                if(prefixPos == -1) continue;
+
+                header = file.getName().substring(0, prefixPos);
+                if(!(header.startsWith("_tmp_") || !header.endsWith("_"))) {
                     continue;
                 }
-                String data;
+                if(header.length() ==0) {
+                    continue;
+                }
+                String idInHeader;
+
                 try {
-                    while((data = br.readLine())!=null ) {
-                        proc.getSDFS().appendDataToLocalFile(file.getName().substring(header.length()), data);
-                    }
-                    br.close();
-                } catch (IOException e) {
-                    logger.error("read tmp file error", e);
+                    idInHeader = header.substring(5, header.length()-1);
+                } catch (StringIndexOutOfBoundsException e) {
+                    logger.info("string index out of bounds: " + header, e);
+                    continue;
                 }
 
-                if(!file.delete()) {
-                    logger.error("fail to delete tmp file");
+//                if(file.getName().startsWith(header)) {
+                if(confirmPid.contains(idInHeader)) {
+                    String newFileName = file.getName().substring(header.length());
+                    if(!proc.getSDFS().hasSDFSFile(newFileName)) {
+                        proc.getSDFS().createLocalSDFSFile(newFileName);
+                    }
+                    flag = false;
+                    BufferedReader br;
+                    try {
+                        br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                    } catch (FileNotFoundException e) {
+                        logger.error("file not found", e);
+                        continue;
+                    }
+                    String data;
+                    try {
+                        while((data = br.readLine())!=null ) {
+                            proc.getSDFS().appendDataToLocalFile(file.getName().substring(header.length()), data);
+                        }
+                        br.close();
+                    } catch (IOException e) {
+                        logger.error("read tmp file error", e);
+                    }
+
+                    if(!file.delete()) {
+                        logger.error("fail to delete tmp file");
+                    }
                 }
             }
+
+            if(flag) {
+                break;
+            }
         }
+        System.out.println(MiscTool.getDate() + ":" + "Committing done");
     }
 
     public static void main(String[] args) throws IOException {

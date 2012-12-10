@@ -148,8 +148,8 @@ message JuiceMessage {
 message JuiceResultMessage {
     required ProcessIdentifier fromMachine = 1;
     optional string fileName = 2;
-    optional string key = 3;
-    optional string value = 4;
+    repeated string key = 3;
+    repeated string value = 4;
     optional int32 numJuice = 5;
 }
 

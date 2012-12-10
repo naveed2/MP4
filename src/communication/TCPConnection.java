@@ -443,8 +443,8 @@ public class TCPConnection {
             //
         }
         String id = mapleFinishMessage.getFromMachine().getId();
-        proc.getMapleClient().confirm(id);
         proc.getAndRemoveOtherMapleJobs(id);
+        proc.getMapleClient().confirm(id);
     }
 
     private void respondMaple(ReceivedMapleMessage receivedMapleMessage) {
@@ -489,7 +489,7 @@ public class TCPConnection {
                 if(!tmpFile.exists()) {
                     try {
                         if(!tmpFile.createNewFile()) {
-                            throw new IOException("return false");
+//                            throw new IOException("return false");
                         }
                     } catch (IOException e) {
                         logger.error("create new file failed: ", e);

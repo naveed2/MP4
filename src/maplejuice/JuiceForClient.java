@@ -91,7 +91,7 @@ public class JuiceForClient {
 
             saveResults();
         } catch(IOException e) {
-            logger.error("Maple job error "+ e);
+            logger.error("Juice job error "+ e);
         }
     }
 
