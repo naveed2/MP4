@@ -1,4 +1,4 @@
-package TFIDF;
+//package TFIDF;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -21,10 +21,13 @@ public class JuiceExe {
 
 
 
+
+
     public static void main(String[] args){
 
 //        String[] args1 = new String[1];
-//        args1[0] = "/Users/naveed/Desktop/Courses/CS425/MP4/outputFile";
+
+
         JuiceExe juiceExe = new JuiceExe();
 
         juiceExe.getAllPairs(args);
@@ -47,6 +50,7 @@ public class JuiceExe {
             System.arraycopy(pair, 1, value, 0, pair.length-1);
 
             if(pairs.containsKey(key)){
+
                 value[3] = Integer.toString(Integer.parseInt(value[3]) + 1);
             }
 //            for(String s:value){
@@ -77,13 +81,15 @@ public class JuiceExe {
     public void displayTFIDF(){
         for(Map.Entry<String, String[]> pair : pairs.entrySet()){
             String[] value = pair.getValue();
-            double tfidf = computeTFIDF(Integer.parseInt(value[1]), Integer.parseInt(value[2]), Integer.parseInt(value[3]));
+            Double tfidf = computeTFIDF(Integer.parseInt(value[1]), Integer.parseInt(value[2]), Integer.parseInt(value[3]));
 //            System.out.println(Integer.parseInt(value[1]) +" " + Integer.parseInt(value[2]) +" " + Integer.parseInt(value[3]));
             System.out.println("(" + pair.getKey() + "," + pair.getValue()[0] + ")," + Double.toString(tfidf));
         }
     }
 
     public Double computeTFIDF(int singleWordCountInDoc, int totalWordCountInDoc, int docCountInCorpus) {
+
+
         return ((double)singleWordCountInDoc / (double)totalWordCountInDoc) * Math.log((double)totaldoc/(double)docCountInCorpus);
     }
 
@@ -99,6 +105,7 @@ public class JuiceExe {
             String line = null;
             while( ( line = bufferedReader.readLine()) != null){
                 line = line.replaceAll("[\\(\\)]", "");
+                //System.out.println(line);
                 parsedPair = line.split(",");
                 parsedPairs.add(parsedPair);
             }
