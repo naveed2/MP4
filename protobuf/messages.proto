@@ -128,8 +128,8 @@ message DoMapleMessage {
 
 message MapleResultMessage {
     required ProcessIdentifier fromMachine = 1;
-    optional string fileName = 2;
-    optional string value = 3;
+    repeated string fileName = 2;
+    repeated string value = 3;
 }
 
 message JuiceMessage {
