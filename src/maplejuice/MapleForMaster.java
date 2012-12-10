@@ -6,9 +6,12 @@ import communication.TCPClient;
 import communication.message.Messages;
 import communication.message.MessagesFactory;
 import membership.AbstractProcFailureListener;
+import membership.PIDComparator;
 import membership.Proc;
 import misc.MiscTool;
+import org.apache.log4j.Logger;
 
+import java.io.*;
 import java.util.*;
 
 import static communication.message.Messages.Message;
@@ -18,6 +21,8 @@ import static communication.message.Messages.ProcessIdentifier;
  * Maple master. Responsible for assigning files to procs.
  */
 public class MapleForMaster {
+
+    private static Logger logger = Logger.getLogger(MapleForMaster.class);
     private Proc proc;
 
     private String cmdExe;
@@ -45,6 +50,7 @@ public class MapleForMaster {
         inputFiles = files;
 
         procIDs = proc.getMemberList().getList();
+        Collections.sort(procIDs, new PIDComparator());
 
         //broadcast master
         MultiCast.broadCast(
@@ -56,9 +62,6 @@ public class MapleForMaster {
 
         //assignFiles
         assignFiles();
-
-        //register failure listener
-        registerFailListener();
 
         //send message
         sendMapleMessage();
@@ -102,13 +105,20 @@ public class MapleForMaster {
 
 
     public void sendMapleMessage() {
-        for(final ProcessIdentifier pid : procIDs) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    sendMapleMessageToProc(pid, assignedFiles.get(pid.getId()));
-                }
-            }).start();
+//        for(final ProcessIdentifier pid : procIDs) {
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    sendMapleMessageToProc(pid, assignedFiles.get(pid.getId()));
+//                }
+//            }).start();
+//        }
+        for(ProcessIdentifier pid : procIDs) {
+            Message mapleMessage =
+                    MessagesFactory.generateMapleMessage(pid, procIDs,
+                            cmdExe, filePrefix, assignedFiles.get(pid.getId()));
+
+            MultiCast.broadCast(procIDs, mapleMessage);
         }
     }
 
@@ -123,40 +133,30 @@ public class MapleForMaster {
         }
     }
 
-    public void registerFailListener() {
-        failureListener = new AbstractProcFailureListener(-1) {
-            @Override
-            public void run(ProcessIdentifier pid) {
-                reassignFiles(pid.getId());
-            }
-        };
-        proc.getMemberList().registerFailureListener(failureListener);
-    }
-
-    private void reassignFiles(String id) {
-        final List<String> filesNeedToReassign = assignedFiles.get(id);
-        assignedFiles.remove(id);
-        for(ProcessIdentifier pid: procIDs) {
-            if(pid.getId().equals(id)) {
-                procIDs.remove(pid);
-                break;
-            }
-        }
-
-        if(procIDs.size()>0) {
-            final ProcessIdentifier pid = procIDs.get(0);
-            assignFile(pid.getId(), filesNeedToReassign);
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    sendMapleMessageToProc(pid, filesNeedToReassign);
-                }
-            }).start();
-        } else {
-            System.out.println("No processes available, can't reassign tasks");
-        }
-    }
+//    private void reassignFiles(String id) {
+//        final List<String> filesNeedToReassign = assignedFiles.get(id);
+//        assignedFiles.remove(id);
+//        for(ProcessIdentifier pid: procIDs) {
+//            if(pid.getId().equals(id)) {
+//                procIDs.remove(pid);
+//                break;
+//            }
+//        }
+//
+//        if(procIDs.size()>0) {
+//            final ProcessIdentifier pid = procIDs.get(0);
+//            assignFile(pid.getId(), filesNeedToReassign);
+//
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    sendMapleMessageToProc(pid, filesNeedToReassign);
+//                }
+//            }).start();
+//        } else {
+//            System.out.println("No processes available, can't reassign tasks");
+//        }
+//    }
 
     public void monitor() {
 

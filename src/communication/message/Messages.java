@@ -9407,10 +9407,10 @@ public final class Messages {
   public interface MapleMessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // required .communication.message.ProcessIdentifier fromMachine = 1;
-    boolean hasFromMachine();
-    communication.message.Messages.ProcessIdentifier getFromMachine();
-    communication.message.Messages.ProcessIdentifierOrBuilder getFromMachineOrBuilder();
+    // required .communication.message.ProcessIdentifier targetMachine = 1;
+    boolean hasTargetMachine();
+    communication.message.Messages.ProcessIdentifier getTargetMachine();
+    communication.message.Messages.ProcessIdentifierOrBuilder getTargetMachineOrBuilder();
     
     // optional string cmdExe = 2;
     boolean hasCmdExe();
@@ -9464,17 +9464,17 @@ public final class Messages {
     }
     
     private int bitField0_;
-    // required .communication.message.ProcessIdentifier fromMachine = 1;
-    public static final int FROMMACHINE_FIELD_NUMBER = 1;
-    private communication.message.Messages.ProcessIdentifier fromMachine_;
-    public boolean hasFromMachine() {
+    // required .communication.message.ProcessIdentifier targetMachine = 1;
+    public static final int TARGETMACHINE_FIELD_NUMBER = 1;
+    private communication.message.Messages.ProcessIdentifier targetMachine_;
+    public boolean hasTargetMachine() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public communication.message.Messages.ProcessIdentifier getFromMachine() {
-      return fromMachine_;
+    public communication.message.Messages.ProcessIdentifier getTargetMachine() {
+      return targetMachine_;
     }
-    public communication.message.Messages.ProcessIdentifierOrBuilder getFromMachineOrBuilder() {
-      return fromMachine_;
+    public communication.message.Messages.ProcessIdentifierOrBuilder getTargetMachineOrBuilder() {
+      return targetMachine_;
     }
     
     // optional string cmdExe = 2;
@@ -9577,7 +9577,7 @@ public final class Messages {
     }
     
     private void initFields() {
-      fromMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
+      targetMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
       cmdExe_ = "";
       prefix_ = "";
       fileList_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -9588,11 +9588,11 @@ public final class Messages {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
       
-      if (!hasFromMachine()) {
+      if (!hasTargetMachine()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!getFromMachine().isInitialized()) {
+      if (!getTargetMachine().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -9610,7 +9610,7 @@ public final class Messages {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeMessage(1, fromMachine_);
+        output.writeMessage(1, targetMachine_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeBytes(2, getCmdExeBytes());
@@ -9635,7 +9635,7 @@ public final class Messages {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, fromMachine_);
+          .computeMessageSize(1, targetMachine_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
@@ -9774,7 +9774,7 @@ public final class Messages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getFromMachineFieldBuilder();
+          getTargetMachineFieldBuilder();
           getMachinesFieldBuilder();
         }
       }
@@ -9784,10 +9784,10 @@ public final class Messages {
       
       public Builder clear() {
         super.clear();
-        if (fromMachineBuilder_ == null) {
-          fromMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
+        if (targetMachineBuilder_ == null) {
+          targetMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
         } else {
-          fromMachineBuilder_.clear();
+          targetMachineBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000001);
         cmdExe_ = "";
@@ -9843,10 +9843,10 @@ public final class Messages {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        if (fromMachineBuilder_ == null) {
-          result.fromMachine_ = fromMachine_;
+        if (targetMachineBuilder_ == null) {
+          result.targetMachine_ = targetMachine_;
         } else {
-          result.fromMachine_ = fromMachineBuilder_.build();
+          result.targetMachine_ = targetMachineBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
@@ -9887,8 +9887,8 @@ public final class Messages {
       
       public Builder mergeFrom(communication.message.Messages.MapleMessage other) {
         if (other == communication.message.Messages.MapleMessage.getDefaultInstance()) return this;
-        if (other.hasFromMachine()) {
-          mergeFromMachine(other.getFromMachine());
+        if (other.hasTargetMachine()) {
+          mergeTargetMachine(other.getTargetMachine());
         }
         if (other.hasCmdExe()) {
           setCmdExe(other.getCmdExe());
@@ -9937,11 +9937,11 @@ public final class Messages {
       }
       
       public final boolean isInitialized() {
-        if (!hasFromMachine()) {
+        if (!hasTargetMachine()) {
           
           return false;
         }
-        if (!getFromMachine().isInitialized()) {
+        if (!getTargetMachine().isInitialized()) {
           
           return false;
         }
@@ -9979,11 +9979,11 @@ public final class Messages {
             }
             case 10: {
               communication.message.Messages.ProcessIdentifier.Builder subBuilder = communication.message.Messages.ProcessIdentifier.newBuilder();
-              if (hasFromMachine()) {
-                subBuilder.mergeFrom(getFromMachine());
+              if (hasTargetMachine()) {
+                subBuilder.mergeFrom(getTargetMachine());
               }
               input.readMessage(subBuilder, extensionRegistry);
-              setFromMachine(subBuilder.buildPartial());
+              setTargetMachine(subBuilder.buildPartial());
               break;
             }
             case 18: {
@@ -10013,94 +10013,94 @@ public final class Messages {
       
       private int bitField0_;
       
-      // required .communication.message.ProcessIdentifier fromMachine = 1;
-      private communication.message.Messages.ProcessIdentifier fromMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
+      // required .communication.message.ProcessIdentifier targetMachine = 1;
+      private communication.message.Messages.ProcessIdentifier targetMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          communication.message.Messages.ProcessIdentifier, communication.message.Messages.ProcessIdentifier.Builder, communication.message.Messages.ProcessIdentifierOrBuilder> fromMachineBuilder_;
-      public boolean hasFromMachine() {
+          communication.message.Messages.ProcessIdentifier, communication.message.Messages.ProcessIdentifier.Builder, communication.message.Messages.ProcessIdentifierOrBuilder> targetMachineBuilder_;
+      public boolean hasTargetMachine() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public communication.message.Messages.ProcessIdentifier getFromMachine() {
-        if (fromMachineBuilder_ == null) {
-          return fromMachine_;
+      public communication.message.Messages.ProcessIdentifier getTargetMachine() {
+        if (targetMachineBuilder_ == null) {
+          return targetMachine_;
         } else {
-          return fromMachineBuilder_.getMessage();
+          return targetMachineBuilder_.getMessage();
         }
       }
-      public Builder setFromMachine(communication.message.Messages.ProcessIdentifier value) {
-        if (fromMachineBuilder_ == null) {
+      public Builder setTargetMachine(communication.message.Messages.ProcessIdentifier value) {
+        if (targetMachineBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          fromMachine_ = value;
+          targetMachine_ = value;
           onChanged();
         } else {
-          fromMachineBuilder_.setMessage(value);
+          targetMachineBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000001;
         return this;
       }
-      public Builder setFromMachine(
+      public Builder setTargetMachine(
           communication.message.Messages.ProcessIdentifier.Builder builderForValue) {
-        if (fromMachineBuilder_ == null) {
-          fromMachine_ = builderForValue.build();
+        if (targetMachineBuilder_ == null) {
+          targetMachine_ = builderForValue.build();
           onChanged();
         } else {
-          fromMachineBuilder_.setMessage(builderForValue.build());
+          targetMachineBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000001;
         return this;
       }
-      public Builder mergeFromMachine(communication.message.Messages.ProcessIdentifier value) {
-        if (fromMachineBuilder_ == null) {
+      public Builder mergeTargetMachine(communication.message.Messages.ProcessIdentifier value) {
+        if (targetMachineBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
-              fromMachine_ != communication.message.Messages.ProcessIdentifier.getDefaultInstance()) {
-            fromMachine_ =
-              communication.message.Messages.ProcessIdentifier.newBuilder(fromMachine_).mergeFrom(value).buildPartial();
+              targetMachine_ != communication.message.Messages.ProcessIdentifier.getDefaultInstance()) {
+            targetMachine_ =
+              communication.message.Messages.ProcessIdentifier.newBuilder(targetMachine_).mergeFrom(value).buildPartial();
           } else {
-            fromMachine_ = value;
+            targetMachine_ = value;
           }
           onChanged();
         } else {
-          fromMachineBuilder_.mergeFrom(value);
+          targetMachineBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000001;
         return this;
       }
-      public Builder clearFromMachine() {
-        if (fromMachineBuilder_ == null) {
-          fromMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
+      public Builder clearTargetMachine() {
+        if (targetMachineBuilder_ == null) {
+          targetMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
           onChanged();
         } else {
-          fromMachineBuilder_.clear();
+          targetMachineBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
-      public communication.message.Messages.ProcessIdentifier.Builder getFromMachineBuilder() {
+      public communication.message.Messages.ProcessIdentifier.Builder getTargetMachineBuilder() {
         bitField0_ |= 0x00000001;
         onChanged();
-        return getFromMachineFieldBuilder().getBuilder();
+        return getTargetMachineFieldBuilder().getBuilder();
       }
-      public communication.message.Messages.ProcessIdentifierOrBuilder getFromMachineOrBuilder() {
-        if (fromMachineBuilder_ != null) {
-          return fromMachineBuilder_.getMessageOrBuilder();
+      public communication.message.Messages.ProcessIdentifierOrBuilder getTargetMachineOrBuilder() {
+        if (targetMachineBuilder_ != null) {
+          return targetMachineBuilder_.getMessageOrBuilder();
         } else {
-          return fromMachine_;
+          return targetMachine_;
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
           communication.message.Messages.ProcessIdentifier, communication.message.Messages.ProcessIdentifier.Builder, communication.message.Messages.ProcessIdentifierOrBuilder> 
-          getFromMachineFieldBuilder() {
-        if (fromMachineBuilder_ == null) {
-          fromMachineBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          getTargetMachineFieldBuilder() {
+        if (targetMachineBuilder_ == null) {
+          targetMachineBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               communication.message.Messages.ProcessIdentifier, communication.message.Messages.ProcessIdentifier.Builder, communication.message.Messages.ProcessIdentifierOrBuilder>(
-                  fromMachine_,
+                  targetMachine_,
                   getParentForChildren(),
                   isClean());
-          fromMachine_ = null;
+          targetMachine_ = null;
         }
-        return fromMachineBuilder_;
+        return targetMachineBuilder_;
       }
       
       // optional string cmdExe = 2;
@@ -17330,70 +17330,70 @@ public final class Messages {
       "Process\030\001 \002(\0132(.communication.message.Pr" +
       "ocessIdentifier\022\020\n\010fileName\030\002 \001(\t\"R\n\017ImM" +
       "asterMessage\022?\n\rmasterProcess\030\001 \002(\0132(.co" +
-      "mmunication.message.ProcessIdentifier\"\273\001" +
-      "\n\014MapleMessage\022=\n\013fromMachine\030\001 \002(\0132(.co" +
-      "mmunication.message.ProcessIdentifier\022\016\n" +
-      "\006cmdExe\030\002 \001(\t\022\016\n\006prefix\030\003 \001(\t\022\020\n\010fileLis",
-      "t\030\004 \003(\t\022:\n\010machines\030\005 \003(\0132(.communicatio" +
-      "n.message.ProcessIdentifier\"U\n\024ReceivedM" +
-      "apleMessage\022=\n\013fromMachine\030\001 \002(\0132(.commu" +
-      "nication.message.ProcessIdentifier\"O\n\016Do" +
-      "MapleMessage\022=\n\013fromMachine\030\001 \002(\0132(.comm" +
-      "unication.message.ProcessIdentifier\"t\n\022M" +
-      "apleResultMessage\022=\n\013fromMachine\030\001 \002(\0132(" +
-      ".communication.message.ProcessIdentifier" +
-      "\022\020\n\010fileName\030\002 \003(\t\022\r\n\005value\030\003 \003(\t\"\227\001\n\014Ju" +
-      "iceMessage\022=\n\013fromMachine\030\001 \002(\0132(.commun",
-      "ication.message.ProcessIdentifier\022\016\n\006cmd" +
-      "Exe\030\002 \001(\t\022\024\n\014destFileName\030\003 \001(\t\022\020\n\010numJu" +
-      "ice\030\004 \001(\005\022\020\n\010fileList\030\005 \003(\t\"\223\001\n\022JuiceRes" +
-      "ultMessage\022=\n\013fromMachine\030\001 \002(\0132(.commun" +
-      "ication.message.ProcessIdentifier\022\020\n\010fil" +
-      "eName\030\002 \001(\t\022\013\n\003key\030\003 \001(\t\022\r\n\005value\030\004 \001(\t\022" +
-      "\020\n\010numJuice\030\005 \001(\005\"\231\013\n\007Message\0220\n\004type\030\001 " +
-      "\002(\0162\".communication.message.MessageType\022" +
-      "7\n\013joinMessage\030\002 \001(\0132\".communication.mes" +
-      "sage.JoinMessage\0229\n\014leaveMessage\030\003 \001(\0132#",
-      ".communication.message.LeaveMessage\0227\n\013f" +
-      "ailMessage\030\004 \001(\0132\".communication.message" +
-      ".FailMessage\022I\n\024syncProcessesMessage\030\005 \001" +
-      "(\0132+.communication.message.SyncProcesses" +
-      "Message\022E\n\020syncFilesMessage\030\006 \001(\0132+.comm" +
-      "unication.message.SyncFilesListMessage\022A" +
-      "\n\020heartBeatMessage\030\007 \001(\0132\'.communication" +
-      ".message.HeartBeatMessage\022;\n\rsendToMessa" +
-      "ge\030\010 \001(\0132$.communication.message.SendToM" +
-      "essage\022<\n\nlistenFrom\030\t \001(\0132(.communicati",
-      "on.message.ListenFromMessage\022=\n\016getFileM" +
-      "essage\030\n \001(\0132%.communication.message.Get" +
-      "FileMessage\022=\n\016putFileMessage\030\013 \001(\0132%.co" +
-      "mmunication.message.PutFileMessage\022C\n\021de" +
-      "leteFileMessage\030\014 \001(\0132(.communication.me" +
-      "ssage.DeleteFileMessage\022K\n\025readyToPutFil" +
-      "eMessage\030\r \001(\0132,.communication.message.R" +
-      "eadyToPutFileMessage\022K\n\025readyToGetFileMe" +
-      "ssage\030\016 \001(\0132,.communication.message.Read" +
-      "yToGetFileMessage\0225\n\ngetMessage\030\017 \001(\0132!.",
-      "communication.message.GetMessage\022=\n\rmast" +
-      "erMessage\030\020 \001(\0132&.communication.message." +
-      "ImMasterMessage\0229\n\014mapleMessage\030\021 \001(\0132#." +
-      "communication.message.MapleMessage\022I\n\024re" +
-      "ceivedMapleMessage\030\022 \001(\0132+.communication" +
-      ".message.ReceivedMapleMessage\022=\n\016doMaple" +
-      "Message\030\023 \001(\0132%.communication.message.Do" +
-      "MapleMessage\022E\n\022mapleResultMessage\030\024 \001(\013" +
-      "2).communication.message.MapleResultMess" +
-      "age\0229\n\014juiceMessage\030\025 \001(\0132#.communicatio",
-      "n.message.JuiceMessage\022E\n\022juiceResultMes" +
-      "sage\030\026 \001(\0132).communication.message.Juice" +
-      "ResultMessage*\247\002\n\013MessageType\022\r\n\tHeartbe" +
-      "at\020\000\022\010\n\004Join\020\001\022\010\n\004Fail\020\002\022\021\n\rSyncProcesse" +
-      "s\020\003\022\r\n\tSyncFiles\020\004\022\n\n\006SendTo\020\005\022\016\n\nListen" +
-      "From\020\006\022\013\n\007getFile\020\007\022\013\n\007putFile\020\010\022\016\n\ndele" +
-      "teFile\020\t\022\016\n\nreadyToPut\020\n\022\016\n\nreadyToGet\020\013" +
-      "\022\007\n\003get\020\014\022\014\n\010ImMaster\020\r\022\t\n\005maple\020\016\022\021\n\rre" +
-      "ceivedMaple\020\017\022\013\n\007doMaple\020\020\022\017\n\013mapleResul" +
-      "t\020\021\022\t\n\005juice\020\022\022\017\n\013juiceResult\020\023"
+      "mmunication.message.ProcessIdentifier\"\275\001" +
+      "\n\014MapleMessage\022?\n\rtargetMachine\030\001 \002(\0132(." +
+      "communication.message.ProcessIdentifier\022" +
+      "\016\n\006cmdExe\030\002 \001(\t\022\016\n\006prefix\030\003 \001(\t\022\020\n\010fileL",
+      "ist\030\004 \003(\t\022:\n\010machines\030\005 \003(\0132(.communicat" +
+      "ion.message.ProcessIdentifier\"U\n\024Receive" +
+      "dMapleMessage\022=\n\013fromMachine\030\001 \002(\0132(.com" +
+      "munication.message.ProcessIdentifier\"O\n\016" +
+      "DoMapleMessage\022=\n\013fromMachine\030\001 \002(\0132(.co" +
+      "mmunication.message.ProcessIdentifier\"t\n" +
+      "\022MapleResultMessage\022=\n\013fromMachine\030\001 \002(\013" +
+      "2(.communication.message.ProcessIdentifi" +
+      "er\022\020\n\010fileName\030\002 \003(\t\022\r\n\005value\030\003 \003(\t\"\227\001\n\014" +
+      "JuiceMessage\022=\n\013fromMachine\030\001 \002(\0132(.comm",
+      "unication.message.ProcessIdentifier\022\016\n\006c" +
+      "mdExe\030\002 \001(\t\022\024\n\014destFileName\030\003 \001(\t\022\020\n\010num" +
+      "Juice\030\004 \001(\005\022\020\n\010fileList\030\005 \003(\t\"\223\001\n\022JuiceR" +
+      "esultMessage\022=\n\013fromMachine\030\001 \002(\0132(.comm" +
+      "unication.message.ProcessIdentifier\022\020\n\010f" +
+      "ileName\030\002 \001(\t\022\013\n\003key\030\003 \001(\t\022\r\n\005value\030\004 \001(" +
+      "\t\022\020\n\010numJuice\030\005 \001(\005\"\231\013\n\007Message\0220\n\004type\030" +
+      "\001 \002(\0162\".communication.message.MessageTyp" +
+      "e\0227\n\013joinMessage\030\002 \001(\0132\".communication.m" +
+      "essage.JoinMessage\0229\n\014leaveMessage\030\003 \001(\013",
+      "2#.communication.message.LeaveMessage\0227\n" +
+      "\013failMessage\030\004 \001(\0132\".communication.messa" +
+      "ge.FailMessage\022I\n\024syncProcessesMessage\030\005" +
+      " \001(\0132+.communication.message.SyncProcess" +
+      "esMessage\022E\n\020syncFilesMessage\030\006 \001(\0132+.co" +
+      "mmunication.message.SyncFilesListMessage" +
+      "\022A\n\020heartBeatMessage\030\007 \001(\0132\'.communicati" +
+      "on.message.HeartBeatMessage\022;\n\rsendToMes" +
+      "sage\030\010 \001(\0132$.communication.message.SendT" +
+      "oMessage\022<\n\nlistenFrom\030\t \001(\0132(.communica",
+      "tion.message.ListenFromMessage\022=\n\016getFil" +
+      "eMessage\030\n \001(\0132%.communication.message.G" +
+      "etFileMessage\022=\n\016putFileMessage\030\013 \001(\0132%." +
+      "communication.message.PutFileMessage\022C\n\021" +
+      "deleteFileMessage\030\014 \001(\0132(.communication." +
+      "message.DeleteFileMessage\022K\n\025readyToPutF" +
+      "ileMessage\030\r \001(\0132,.communication.message" +
+      ".ReadyToPutFileMessage\022K\n\025readyToGetFile" +
+      "Message\030\016 \001(\0132,.communication.message.Re" +
+      "adyToGetFileMessage\0225\n\ngetMessage\030\017 \001(\0132",
+      "!.communication.message.GetMessage\022=\n\rma" +
+      "sterMessage\030\020 \001(\0132&.communication.messag" +
+      "e.ImMasterMessage\0229\n\014mapleMessage\030\021 \001(\0132" +
+      "#.communication.message.MapleMessage\022I\n\024" +
+      "receivedMapleMessage\030\022 \001(\0132+.communicati" +
+      "on.message.ReceivedMapleMessage\022=\n\016doMap" +
+      "leMessage\030\023 \001(\0132%.communication.message." +
+      "DoMapleMessage\022E\n\022mapleResultMessage\030\024 \001" +
+      "(\0132).communication.message.MapleResultMe" +
+      "ssage\0229\n\014juiceMessage\030\025 \001(\0132#.communicat",
+      "ion.message.JuiceMessage\022E\n\022juiceResultM" +
+      "essage\030\026 \001(\0132).communication.message.Jui" +
+      "ceResultMessage*\247\002\n\013MessageType\022\r\n\tHeart" +
+      "beat\020\000\022\010\n\004Join\020\001\022\010\n\004Fail\020\002\022\021\n\rSyncProces" +
+      "ses\020\003\022\r\n\tSyncFiles\020\004\022\n\n\006SendTo\020\005\022\016\n\nList" +
+      "enFrom\020\006\022\013\n\007getFile\020\007\022\013\n\007putFile\020\010\022\016\n\nde" +
+      "leteFile\020\t\022\016\n\nreadyToPut\020\n\022\016\n\nreadyToGet" +
+      "\020\013\022\007\n\003get\020\014\022\014\n\010ImMaster\020\r\022\t\n\005maple\020\016\022\021\n\r" +
+      "receivedMaple\020\017\022\013\n\007doMaple\020\020\022\017\n\013mapleRes" +
+      "ult\020\021\022\t\n\005juice\020\022\022\017\n\013juiceResult\020\023"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -17541,7 +17541,7 @@ public final class Messages {
           internal_static_communication_message_MapleMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_communication_message_MapleMessage_descriptor,
-              new java.lang.String[] { "FromMachine", "CmdExe", "Prefix", "FileList", "Machines", },
+              new java.lang.String[] { "TargetMachine", "CmdExe", "Prefix", "FileList", "Machines", },
               communication.message.Messages.MapleMessage.class,
               communication.message.Messages.MapleMessage.Builder.class);
           internal_static_communication_message_ReceivedMapleMessage_descriptor =

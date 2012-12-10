@@ -181,9 +181,9 @@ public class MessagesFactory {
                 .setMasterMessage(masterMessage).build();
     }
 
-    public static Message generateMapleMessage(ProcessIdentifier fromMachine, List<ProcessIdentifier> pidList, String cmdExe, String prefix, List<String> fileList) {
+    public static Message generateMapleMessage(ProcessIdentifier targetMachine, List<ProcessIdentifier> pidList, String cmdExe, String prefix, List<String> fileList) {
         MapleMessage.Builder mapleMessageBuilder = MapleMessage.newBuilder()
-                .setFromMachine(fromMachine)
+                .setTargetMachine(targetMachine)
                 .setCmdExe(cmdExe).setPrefix(prefix);
         for(ProcessIdentifier pid: pidList) {
             mapleMessageBuilder.addMachines(pid);

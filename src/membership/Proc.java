@@ -15,8 +15,7 @@ import org.apache.log4j.Logger;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 import static communication.message.Messages.*;
 
@@ -109,7 +108,7 @@ public class Proc {
 
         //init failure detector
 //        initFailureDetector();
-//        initMemberListScanningThread();
+        initMemberListScanningThread();
 
         initSDFS();
         initFileListScan();
@@ -301,11 +300,16 @@ public class Proc {
     public Proc setMaster(ProcessIdentifier masterProcess) {
         if(masterProcess.getId().equals(getId())) {
             isMaster = true;
+            master = masterProcess;
         } else {
             isMaster = false;
             master = masterProcess;
         }
         return this;
+    }
+
+    public ProcessIdentifier getMaster() {
+        return master;
     }
 
     public Proc setMapleMaster(MapleForMaster mapleMaster) {
@@ -324,6 +328,25 @@ public class Proc {
 
     public MapleForClient getMapleClient() {
         return mapleClient;
+    }
+
+    Map<String, List<String>> mapleJobsForOthers = new HashMap<String, List<String>>();
+    Map<String, List<String>> mapleFilesFromOthers = new HashMap<String, List<String>>();
+
+    public void addOtherMapleJobs(String id, List<String> files) {
+        mapleJobsForOthers.put(id ,files);
+    }
+
+    public List<String> getAndRemoveOtherMapleJobs(String id) {
+        return mapleJobsForOthers.remove(id);
+    }
+
+    public void addMapleFileFromOthers(String id, String file) {
+        synchronized (this){
+            List<String> list = mapleFilesFromOthers.get(id);
+            if(list == null) list = new LinkedList<String>();
+            list.add(file);
+        }
     }
 
 }

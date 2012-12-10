@@ -3,6 +3,7 @@ package maplejuice;
 import communication.MultiCast;
 import communication.TCPClient;
 import communication.message.MessagesFactory;
+import membership.AbstractProcFailureListener;
 import membership.Proc;
 import misc.MiscTool;
 import org.apache.log4j.Logger;
@@ -24,11 +25,15 @@ public class MapleForClient {
     private Proc proc;
 
     private MapleMessage mapleMessage;
-    private ProcessIdentifier master;
     private String cmdExe;
     private String preFix;
     private List<String> inputFileList;
     private List<ProcessIdentifier> pidList;
+
+    private AbstractProcFailureListener failureListener;
+
+    private boolean hasReceivedDoMaple = false;
+
 
 
     private Map<String, String> mapleResult;
@@ -47,7 +52,6 @@ public class MapleForClient {
         preFix = mapleMessage.getPrefix();
         inputFileList = mapleMessage.getFileListList();
         pidList = mapleMessage.getMachinesList();
-        master = mapleMessage.getFromMachine();
 
         System.out.println("Received maple command: " + cmdExe + ", " + preFix + ", " + inputFileList);
 
@@ -58,7 +62,7 @@ public class MapleForClient {
             }
         }
 
-        sendReceivedMapleMessage(master);
+        sendReceivedMapleMessage(proc.getMaster());
     }
 
     private void sendReceivedMapleMessage(ProcessIdentifier master) {
@@ -71,8 +75,10 @@ public class MapleForClient {
 
     public void doMaple() {
 
+        hasReceivedDoMaple = true;
         System.out.println("maple start time: " + System.currentTimeMillis());
 
+        registerFailListener();
 
         new Thread(new Runnable() {
             @Override
@@ -85,6 +91,7 @@ public class MapleForClient {
                     runCommand(command);
                     mapleResult.clear();
                 }
+//                unregisterFailListener();
                 System.out.println("maple end time: " + System.currentTimeMillis());
             }
         }).start();
@@ -178,6 +185,134 @@ public class MapleForClient {
         return pidList;
     }
 
+    public void registerFailListener() {
+        failureListener = new AbstractProcFailureListener(-1) {
+            @Override
+            public void run(ProcessIdentifier pid) {
+                logger.info("Detecting failure, starts to reassign and rollback");
+                rollback(pid.getId());
+                reassignFiles(pid.getId());
+            }
+        };
+        proc.getMemberList().registerFailureListener(failureListener);
+    }
+
+    public void unregisterFailListener() {
+        proc.getMemberList().unregisterFailureListener(failureListener);
+    }
+
+    private void reassignFiles(String id) {
+        final List<String> files = proc.getAndRemoveOtherMapleJobs(id);
+
+        int pos=-1;
+        for(int i=0; i<pidList.size();++i) {
+            if(pidList.get(i).getId().equals(id)) {
+                pos = i;
+                break;
+            }
+        }
+
+        if(pos == -1){
+            logger.error("Something wrong with reassign files");
+            return;
+        }
+
+        ProcessIdentifier pid;
+
+        if(pos == pidList.size() -1) {
+            pid = pidList.get(0);
+        } else {
+            pid = pidList.get(pos+1);
+        }
+
+        if(!pid.getId().equals(proc.getId())) {
+            return;
+        }
+
+        for(String file: files) {
+            if(!proc.getSDFS().isLocalFile(file)) {
+                proc.getSDFS().getRemoteFile(file, proc.getSDFS().getRootDirectory() + file);
+                proc.getSDFS().loadFileFromRootDirectory(new File(file));
+            }
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for(String file: files) {
+                    final List<String> command = new LinkedList<String>();
+                    command.add("./" + cmdExe);
+                    command.add(proc.getSDFS().getRootDirectory() + file);
+                    logger.info("Run maple command: " + command);
+                    runCommand(command);
+                    mapleResult.clear();
+                }
+//                unregisterFailListener();
+                System.out.println("maple end time: " + System.currentTimeMillis());
+            }
+        }).start();
+
+        if(pid.getId().equals(proc.getId())) {
+            Message mapleMessage = MessagesFactory.generateMapleMessage(proc.getIdentifier(), pidList, cmdExe, preFix, files);
+            TCPClient tcpClient = new TCPClient(proc.getIdentifier()).setProc(proc);
+            if(tcpClient.connect()) {
+                tcpClient.sendData(mapleMessage);
+                tcpClient.close();
+            } else {
+                logger.error("Reassign task fail");
+            }
+        }
+    }
+
+    private void rollback(String id) {
+        File rootDir = new File(proc.getSDFS().getRootDirectory());
+        File[] files;
+        if((files=rootDir.listFiles()) == null) {
+            logger.error("wrong root dir");
+            return;
+        }
+        for (File file : files) {
+            if(file.getName().startsWith("_tmp_" + id)) {
+                if(!file.delete()) {
+                    logger.error("fail to delete tmp file");
+                }
+            }
+        }
+    }
+
+
+    public void confirm(String id) {
+        File rootDir = new File(proc.getSDFS().getRootDirectory());
+        File[] files;
+        if((files=rootDir.listFiles()) == null) {
+            logger.error("wrong root dir");
+            return;
+        }
+        for (File file : files) {
+            String header = "_tmp_" + id + "_";
+            if(file.getName().startsWith(header)) {
+                BufferedReader br;
+                try {
+                    br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                } catch (FileNotFoundException e) {
+                    logger.error("file not found", e);
+                    continue;
+                }
+                String data;
+                try {
+                    while((data = br.readLine())!=null ) {
+                        proc.getSDFS().appendDataToLocalFile(file.getName().substring(header.length()), data);
+                    }
+                } catch (IOException e) {
+                    logger.error("read tmp file error", e);
+                }
+
+                if(!file.delete()) {
+                    logger.error("fail to delete tmp file");
+                }
+            }
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         System.gc();

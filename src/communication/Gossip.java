@@ -74,9 +74,13 @@ public class Gossip {
             if(infectedProcess == null) {
                 return;
             }
-            if(notSelf(infectedProcess)) {
-                sendSyncMessage(infectedProcess);
-                sendSyncFileListMessage(infectedProcess);
+            try {
+                if(notSelf(infectedProcess)) {
+                    sendSyncMessage(infectedProcess);
+                    sendSyncFileListMessage(infectedProcess);
+                }
+            } catch (Exception e) {
+                logger.error("gossip", e);
             }
         }
     }

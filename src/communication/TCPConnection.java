@@ -13,8 +13,7 @@ import org.apache.log4j.Logger;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.security.PrivateKey;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static communication.message.Messages.*;
@@ -413,9 +412,15 @@ public class TCPConnection {
     }
 
     private void constructMapleJob(MapleMessage mapleMessage) {
-        MapleForClient maple = new MapleForClient();
-        maple.setProc(proc).setMapleMessage(mapleMessage).init();
-        proc.setMapleClient(maple);
+        ProcessIdentifier pid = mapleMessage.getTargetMachine();
+        if(pid.getId().equals(proc.getId())) {
+            MapleForClient maple = new MapleForClient();
+            maple.setProc(proc).setMapleMessage(mapleMessage).init();
+            proc.setMapleClient(maple);
+        } else {
+            List<String> files = mapleMessage.getFileListList();
+            proc.addOtherMapleJobs(pid.getId(), new LinkedList<String>(files));
+        }
     }
 
     private void respondMaple(ReceivedMapleMessage receivedMapleMessage) {
@@ -425,6 +430,25 @@ public class TCPConnection {
     private void doMapleJob() {
         proc.getMapleClient().doMaple();
     }
+
+//    private void aggregateMapleResult(MapleResultMessage mapleResult) {
+//        List<String> fileNames = mapleResult.getFileNameList();
+//        List<String> values = mapleResult.getValueList();
+//        MapleForClient maple = proc.getMapleClient();
+//
+//        for(int i=0;i<fileNames.size();++i) {
+//            String fileName = fileNames.get(i);
+//            String value = values.get(i);
+//
+//            if(MiscTool.requireToCreateFile(maple.getPidList(), proc.getIdentifier(), fileName)) {
+//                if(!proc.getSDFS().hasSDFSFile(fileName)) {
+//                    proc.getSDFS().createLocalSDFSFile(fileName);
+//                }
+//                proc.getSDFS().appendDataToLocalFile(fileName, value);
+//            }
+//        }
+//
+//    }
 
     private void aggregateMapleResult(MapleResultMessage mapleResult) {
         List<String> fileNames = mapleResult.getFileNameList();
@@ -436,13 +460,28 @@ public class TCPConnection {
             String value = values.get(i);
 
             if(MiscTool.requireToCreateFile(maple.getPidList(), proc.getIdentifier(), fileName)) {
-                if(!proc.getSDFS().hasSDFSFile(fileName)) {
-                    proc.getSDFS().createLocalSDFSFile(fileName);
+                String tmpFileName = "_tmp_" + mapleResult.getFromMachine().getId() + "_" + fileName;
+                File tmpFile = new File(proc.getSDFS().getRootDirectory() + tmpFileName);
+                if(!tmpFile.exists()) {
+                    try {
+                        if(!tmpFile.createNewFile()) {
+                            throw new IOException("return false");
+                        }
+                    } catch (IOException e) {
+                        logger.error("create new file failed: ", e);
+                    }
                 }
-                proc.getSDFS().appendDataToLocalFile(fileName, value);
+
+                try {
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(tmpFile, true));
+                    bw.write(value);
+                    bw.write('\n');
+                    bw.close();
+                } catch (IOException e) {
+                    logger.error("error in appending data to tmp file");
+                }
             }
         }
-
     }
 
     private void setMaster(ProcessIdentifier masterProcess) {
