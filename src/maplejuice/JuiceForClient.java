@@ -63,10 +63,10 @@ public class JuiceForClient {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("maple start time: " + System.currentTimeMillis());
+                System.out.println("juice start time: " + System.currentTimeMillis());
                 logger.info("Run juice command: " + command);
                 runCommand(command);
-                System.out.println("maple start time: " + System.currentTimeMillis());
+                System.out.println("juice end time: " + System.currentTimeMillis());
             }
         }).start();
     }

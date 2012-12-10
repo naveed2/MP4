@@ -134,18 +134,13 @@ public class MapleForClient {
             fileNames.add(fileName);
             values.add(result.getValue());
 
-            if(fileNames.size() == 600) {
-                cur+=600;
+            if(fileNames.size() == 300) {
+                cur+=300;
                 System.gc();
                 sendResult(fileNames, values);
                 fileNames.clear();
                 values.clear();
                 System.out.println("Progress: " + cur + "/" + size);
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    //
-                }
             }
 
         }

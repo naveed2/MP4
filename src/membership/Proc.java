@@ -109,7 +109,7 @@ public class Proc {
 
         //init failure detector
 //        initFailureDetector();
-        initMemberListScanningThread();
+//        initMemberListScanningThread();
 
         initSDFS();
         initFileListScan();

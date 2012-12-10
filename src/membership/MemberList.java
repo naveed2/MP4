@@ -12,8 +12,8 @@ public class MemberList implements Iterable<ProcessIdentifier>{
     private Map<String, ProcState> stateMap;
     private Map<String, Long> timeMap;
 
-    private static final Integer MAX_TIME_DIFFERENCE = 100;
-    private static final Integer MIN_TIME_DIFFERENCE = 50;
+    private static final Integer MAX_TIME_DIFFERENCE = 200;
+    private static final Integer MIN_TIME_DIFFERENCE = 100;
 
     private static Logger logger = Logger.getLogger(MemberList.class);
 
