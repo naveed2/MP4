@@ -189,7 +189,7 @@ public class Proc {
     private void initUpdateManager() {
         updateManager = new UpdateManager();
         updateManager.setProc(this);
-        updateManager.start();
+//        updateManager.start();
     }
 
     public void initTCPServer() {

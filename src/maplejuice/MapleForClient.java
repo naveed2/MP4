@@ -49,6 +49,13 @@ public class MapleForClient {
 
         System.out.println("Received maple command: " + cmdExe + ", " + preFix + ", " + inputFileList);
 
+        for(String file: inputFileList) {
+            if(!proc.getSDFS().isLocalFile(file)) {
+                proc.getSDFS().getRemoteFile(file, proc.getSDFS().getRootDirectory() + file);
+                proc.getSDFS().loadFileFromRootDirectory(new File(file));
+            }
+        }
+
         sendReceivedMapleMessage(master);
     }
 
@@ -64,10 +71,10 @@ public class MapleForClient {
         final List<String> command = new LinkedList<String>();
         command.add("./" + cmdExe);
         for(String file: inputFileList) {
-            if(!proc.getSDFS().isLocalFile(file)) {
-                proc.getSDFS().getRemoteFile(file, proc.getSDFS().getRootDirectory() + file);
-                proc.getSDFS().loadFileFromRootDirectory(new File(file));
-            }
+//            if(!proc.getSDFS().isLocalFile(file)) {
+//                proc.getSDFS().getRemoteFile(file, proc.getSDFS().getRootDirectory() + file);
+//                proc.getSDFS().loadFileFromRootDirectory(new File(file));
+//            }
             command.add(proc.getSDFS().getRootDirectory() + file);
         }
 
@@ -109,6 +116,8 @@ public class MapleForClient {
     }
 
     public void saveResults() {
+        Integer size = mapleResult.entrySet().size();
+        Integer cur = 0;
         for(Map.Entry<String, String> result : mapleResult.entrySet()) {
             String key = result.getKey();
             String fileName = preFix + "_" + key;
@@ -118,6 +127,8 @@ public class MapleForClient {
             }
 
             sendResult(fileName, result.getValue());
+            ++cur;
+            System.out.println("Progress: " + cur + "/" + size);
         }
     }
 

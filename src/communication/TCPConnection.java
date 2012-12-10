@@ -69,6 +69,7 @@ public class TCPConnection {
                 System.arraycopy(tmpBytes, 0, bytes, 0, num);
                 Message message = Message.parseFrom(bytes);
 //                logger.info("Received Message: " + message.toString() + ", size: " + message.toByteArray().length);
+                logger.info("Received Message: " + message.getType());
                 handle(message);
             } catch(IOException e) {
                 if(e.getMessage().equals("socket close")) {
@@ -314,15 +315,23 @@ public class TCPConnection {
 
                 TCPClient tcpClient = new TCPClient(address);
                 tcpClient.setProc(proc);
-                if(tcpClient.connect()) {
+                while(true) {
+                    if(tcpClient.connect()) {
+                        try {
+                            BufferedInputStream bis =
+                                    new BufferedInputStream(new FileInputStream(proc.getSDFS().getFile(fileName)));
+                            tcpClient.sendData(bis);
+                            bis.close();
+                            tcpClient.close();
+                            break;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     try {
-                        BufferedInputStream bis =
-                                new BufferedInputStream(new FileInputStream(proc.getSDFS().getFile(fileName)));
-                        tcpClient.sendData(bis);
-                        bis.close();
-                        tcpClient.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        ;
                     }
                 }
                 break;

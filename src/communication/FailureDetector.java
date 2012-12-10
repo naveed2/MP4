@@ -18,7 +18,7 @@ public class FailureDetector {
 
     private static final Integer HEART_BEATING_SEND_DELAY = 200;
     private static final Integer HEART_BEATING_LISTEN_DELAY = 1000;
-    private static final Integer MAXIMUM_SUSPENSION = 5;
+    private static final Integer MAXIMUM_SUSPENSION = 10;
 
     public FailureDetector() {
         shouldStopListen = new AtomicBoolean(false);
@@ -78,6 +78,7 @@ public class FailureDetector {
     }
 
     public void onReceivingHeartBeat() {
+        suspension=0;
         listenThread.interrupt();
     }
 

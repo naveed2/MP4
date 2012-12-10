@@ -134,6 +134,7 @@ public class SDFS {
 
     private void startReceivingFile(FileIdentifier fileIdentifier, String savedName) {
         try {
+            System.out.println("Receiving file: " + savedName);
             ServerSocket serverSocket = new ServerSocket(proc.getTcpPort()+3);
             Socket socket = serverSocket.accept();
             File file = new File(savedName);
