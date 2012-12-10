@@ -35,9 +35,10 @@ enum MessageType{
     receivedMaple = 15;
     doMaple = 16;
     mapleResult = 17;
+    mapleFinish = 18;
 
-    juice = 18;
-    juiceResult = 19;
+    juice = 19;
+    juiceResult = 20;
 }
 
 message HeartBeatMessage {
@@ -126,6 +127,10 @@ message DoMapleMessage {
     required ProcessIdentifier fromMachine = 1;
 }
 
+message MapleFinishMessage {
+    required ProcessIdentifier fromMachine = 1;
+}
+
 message MapleResultMessage {
     required ProcessIdentifier fromMachine = 1;
     repeated string fileName = 2;
@@ -171,9 +176,10 @@ message Message{
     optional ReceivedMapleMessage receivedMapleMessage = 18;
     optional DoMapleMessage doMapleMessage = 19;
     optional MapleResultMessage mapleResultMessage = 20;
+    optional MapleFinishMessage mapleFinishMessage = 21;
 
-    optional JuiceMessage juiceMessage = 21;
-    optional JuiceResultMessage juiceResultMessage = 22;
+    optional JuiceMessage juiceMessage = 22;
+    optional JuiceResultMessage juiceResultMessage = 23;
 }
 
 

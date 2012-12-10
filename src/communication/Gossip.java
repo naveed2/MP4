@@ -28,7 +28,7 @@ public class Gossip {
 
     public Gossip(){
         shouldStop = new AtomicBoolean(false);
-        delay = 500;
+        delay = 1000;
     }
 
 //  This method is used to get the memberlist

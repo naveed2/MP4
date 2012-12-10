@@ -331,7 +331,6 @@ public class Proc {
     }
 
     Map<String, List<String>> mapleJobsForOthers = new HashMap<String, List<String>>();
-    Map<String, List<String>> mapleFilesFromOthers = new HashMap<String, List<String>>();
 
     public void addOtherMapleJobs(String id, List<String> files) {
         mapleJobsForOthers.put(id ,files);
@@ -341,12 +340,5 @@ public class Proc {
         return mapleJobsForOthers.remove(id);
     }
 
-    public void addMapleFileFromOthers(String id, String file) {
-        synchronized (this){
-            List<String> list = mapleFilesFromOthers.get(id);
-            if(list == null) list = new LinkedList<String>();
-            list.add(file);
-        }
-    }
 
 }

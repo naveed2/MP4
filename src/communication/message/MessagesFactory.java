@@ -250,5 +250,13 @@ public class MessagesFactory {
     }
 
 
+    public static Message generateMapleFinishMessage(ProcessIdentifier fromMachine) {
+        MapleFinishMessage mapleFinishMessage = MapleFinishMessage.newBuilder()
+                .setFromMachine(fromMachine).build();
+
+        return Message.newBuilder()
+                .setType(MessageType.mapleFinish)
+                .setMapleFinishMessage(mapleFinishMessage).build();
+    }
 
 }

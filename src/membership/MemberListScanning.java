@@ -6,7 +6,7 @@ public class MemberListScanning {
 
     private Proc proc;
     private AtomicBoolean shouldStop;
-    private static final Integer INTERVAL = 2000;
+    private static final Integer INTERVAL = 5000;
 
     public MemberListScanning() {
         shouldStop = new AtomicBoolean(false);

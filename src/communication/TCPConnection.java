@@ -378,6 +378,11 @@ public class TCPConnection {
                 aggregateMapleResult(mapleResultMessage);
                 break;
 
+            case mapleFinish:
+                MapleFinishMessage mapleFinishMessage = m.getMapleFinishMessage();
+                confirmData(mapleFinishMessage);
+                break;
+
             case juice:
                 JuiceMessage juiceMessage = m.getJuiceMessage();
                 doJuiceJob(juiceMessage);
@@ -398,6 +403,7 @@ public class TCPConnection {
         juice.setProc(proc).setJuiceMessage(juiceMessage).init();
         juice.doJuice();
     }
+
     private void aggregateJuiceResult(JuiceResultMessage juiceResult) {
         String fileName = juiceResult.getFileName();
         Integer numJuice = juiceResult.getNumJuice();
@@ -410,7 +416,6 @@ public class TCPConnection {
             proc.getSDFS().appendDataToLocalFile(fileName, data);
         }
     }
-
     private void constructMapleJob(MapleMessage mapleMessage) {
         ProcessIdentifier pid = mapleMessage.getTargetMachine();
         if(pid.getId().equals(proc.getId())) {
@@ -421,6 +426,17 @@ public class TCPConnection {
             List<String> files = mapleMessage.getFileListList();
             proc.addOtherMapleJobs(pid.getId(), new LinkedList<String>(files));
         }
+    }
+
+    private void confirmData(MapleFinishMessage mapleFinishMessage) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            //
+        }
+        String id = mapleFinishMessage.getFromMachine().getId();
+        proc.getMapleClient().confirm(id);
+        proc.getAndRemoveOtherMapleJobs(id);
     }
 
     private void respondMaple(ReceivedMapleMessage receivedMapleMessage) {

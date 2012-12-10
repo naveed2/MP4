@@ -92,6 +92,7 @@ public class MapleForClient {
                     mapleResult.clear();
                 }
 //                unregisterFailListener();
+                MultiCast.broadCast(pidList, MessagesFactory.generateMapleFinishMessage(proc.getIdentifier()));
                 System.out.println("maple end time: " + System.currentTimeMillis());
             }
         }).start();
@@ -185,16 +186,21 @@ public class MapleForClient {
         return pidList;
     }
 
+    private static boolean registered = false;
+
     public void registerFailListener() {
-        failureListener = new AbstractProcFailureListener(-1) {
-            @Override
-            public void run(ProcessIdentifier pid) {
-                logger.info("Detecting failure, starts to reassign and rollback");
-                rollback(pid.getId());
-                reassignFiles(pid.getId());
-            }
-        };
-        proc.getMemberList().registerFailureListener(failureListener);
+        if(!MapleForClient.registered) {
+            failureListener = new AbstractProcFailureListener(-1) {
+                @Override
+                public void run(ProcessIdentifier pid) {
+                    logger.info("Detecting failure, starts to reassign and rollback");
+                    rollback(pid.getId());
+                    reassignFiles(pid.getId());
+                }
+            };
+            proc.getMemberList().registerFailureListener(failureListener);
+            MapleForClient.registered = true;
+        }
     }
 
     public void unregisterFailListener() {
@@ -203,6 +209,7 @@ public class MapleForClient {
 
     private void reassignFiles(String id) {
         final List<String> files = proc.getAndRemoveOtherMapleJobs(id);
+        if(files.size() == 0) return;
 
         int pos=-1;
         for(int i=0; i<pidList.size();++i) {
@@ -248,6 +255,7 @@ public class MapleForClient {
                     mapleResult.clear();
                 }
 //                unregisterFailListener();
+                MultiCast.broadCast(pidList, MessagesFactory.generateMapleFinishMessage(proc.getIdentifier()));
                 System.out.println("maple end time: " + System.currentTimeMillis());
             }
         }).start();
@@ -303,6 +311,7 @@ public class MapleForClient {
                     while((data = br.readLine())!=null ) {
                         proc.getSDFS().appendDataToLocalFile(file.getName().substring(header.length()), data);
                     }
+                    br.close();
                 } catch (IOException e) {
                     logger.error("read tmp file error", e);
                 }
