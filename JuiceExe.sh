@@ -1,4 +1,4 @@
 for PARAM; do
         args=$args" "$PARAM
 done
-java -jar JuiceExe.jar $args
+java -Xmx2g -jar JuiceExe.jar $args
