@@ -162,23 +162,21 @@ public class MemberList implements Iterable<ProcessIdentifier>{
     }
 
     public boolean updateMemberList() {
-        synchronized (this) {
-            boolean flag = false;
-            for(ProcessIdentifier identifier : list) {
-                if(identifier.getId().equals(proc.getId())) {   //don't update itself
-                    continue;
-                }
-                Long diff = TimeMachine.getTime() - timeMap.get(identifier.getId());
-                if(diff > MAX_TIME_DIFFERENCE) {
-                    remove(identifier);
-                    return true;
-                } else if(diff > MIN_TIME_DIFFERENCE) {
-                    setAsToBeDeleted(identifier);
-                    flag = true;
-                }
+        boolean flag = false;
+        for(ProcessIdentifier identifier : getList()) {
+            if(identifier.getId().equals(proc.getId())) {   //don't update itself
+                continue;
             }
-            return flag;
+            Long diff = TimeMachine.getTime() - timeMap.get(identifier.getId());
+            if(diff > MAX_TIME_DIFFERENCE) {
+                remove(identifier);
+                return true;
+            } else if(diff > MIN_TIME_DIFFERENCE) {
+                setAsToBeDeleted(identifier);
+                flag = true;
+            }
         }
+        return flag;
     }
 
     public void setProc(Proc proc) {

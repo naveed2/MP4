@@ -67,6 +67,7 @@ public class JuiceForClient {
                 logger.info("Run juice command: " + command);
                 runCommand(command);
                 System.out.println("juice end time: " + System.currentTimeMillis());
+                juiceResult.clear();
             }
         }).start();
     }
@@ -95,17 +96,38 @@ public class JuiceForClient {
     }
 
     private void saveResults() {
+        Integer size = juiceResult.size();
+        Integer cur = 0;
+        List<String> key = new LinkedList<String>();
+        List<String> value = new LinkedList<String>();
+
         for(Map.Entry<String, String> result : juiceResult.entrySet()) {
 
+            key.add(result.getKey());
+            value.add(result.getValue());
             if(MiscTool.requireToCreateFile(proc.getMemberList().getList(), proc.getIdentifier(), destFileName, numJuice)) {
                 proc.getSDFS().createLocalSDFSFile(destFileName);
             }
 
-            sendResult(destFileName, result.getKey(), result.getValue());
+            if(key.size() == 300) {
+                cur += 300;
+                sendResult(destFileName, key, value);
+                key.clear();
+                value.clear();
+                System.out.println("Progress: " + cur + "/" + size);
+            }
+
+//            sendResult(destFileName, result.getKey(), result.getValue());
+        }
+
+        if(key.size() !=0 ){
+            cur += key.size();
+            sendResult(destFileName, key, value);
+            System.out.println("Progress: " + cur + "/" + size);
         }
     }
 
-    public void sendResult(String fileName, String key, String value) {
+    public void sendResult(String fileName, List<String> key, List<String> value) {
         Message juiceResult = MessagesFactory.generateJuiceResultMessage(
                 proc.getIdentifier(),fileName,key,value, numJuice);
         MultiCast.broadCast(proc.getMemberList().getList(), juiceResult);

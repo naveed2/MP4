@@ -239,10 +239,10 @@ public class MessagesFactory {
     }
 
     public static Message generateJuiceResultMessage(ProcessIdentifier fromMachine, String fileName,
-                                                     String key, String value, Integer numJuice) {
+                                                     List<String> keys, List<String> values, Integer numJuice) {
         JuiceResultMessage juiceResultMessage = JuiceResultMessage.newBuilder()
                 .setFromMachine(fromMachine).setFileName(fileName)
-                .setKey(key).setValue(value).setNumJuice(numJuice).build();
+                .addAllKey(keys).addAllValue(values).setNumJuice(numJuice).build();
 
         return Message.newBuilder()
                 .setType(MessageType.juiceResult)

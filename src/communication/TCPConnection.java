@@ -315,6 +315,7 @@ public class TCPConnection {
             case get:
                 GetMessage getMessage = m.getGetMessage();
                 ProcessIdentifier requestProcess = getMessage.getRequestingProcess();
+                proc.getMemberList().updateProcessIdentifier(requestProcess);
                 String address = requestProcess.getIP()+":" + (requestProcess.getPort()+3);
                 String fileName = getMessage.getFileName();
 
@@ -375,6 +376,7 @@ public class TCPConnection {
 
             case mapleResult:
                 MapleResultMessage mapleResultMessage = m.getMapleResultMessage();
+                proc.getMemberList().updateProcessIdentifier(mapleResultMessage.getFromMachine());
                 aggregateMapleResult(mapleResultMessage);
                 break;
 
@@ -390,6 +392,7 @@ public class TCPConnection {
 
             case juiceResult:
                 JuiceResultMessage juiceResultMessage = m.getJuiceResultMessage();
+                proc.getMemberList().updateProcessIdentifier(juiceResultMessage.getFromMachine());
                 aggregateJuiceResult(juiceResultMessage);
             default:
                 break;
@@ -412,8 +415,13 @@ public class TCPConnection {
             if(!proc.getSDFS().hasSDFSFile(fileName)) {
                 proc.getSDFS().createLocalSDFSFile(fileName);
             }
-            String data = juiceResult.getKey() + "," + juiceResult.getValue();
-            proc.getSDFS().appendDataToLocalFile(fileName, data);
+
+            List<String> key = juiceResult.getKeyList();
+            List<String> value = juiceResult.getValueList();
+            for(int i=0;i<key.size(); ++i) {
+                String data = key.get(i) + "," + value.get(i);
+                proc.getSDFS().appendDataToLocalFile(fileName, data);
+            }
         }
     }
     private void constructMapleJob(MapleMessage mapleMessage) {

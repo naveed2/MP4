@@ -13221,13 +13221,15 @@ public final class Messages {
     boolean hasFileName();
     String getFileName();
     
-    // optional string key = 3;
-    boolean hasKey();
-    String getKey();
+    // repeated string key = 3;
+    java.util.List<String> getKeyList();
+    int getKeyCount();
+    String getKey(int index);
     
-    // optional string value = 4;
-    boolean hasValue();
-    String getValue();
+    // repeated string value = 4;
+    java.util.List<String> getValueList();
+    int getValueCount();
+    String getValue(int index);
     
     // optional int32 numJuice = 5;
     boolean hasNumJuice();
@@ -13307,75 +13309,39 @@ public final class Messages {
       }
     }
     
-    // optional string key = 3;
+    // repeated string key = 3;
     public static final int KEY_FIELD_NUMBER = 3;
-    private java.lang.Object key_;
-    public boolean hasKey() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+    private com.google.protobuf.LazyStringList key_;
+    public java.util.List<String>
+        getKeyList() {
+      return key_;
     }
-    public String getKey() {
-      java.lang.Object ref = key_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          key_ = s;
-        }
-        return s;
-      }
+    public int getKeyCount() {
+      return key_.size();
     }
-    private com.google.protobuf.ByteString getKeyBytes() {
-      java.lang.Object ref = key_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        key_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public String getKey(int index) {
+      return key_.get(index);
     }
     
-    // optional string value = 4;
+    // repeated string value = 4;
     public static final int VALUE_FIELD_NUMBER = 4;
-    private java.lang.Object value_;
-    public boolean hasValue() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+    private com.google.protobuf.LazyStringList value_;
+    public java.util.List<String>
+        getValueList() {
+      return value_;
     }
-    public String getValue() {
-      java.lang.Object ref = value_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          value_ = s;
-        }
-        return s;
-      }
+    public int getValueCount() {
+      return value_.size();
     }
-    private com.google.protobuf.ByteString getValueBytes() {
-      java.lang.Object ref = value_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        value_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public String getValue(int index) {
+      return value_.get(index);
     }
     
     // optional int32 numJuice = 5;
     public static final int NUMJUICE_FIELD_NUMBER = 5;
     private int numJuice_;
     public boolean hasNumJuice() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     public int getNumJuice() {
       return numJuice_;
@@ -13384,8 +13350,8 @@ public final class Messages {
     private void initFields() {
       fromMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
       fileName_ = "";
-      key_ = "";
-      value_ = "";
+      key_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       numJuice_ = 0;
     }
     private byte memoizedIsInitialized = -1;
@@ -13414,13 +13380,13 @@ public final class Messages {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeBytes(2, getFileNameBytes());
       }
+      for (int i = 0; i < key_.size(); i++) {
+        output.writeBytes(3, key_.getByteString(i));
+      }
+      for (int i = 0; i < value_.size(); i++) {
+        output.writeBytes(4, value_.getByteString(i));
+      }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getKeyBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getValueBytes());
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeInt32(5, numJuice_);
       }
       getUnknownFields().writeTo(output);
@@ -13440,15 +13406,25 @@ public final class Messages {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, getFileNameBytes());
       }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < key_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(key_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getKeyList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < value_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(value_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getValueList().size();
+      }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getKeyBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getValueBytes());
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(5, numJuice_);
       }
@@ -13585,9 +13561,9 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000001);
         fileName_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        key_ = "";
+        key_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000004);
-        value_ = "";
+        value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000008);
         numJuice_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -13641,16 +13617,20 @@ public final class Messages {
           to_bitField0_ |= 0x00000002;
         }
         result.fileName_ = fileName_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          key_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              key_);
+          bitField0_ = (bitField0_ & ~0x00000004);
         }
         result.key_ = key_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
+        if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          value_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              value_);
+          bitField0_ = (bitField0_ & ~0x00000008);
         }
         result.value_ = value_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
+          to_bitField0_ |= 0x00000004;
         }
         result.numJuice_ = numJuice_;
         result.bitField0_ = to_bitField0_;
@@ -13675,11 +13655,25 @@ public final class Messages {
         if (other.hasFileName()) {
           setFileName(other.getFileName());
         }
-        if (other.hasKey()) {
-          setKey(other.getKey());
+        if (!other.key_.isEmpty()) {
+          if (key_.isEmpty()) {
+            key_ = other.key_;
+            bitField0_ = (bitField0_ & ~0x00000004);
+          } else {
+            ensureKeyIsMutable();
+            key_.addAll(other.key_);
+          }
+          onChanged();
         }
-        if (other.hasValue()) {
-          setValue(other.getValue());
+        if (!other.value_.isEmpty()) {
+          if (value_.isEmpty()) {
+            value_ = other.value_;
+            bitField0_ = (bitField0_ & ~0x00000008);
+          } else {
+            ensureValueIsMutable();
+            value_.addAll(other.value_);
+          }
+          onChanged();
         }
         if (other.hasNumJuice()) {
           setNumJuice(other.getNumJuice());
@@ -13738,13 +13732,13 @@ public final class Messages {
               break;
             }
             case 26: {
-              bitField0_ |= 0x00000004;
-              key_ = input.readBytes();
+              ensureKeyIsMutable();
+              key_.add(input.readBytes());
               break;
             }
             case 34: {
-              bitField0_ |= 0x00000008;
-              value_ = input.readBytes();
+              ensureValueIsMutable();
+              value_.add(input.readBytes());
               break;
             }
             case 40: {
@@ -13884,75 +13878,115 @@ public final class Messages {
         onChanged();
       }
       
-      // optional string key = 3;
-      private java.lang.Object key_ = "";
-      public boolean hasKey() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+      // repeated string key = 3;
+      private com.google.protobuf.LazyStringList key_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureKeyIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          key_ = new com.google.protobuf.LazyStringArrayList(key_);
+          bitField0_ |= 0x00000004;
+         }
       }
-      public String getKey() {
-        java.lang.Object ref = key_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          key_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
+      public java.util.List<String>
+          getKeyList() {
+        return java.util.Collections.unmodifiableList(key_);
       }
-      public Builder setKey(String value) {
+      public int getKeyCount() {
+        return key_.size();
+      }
+      public String getKey(int index) {
+        return key_.get(index);
+      }
+      public Builder setKey(
+          int index, String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
-        key_ = value;
+  ensureKeyIsMutable();
+        key_.set(index, value);
+        onChanged();
+        return this;
+      }
+      public Builder addKey(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureKeyIsMutable();
+        key_.add(value);
+        onChanged();
+        return this;
+      }
+      public Builder addAllKey(
+          java.lang.Iterable<String> values) {
+        ensureKeyIsMutable();
+        super.addAll(values, key_);
         onChanged();
         return this;
       }
       public Builder clearKey() {
+        key_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000004);
-        key_ = getDefaultInstance().getKey();
         onChanged();
         return this;
       }
-      void setKey(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000004;
-        key_ = value;
+      void addKey(com.google.protobuf.ByteString value) {
+        ensureKeyIsMutable();
+        key_.add(value);
         onChanged();
       }
       
-      // optional string value = 4;
-      private java.lang.Object value_ = "";
-      public boolean hasValue() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+      // repeated string value = 4;
+      private com.google.protobuf.LazyStringList value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureValueIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          value_ = new com.google.protobuf.LazyStringArrayList(value_);
+          bitField0_ |= 0x00000008;
+         }
       }
-      public String getValue() {
-        java.lang.Object ref = value_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          value_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
+      public java.util.List<String>
+          getValueList() {
+        return java.util.Collections.unmodifiableList(value_);
       }
-      public Builder setValue(String value) {
+      public int getValueCount() {
+        return value_.size();
+      }
+      public String getValue(int index) {
+        return value_.get(index);
+      }
+      public Builder setValue(
+          int index, String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000008;
-        value_ = value;
+  ensureValueIsMutable();
+        value_.set(index, value);
+        onChanged();
+        return this;
+      }
+      public Builder addValue(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureValueIsMutable();
+        value_.add(value);
+        onChanged();
+        return this;
+      }
+      public Builder addAllValue(
+          java.lang.Iterable<String> values) {
+        ensureValueIsMutable();
+        super.addAll(values, value_);
         onChanged();
         return this;
       }
       public Builder clearValue() {
+        value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000008);
-        value_ = getDefaultInstance().getValue();
         onChanged();
         return this;
       }
-      void setValue(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000008;
-        value_ = value;
+      void addValue(com.google.protobuf.ByteString value) {
+        ensureValueIsMutable();
+        value_.add(value);
         onChanged();
       }
       
@@ -17954,8 +17988,8 @@ public final class Messages {
       "\n\010numJuice\030\004 \001(\005\022\020\n\010fileList\030\005 \003(\t\"\223\001\n\022J" +
       "uiceResultMessage\022=\n\013fromMachine\030\001 \002(\0132(" +
       ".communication.message.ProcessIdentifier" +
-      "\022\020\n\010fileName\030\002 \001(\t\022\013\n\003key\030\003 \001(\t\022\r\n\005value" +
-      "\030\004 \001(\t\022\020\n\010numJuice\030\005 \001(\005\"\340\013\n\007Message\0220\n\004" +
+      "\022\020\n\010fileName\030\002 \001(\t\022\013\n\003key\030\003 \003(\t\022\r\n\005value" +
+      "\030\004 \003(\t\022\020\n\010numJuice\030\005 \001(\005\"\340\013\n\007Message\0220\n\004" +
       "type\030\001 \002(\0162\".communication.message.Messa",
       "geType\0227\n\013joinMessage\030\002 \001(\0132\".communicat" +
       "ion.message.JoinMessage\0229\n\014leaveMessage\030" +

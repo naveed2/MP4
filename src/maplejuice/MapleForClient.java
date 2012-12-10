@@ -144,7 +144,6 @@ public class MapleForClient {
 
             if(fileNames.size() == 300) {
                 cur+=300;
-                System.gc();
                 sendResult(fileNames, values);
                 fileNames.clear();
                 values.clear();
