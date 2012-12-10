@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name = "MapleJuice" default = "maplejuice.jar" basedir = ".">
+    <property name="build.home" value="build/" />
+    <property name="deploy.home" value="deploy/" />
+    <property name="src" value="${basedir}/src/" />
+
+    <path id="compiled.classpath">
+        <fileset dir="lib">
+            <include name="*.jar" />    
+        </fileset>
+    </path>
+
+    <target name="clean">
+        <delete dir="${build.home}" quiet="false"/>
+        <delete dir="${deploy.home}" quiet="false" />
+    </target>
+
+    <target name="maplejuice.init" depends="clean">
+        <mkdir dir="${build.home}" />
+        <mkdir dir="${build.home}/classes/" />
+        <mkdir dir="${deploy.home}" />
+        <mkdir dir="${deploy.home}/lib" />
+    </target>
+
+    <target name="maplejuice.compile" depends="maplejuice.init">
+        <javac srcdir="${src}" destdir = "${build.home}/classes/" includeantruntime="false">
+            <classpath refid="compiled.classpath"/>
+        </javac>
+    </target>
+
+    <target name="maplejuice.jar" depends="maplejuice.compile">
+        <copy todir="${deploy.home}">
+            <fileset dir="${basedir}">
+                <include name="log4j.properties" />
+                <include name="*.sh" />
+                <include name="protobuf" />
+            </fileset>
+        </copy>
+
+        <copy todir="${deploy.home}/lib">
+            <fileset dir="${basedir}/lib">
+                <include name="*.jar" />     
+            </fileset>
+        </copy>
+
+        <jar destfile="${deploy.home}/maplejuice.jar" basedir="${build.home}/classes">
+            <manifest>
+                <attribute name="Main-Class" value="main.MainEntry" />
+            </manifest>
+        </jar>
+    </target>
+    
+  
+    <target name="build" depends="maplejuice.jar" />
+
+    
+</project>
