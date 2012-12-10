@@ -1,5 +1,6 @@
 package membership;
 
+import communication.TCPClient;
 import communication.message.Messages.ProcessIdentifier;
 import misc.TimeMachine;
 import org.apache.log4j.Logger;
@@ -172,6 +173,12 @@ public class MemberList implements Iterable<ProcessIdentifier>{
                 remove(identifier);
                 return true;
             } else if(diff > MIN_TIME_DIFFERENCE) {
+                TCPClient tcpCLient = new TCPClient(identifier).setProc(proc);
+                if(tcpCLient.connect()){
+                    timeMap.put(identifier.getId(), TimeMachine.getTime());
+                    tcpCLient.close();
+                    continue;
+                }
                 setAsToBeDeleted(identifier);
                 flag = true;
             }

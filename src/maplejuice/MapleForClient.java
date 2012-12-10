@@ -143,8 +143,8 @@ public class MapleForClient {
             fileNames.add(fileName);
             values.add(result.getValue());
 
-            if(fileNames.size() == 800) {
-                cur+=800;
+            if(fileNames.size() == 700) {
+                cur+=700;
                 sendResult(fileNames, values);
                 fileNames.clear();
                 values.clear();
@@ -290,19 +290,13 @@ public class MapleForClient {
         }
     }
 
-    private boolean isConfirming = false;
     public void confirm(String id) {
         System.out.println(MiscTool.getDate() + ":" + "Start committing...");
         confirmPid.add(id);
 
-        if(!isConfirming) {
-            isConfirming = true;
-        } else {
-            return;
-        }
         File rootDir = new File(proc.getSDFS().getRootDirectory());
         File[] files;
-        boolean flag = true;
+        boolean flag;
         while(true) {
             flag = true;
             if((files=rootDir.listFiles()) == null) {
@@ -310,32 +304,13 @@ public class MapleForClient {
                 return;
             }
             for (File file : files) {
-                String header;
-                Integer prefixPos = file.getName().indexOf(preFix);
-                if(prefixPos == -1) continue;
+                String header = "_tmp_" + id + "_";
 
-                header = file.getName().substring(0, prefixPos);
-                if(!(header.startsWith("_tmp_") || !header.endsWith("_"))) {
-                    continue;
-                }
-                if(header.length() ==0) {
-                    continue;
-                }
-                String idInHeader;
-
-                try {
-                    idInHeader = header.substring(5, header.length()-1);
-                } catch (StringIndexOutOfBoundsException e) {
-                    logger.info("string index out of bounds: " + header, e);
-                    continue;
-                }
-
-//                if(file.getName().startsWith(header)) {
-                if(confirmPid.contains(idInHeader)) {
+                if(file.getName().startsWith(header)) {
                     String newFileName = file.getName().substring(header.length());
-                    if(!proc.getSDFS().hasSDFSFile(newFileName)) {
-                        proc.getSDFS().createLocalSDFSFile(newFileName);
-                    }
+//                    if(!proc.getSDFS().hasSDFSFile(newFileName)) {
+//                        proc.getSDFS().createLocalSDFSFile(newFileName);
+//                    }
                     flag = false;
                     BufferedReader br;
                     try {
@@ -365,6 +340,24 @@ public class MapleForClient {
             }
         }
         System.out.println(MiscTool.getDate() + ":" + "Committing done");
+        loadIntermediateFilesToSDFS();
+    }
+
+    private void loadIntermediateFilesToSDFS() {
+        logger.info("loadIntermediateFilesToSDFS");
+        File rootDir =new File(proc.getSDFS().getRootDirectory());
+        File[] files = rootDir.listFiles();
+        if(files == null) {
+            logger.error("wrong root dir");
+            return;
+        }
+
+        for(File file : files) {
+            if(file.getName().startsWith(preFix)) {
+                proc.getSDFS().loadFileFromRootDirectory(file);
+            }
+        }
+        logger.info("loadIntermediateFilesToSDFS finished");
     }
 
     public static void main(String[] args) throws IOException {

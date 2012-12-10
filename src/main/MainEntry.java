@@ -181,7 +181,7 @@ public class MainEntry {
                                 '\t' + address +
                                 '\t' + timeStamp +
                                 '\t' + localTime +
-                                '\t' +fileState +
+//                                '\t' + fileState +
                                 '\t' + sdf.format(date));
             }
         } catch (Exception ex) {
