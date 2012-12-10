@@ -1,4 +1,4 @@
-//package TFIDF;
+package TFIDF;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
