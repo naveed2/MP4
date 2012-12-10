@@ -14,6 +14,9 @@ import java.util.*;
 import static communication.message.Messages.Message;
 import static communication.message.Messages.ProcessIdentifier;
 
+/**
+ * Maple master. Responsible for assigning files to procs.
+ */
 public class MapleForMaster {
     private Proc proc;
 

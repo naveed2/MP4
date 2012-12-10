@@ -14,6 +14,9 @@ import static communication.message.Messages.MapleMessage;
 import static communication.message.Messages.Message;
 import static communication.message.Messages.ProcessIdentifier;
 
+/**
+ * This maple for client part.
+ */
 public class MapleForClient {
 
     private static Logger logger = Logger.getLogger(MapleForClient.class);
@@ -68,7 +71,7 @@ public class MapleForClient {
 
     public void doMaple() {
 
-        System.out.println(MiscTool.getDate());
+        System.out.println("maple start time: " + System.currentTimeMillis());
 
 
         new Thread(new Runnable() {
@@ -80,8 +83,9 @@ public class MapleForClient {
                     command.add(proc.getSDFS().getRootDirectory() + file);
                     logger.info("Run maple command: " + command);
                     runCommand(command);
+                    mapleResult.clear();
                 }
-                System.out.println(MiscTool.getDate());
+                System.out.println("maple end time: " + System.currentTimeMillis());
             }
         }).start();
     }
@@ -130,8 +134,9 @@ public class MapleForClient {
             fileNames.add(fileName);
             values.add(result.getValue());
 
-            if(fileNames.size() == 300) {
-                cur+=300;
+            if(fileNames.size() == 600) {
+                cur+=600;
+                System.gc();
                 sendResult(fileNames, values);
                 fileNames.clear();
                 values.clear();
@@ -180,23 +185,7 @@ public class MapleForClient {
 
 
     public static void main(String[] args) throws IOException {
-        List<String> cmds = new LinkedList<String>();
-        cmds.add("./maple_exe");
-        cmds.add("input1");
-        cmds.add("input2");
-        cmds.add("input3");
-
-
-        List<String> fileList = new LinkedList<String>();
-        fileList.add("input1");
-        fileList.add("input2");
-        fileList.add("input3");
-        MapleForClient maple = new MapleForClient();
-        maple.cmdExe="maple_exe";
-        maple.inputFileList = fileList;
-        maple.mapleResult = new HashMap<String, String>();
-        maple.doMaple();
-
+        System.gc();
 
 
 //        ProcessBuilder pb = new ProcessBuilder(cmds);

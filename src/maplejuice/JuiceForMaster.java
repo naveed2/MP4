@@ -12,6 +12,9 @@ import static communication.message.Messages.FileIdentifier;
 import static communication.message.Messages.Message;
 import static communication.message.Messages.ProcessIdentifier;
 
+/**
+ * This is juice for master. It's usage is to assign intermediate files to procs.
+ */
 public class JuiceForMaster {
 
     private Proc proc;

@@ -16,7 +16,7 @@ public class FailureDetector {
     private Thread listenThread;
     private Integer suspension;
 
-    private static final Integer HEART_BEATING_SEND_DELAY = 200;
+    private static final Integer HEART_BEATING_SEND_DELAY = 50;
     private static final Integer HEART_BEATING_LISTEN_DELAY = 1000;
     private static final Integer MAXIMUM_SUSPENSION = 10;
 

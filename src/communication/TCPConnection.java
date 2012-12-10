@@ -82,6 +82,11 @@ public class TCPConnection {
                 //ignore it
             }
         }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            System.out.println(111);
+        }
     }
 
     public String readID() {
@@ -588,6 +593,8 @@ public class TCPConnection {
     }
 
     public void close() throws IOException {
+        is.close();
+        os.close();
         socket.close();
     }
 

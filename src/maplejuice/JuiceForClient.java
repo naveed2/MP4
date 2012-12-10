@@ -16,6 +16,9 @@ import java.util.Map;
 import static communication.message.Messages.JuiceMessage;
 import static communication.message.Messages.Message;
 
+/**
+ * It's juice client. Its function is to calculate data using juice exe.
+ */
 public class JuiceForClient {
     private static Logger logger = Logger.getLogger(JuiceForClient.class);
 
@@ -60,8 +63,10 @@ public class JuiceForClient {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                System.out.println("maple start time: " + System.currentTimeMillis());
                 logger.info("Run juice command: " + command);
                 runCommand(command);
+                System.out.println("maple start time: " + System.currentTimeMillis());
             }
         }).start();
     }
