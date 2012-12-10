@@ -11316,13 +11316,15 @@ public final class Messages {
     communication.message.Messages.ProcessIdentifier getFromMachine();
     communication.message.Messages.ProcessIdentifierOrBuilder getFromMachineOrBuilder();
     
-    // optional string fileName = 2;
-    boolean hasFileName();
-    String getFileName();
+    // repeated string fileName = 2;
+    java.util.List<String> getFileNameList();
+    int getFileNameCount();
+    String getFileName(int index);
     
-    // optional string value = 3;
-    boolean hasValue();
-    String getValue();
+    // repeated string value = 3;
+    java.util.List<String> getValueList();
+    int getValueCount();
+    String getValue(int index);
   }
   public static final class MapleResultMessage extends
       com.google.protobuf.GeneratedMessage
@@ -11366,74 +11368,38 @@ public final class Messages {
       return fromMachine_;
     }
     
-    // optional string fileName = 2;
+    // repeated string fileName = 2;
     public static final int FILENAME_FIELD_NUMBER = 2;
-    private java.lang.Object fileName_;
-    public boolean hasFileName() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+    private com.google.protobuf.LazyStringList fileName_;
+    public java.util.List<String>
+        getFileNameList() {
+      return fileName_;
     }
-    public String getFileName() {
-      java.lang.Object ref = fileName_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          fileName_ = s;
-        }
-        return s;
-      }
+    public int getFileNameCount() {
+      return fileName_.size();
     }
-    private com.google.protobuf.ByteString getFileNameBytes() {
-      java.lang.Object ref = fileName_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        fileName_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public String getFileName(int index) {
+      return fileName_.get(index);
     }
     
-    // optional string value = 3;
+    // repeated string value = 3;
     public static final int VALUE_FIELD_NUMBER = 3;
-    private java.lang.Object value_;
-    public boolean hasValue() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+    private com.google.protobuf.LazyStringList value_;
+    public java.util.List<String>
+        getValueList() {
+      return value_;
     }
-    public String getValue() {
-      java.lang.Object ref = value_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          value_ = s;
-        }
-        return s;
-      }
+    public int getValueCount() {
+      return value_.size();
     }
-    private com.google.protobuf.ByteString getValueBytes() {
-      java.lang.Object ref = value_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        value_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public String getValue(int index) {
+      return value_.get(index);
     }
     
     private void initFields() {
       fromMachine_ = communication.message.Messages.ProcessIdentifier.getDefaultInstance();
-      fileName_ = "";
-      value_ = "";
+      fileName_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -11458,11 +11424,11 @@ public final class Messages {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeMessage(1, fromMachine_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getFileNameBytes());
+      for (int i = 0; i < fileName_.size(); i++) {
+        output.writeBytes(2, fileName_.getByteString(i));
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getValueBytes());
+      for (int i = 0; i < value_.size(); i++) {
+        output.writeBytes(3, value_.getByteString(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -11477,13 +11443,23 @@ public final class Messages {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, fromMachine_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getFileNameBytes());
+      {
+        int dataSize = 0;
+        for (int i = 0; i < fileName_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(fileName_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getFileNameList().size();
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getValueBytes());
+      {
+        int dataSize = 0;
+        for (int i = 0; i < value_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(value_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getValueList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -11616,9 +11592,9 @@ public final class Messages {
           fromMachineBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000001);
-        fileName_ = "";
+        fileName_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000002);
-        value_ = "";
+        value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
@@ -11666,12 +11642,16 @@ public final class Messages {
         } else {
           result.fromMachine_ = fromMachineBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          fileName_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              fileName_);
+          bitField0_ = (bitField0_ & ~0x00000002);
         }
         result.fileName_ = fileName_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          value_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              value_);
+          bitField0_ = (bitField0_ & ~0x00000004);
         }
         result.value_ = value_;
         result.bitField0_ = to_bitField0_;
@@ -11693,11 +11673,25 @@ public final class Messages {
         if (other.hasFromMachine()) {
           mergeFromMachine(other.getFromMachine());
         }
-        if (other.hasFileName()) {
-          setFileName(other.getFileName());
+        if (!other.fileName_.isEmpty()) {
+          if (fileName_.isEmpty()) {
+            fileName_ = other.fileName_;
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            ensureFileNameIsMutable();
+            fileName_.addAll(other.fileName_);
+          }
+          onChanged();
         }
-        if (other.hasValue()) {
-          setValue(other.getValue());
+        if (!other.value_.isEmpty()) {
+          if (value_.isEmpty()) {
+            value_ = other.value_;
+            bitField0_ = (bitField0_ & ~0x00000004);
+          } else {
+            ensureValueIsMutable();
+            value_.addAll(other.value_);
+          }
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -11748,13 +11742,13 @@ public final class Messages {
               break;
             }
             case 18: {
-              bitField0_ |= 0x00000002;
-              fileName_ = input.readBytes();
+              ensureFileNameIsMutable();
+              fileName_.add(input.readBytes());
               break;
             }
             case 26: {
-              bitField0_ |= 0x00000004;
-              value_ = input.readBytes();
+              ensureValueIsMutable();
+              value_.add(input.readBytes());
               break;
             }
           }
@@ -11853,75 +11847,115 @@ public final class Messages {
         return fromMachineBuilder_;
       }
       
-      // optional string fileName = 2;
-      private java.lang.Object fileName_ = "";
-      public boolean hasFileName() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+      // repeated string fileName = 2;
+      private com.google.protobuf.LazyStringList fileName_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureFileNameIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          fileName_ = new com.google.protobuf.LazyStringArrayList(fileName_);
+          bitField0_ |= 0x00000002;
+         }
       }
-      public String getFileName() {
-        java.lang.Object ref = fileName_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          fileName_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
+      public java.util.List<String>
+          getFileNameList() {
+        return java.util.Collections.unmodifiableList(fileName_);
       }
-      public Builder setFileName(String value) {
+      public int getFileNameCount() {
+        return fileName_.size();
+      }
+      public String getFileName(int index) {
+        return fileName_.get(index);
+      }
+      public Builder setFileName(
+          int index, String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
-        fileName_ = value;
+  ensureFileNameIsMutable();
+        fileName_.set(index, value);
+        onChanged();
+        return this;
+      }
+      public Builder addFileName(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureFileNameIsMutable();
+        fileName_.add(value);
+        onChanged();
+        return this;
+      }
+      public Builder addAllFileName(
+          java.lang.Iterable<String> values) {
+        ensureFileNameIsMutable();
+        super.addAll(values, fileName_);
         onChanged();
         return this;
       }
       public Builder clearFileName() {
+        fileName_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000002);
-        fileName_ = getDefaultInstance().getFileName();
         onChanged();
         return this;
       }
-      void setFileName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000002;
-        fileName_ = value;
+      void addFileName(com.google.protobuf.ByteString value) {
+        ensureFileNameIsMutable();
+        fileName_.add(value);
         onChanged();
       }
       
-      // optional string value = 3;
-      private java.lang.Object value_ = "";
-      public boolean hasValue() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+      // repeated string value = 3;
+      private com.google.protobuf.LazyStringList value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureValueIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          value_ = new com.google.protobuf.LazyStringArrayList(value_);
+          bitField0_ |= 0x00000004;
+         }
       }
-      public String getValue() {
-        java.lang.Object ref = value_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          value_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
+      public java.util.List<String>
+          getValueList() {
+        return java.util.Collections.unmodifiableList(value_);
       }
-      public Builder setValue(String value) {
+      public int getValueCount() {
+        return value_.size();
+      }
+      public String getValue(int index) {
+        return value_.get(index);
+      }
+      public Builder setValue(
+          int index, String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
-        value_ = value;
+  ensureValueIsMutable();
+        value_.set(index, value);
+        onChanged();
+        return this;
+      }
+      public Builder addValue(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureValueIsMutable();
+        value_.add(value);
+        onChanged();
+        return this;
+      }
+      public Builder addAllValue(
+          java.lang.Iterable<String> values) {
+        ensureValueIsMutable();
+        super.addAll(values, value_);
         onChanged();
         return this;
       }
       public Builder clearValue() {
+        value_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000004);
-        value_ = getDefaultInstance().getValue();
         onChanged();
         return this;
       }
-      void setValue(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000004;
-        value_ = value;
+      void addValue(com.google.protobuf.ByteString value) {
+        ensureValueIsMutable();
+        value_.add(value);
         onChanged();
       }
       
@@ -17308,7 +17342,7 @@ public final class Messages {
       "unication.message.ProcessIdentifier\"t\n\022M" +
       "apleResultMessage\022=\n\013fromMachine\030\001 \002(\0132(" +
       ".communication.message.ProcessIdentifier" +
-      "\022\020\n\010fileName\030\002 \001(\t\022\r\n\005value\030\003 \001(\t\"\227\001\n\014Ju" +
+      "\022\020\n\010fileName\030\002 \003(\t\022\r\n\005value\030\003 \003(\t\"\227\001\n\014Ju" +
       "iceMessage\022=\n\013fromMachine\030\001 \002(\0132(.commun",
       "ication.message.ProcessIdentifier\022\016\n\006cmd" +
       "Exe\030\002 \001(\t\022\024\n\014destFileName\030\003 \001(\t\022\020\n\010numJu" +

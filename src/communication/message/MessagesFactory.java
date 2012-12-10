@@ -212,10 +212,11 @@ public class MessagesFactory {
                 .setDoMapleMessage(DoMapleMessage.newBuilder().setFromMachine(fromMachine).build()).build();
     }
 
-    public static Message generateMapleResultMessage(ProcessIdentifier fromMachine, String fileName, String value) {
+    public static Message generateMapleResultMessage(ProcessIdentifier fromMachine, List<String> fileName, List<String> value) {
         MapleResultMessage mapleResult = MapleResultMessage.newBuilder()
                 .setFromMachine(fromMachine)
-                .setFileName(fileName).setValue(value).build();
+                .addAllFileName(fileName)
+                .addAllValue(value).build();
         return Message.newBuilder()
                 .setType(MessageType.mapleResult)
                 .setMapleResultMessage(mapleResult).build();

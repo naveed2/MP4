@@ -479,7 +479,8 @@ public class SDFS {
             bw.write(data);
             bw.write('\n');
             bw.close();
-            updateLastWriteTime(fileName, proc.getIdentifier(), new Date().getTime());
+            //TODO:DON'T DO THIS
+//            updateLastWriteTime(fileName, proc.getIdentifier(), new Date().getTime());
 
         } catch (IOException e) {
             logger.error("error in appending data to local file ", e);

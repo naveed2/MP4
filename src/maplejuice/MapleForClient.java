@@ -2,7 +2,6 @@ package maplejuice;
 
 import communication.MultiCast;
 import communication.TCPClient;
-import communication.message.Messages;
 import communication.message.MessagesFactory;
 import membership.Proc;
 import misc.MiscTool;
@@ -68,21 +67,21 @@ public class MapleForClient {
     }
 
     public void doMaple() {
-        final List<String> command = new LinkedList<String>();
-        command.add("./" + cmdExe);
-        for(String file: inputFileList) {
-//            if(!proc.getSDFS().isLocalFile(file)) {
-//                proc.getSDFS().getRemoteFile(file, proc.getSDFS().getRootDirectory() + file);
-//                proc.getSDFS().loadFileFromRootDirectory(new File(file));
-//            }
-            command.add(proc.getSDFS().getRootDirectory() + file);
-        }
+
+        System.out.println(MiscTool.getDate());
+
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                logger.info("Run maple command: " + command);
-                runCommand(command);
+                for(String file: inputFileList) {
+                    final List<String> command = new LinkedList<String>();
+                    command.add("./" + cmdExe);
+                    command.add(proc.getSDFS().getRootDirectory() + file);
+                    logger.info("Run maple command: " + command);
+                    runCommand(command);
+                }
+                System.out.println(MiscTool.getDate());
             }
         }).start();
     }
@@ -118,6 +117,9 @@ public class MapleForClient {
     public void saveResults() {
         Integer size = mapleResult.entrySet().size();
         Integer cur = 0;
+        List<String> fileNames = new LinkedList<String>();
+        List<String> values = new LinkedList<String>();
+
         for(Map.Entry<String, String> result : mapleResult.entrySet()) {
             String key = result.getKey();
             String fileName = preFix + "_" + key;
@@ -125,15 +127,33 @@ public class MapleForClient {
                 proc.getSDFS().createLocalSDFSFile(fileName);
 //                createFile(fileName);
             }
+            fileNames.add(fileName);
+            values.add(result.getValue());
 
-            sendResult(fileName, result.getValue());
-            ++cur;
+            if(fileNames.size() == 300) {
+                cur+=300;
+                sendResult(fileNames, values);
+                fileNames.clear();
+                values.clear();
+                System.out.println("Progress: " + cur + "/" + size);
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    //
+                }
+            }
+
+        }
+
+        if(fileNames.size() != 0) {
+            cur += fileNames.size();
+            sendResult(fileNames, values);
             System.out.println("Progress: " + cur + "/" + size);
         }
     }
 
-    public void sendResult(String fileName, String value) {
-        Message mapleResult = MessagesFactory.generateMapleResultMessage(proc.getIdentifier(), fileName, value);
+    public void sendResult(List<String> fileNames, List<String> values) {
+        Message mapleResult = MessagesFactory.generateMapleResultMessage(proc.getIdentifier(), fileNames, values);
         MultiCast.broadCast(proc.getMemberList().getList(), mapleResult);
     }
 

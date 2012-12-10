@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -176,5 +177,11 @@ public class MiscTool {
         System.out.println(str.matches(regex));
     }
 
+    private static SimpleDateFormat sdf = new SimpleDateFormat();
+
+    public static String getDate() {
+        sdf.applyPattern("yyyy-mm-dd hh:mm:ss");
+        return sdf.format(new Date());
+    }
 
 }

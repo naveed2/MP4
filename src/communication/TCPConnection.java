@@ -15,6 +15,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.security.PrivateKey;
 import java.util.Arrays;
+import java.util.List;
 
 import static communication.message.Messages.*;
 
@@ -70,6 +71,7 @@ public class TCPConnection {
                 Message message = Message.parseFrom(bytes);
 //                logger.info("Received Message: " + message.toString() + ", size: " + message.toByteArray().length);
                 logger.info("Received Message: " + message.getType());
+                socket.close();
                 handle(message);
             } catch(IOException e) {
                 if(e.getMessage().equals("socket close")) {
@@ -421,15 +423,22 @@ public class TCPConnection {
     }
 
     private void aggregateMapleResult(MapleResultMessage mapleResult) {
-        String fileName = mapleResult.getFileName();
-        String value = mapleResult.getValue();
+        List<String> fileNames = mapleResult.getFileNameList();
+        List<String> values = mapleResult.getValueList();
         MapleForClient maple = proc.getMapleClient();
-        if(MiscTool.requireToCreateFile(maple.getPidList(), proc.getIdentifier(), fileName)) {
-            if(!proc.getSDFS().hasSDFSFile(fileName)) {
-                proc.getSDFS().createLocalSDFSFile(fileName);
+
+        for(int i=0;i<fileNames.size();++i) {
+            String fileName = fileNames.get(i);
+            String value = values.get(i);
+
+            if(MiscTool.requireToCreateFile(maple.getPidList(), proc.getIdentifier(), fileName)) {
+                if(!proc.getSDFS().hasSDFSFile(fileName)) {
+                    proc.getSDFS().createLocalSDFSFile(fileName);
+                }
+                proc.getSDFS().appendDataToLocalFile(fileName, value);
             }
-            proc.getSDFS().appendDataToLocalFile(fileName, value);
         }
+
     }
 
     private void setMaster(ProcessIdentifier masterProcess) {
