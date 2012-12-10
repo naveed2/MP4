@@ -19,10 +19,6 @@ public class JuiceExe {
     HashMap<String, String[]> pairs = new HashMap<String, String[]>();
     int totaldoc;
 
-
-
-
-
     public static void main(String[] args){
 
 //        String[] args1 = new String[1];
@@ -105,6 +101,7 @@ public class JuiceExe {
             String line = null;
             while( ( line = bufferedReader.readLine()) != null){
                 line = line.replaceAll("[\\(\\)]", "");
+                line = line.toLowerCase();
                 //System.out.println(line);
                 parsedPair = line.split(",");
                 parsedPairs.add(parsedPair);
