@@ -15,7 +15,14 @@ public class MultiCast {
     private static Logger logger = Logger.getLogger(MultiCast.class);
 
     private MultiCast() {
+    }
 
+    private Integer num;
+    private Thread curTread;
+
+    public void setNum(Integer num ) {
+        this.num = num;
+        curTread = Thread.currentThread();
     }
 
     public static void init(Proc proc) {
@@ -23,6 +30,9 @@ public class MultiCast {
     }
 
     public static void broadCast(Collection<ProcessIdentifier> procIDs, final Message m) {
+        final MultiCast multiCast = new MultiCast();
+        multiCast.setNum(procIDs.size());
+
         for(final ProcessIdentifier procID : procIDs) {
             new Thread(new Runnable() {
                 @Override
@@ -35,9 +45,23 @@ public class MultiCast {
                     } else {
                         logger.error("BroadCast error");
                     }
+
+                    multiCast.onFinish();
                 }
             }).start();
         }
 
+        try {
+            Thread.sleep(25000);
+        } catch (InterruptedException e) {
+            //
+        }
+    }
+
+    private void onFinish() {
+        num--;
+        if(num==0) {
+            curTread.interrupt();
+        }
     }
 }

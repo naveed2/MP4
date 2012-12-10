@@ -86,21 +86,34 @@ public class JuiceForMaster {
         Collections.sort(pidList, new PIDComparator());
         pidList = pidList.subList(0, numJuice);
 
-        int count=0;
+//        int count=0;
+//        for(FileIdentifier fid : fidList) {
+//            if(filesAssignedToJuice.containsKey(count)) {
+//                List<String> tmpList = filesAssignedToJuice.get(count);
+//                tmpList.add(fid.getFileName());
+//            } else {
+//                List<String> newList = new LinkedList<String>();
+//                newList.add(fid.getFileName());
+//                filesAssignedToJuice.put(count, newList);
+//            }
+//
+//            count = (count +1) % numJuice;
+//        }
+
         for(FileIdentifier fid : fidList) {
-            if(filesAssignedToJuice.containsKey(count)) {
-                List<String> tmpList = filesAssignedToJuice.get(count);
+            Integer hashCode = fid.getFileName().hashCode();
+            Integer pos = hashCode % numJuice;
+            if(filesAssignedToJuice.containsKey(pos)) {
+                List<String> tmpList = filesAssignedToJuice.get(pos);
                 tmpList.add(fid.getFileName());
             } else {
                 List<String> newList = new LinkedList<String>();
                 newList.add(fid.getFileName());
-                filesAssignedToJuice.put(count, newList);
+                filesAssignedToJuice.put(pos, newList);
             }
-
-            count = (count +1) % numJuice;
         }
 
-        count = 0;
+        int count = 0;
         for(ProcessIdentifier pid : pidList) {
             assignedJuices.put(count, pid);
             ++count;
@@ -108,6 +121,15 @@ public class JuiceForMaster {
                 break;
             }
         }
+
+//        count = 0;
+//        for(ProcessIdentifier pid : pidList) {
+//            assignedJuices.put(count, pid);
+//            ++count;
+//            if(count == numJuice) {
+//                break;
+//            }
+//        }
 
     }
 

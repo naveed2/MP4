@@ -13,6 +13,7 @@ import misc.MiscTool;
 import misc.TimeMachine;
 import org.apache.log4j.Logger;
 
+import javax.swing.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -340,5 +341,14 @@ public class Proc {
         return mapleJobsForOthers.remove(id);
     }
 
+    Map<String, List<String>> juiceJobsForOthers = new HashMap<String, List<String>>();
+
+    public void addOtherJuiceJobs(String id, List<String> files) {
+        juiceJobsForOthers.put(id, files);
+    }
+
+    public List<String> getAndRemoveOtherJuiceJobs(String id) {
+        return juiceJobsForOthers.remove(id);
+    }
 
 }
