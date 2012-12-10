@@ -17,15 +17,18 @@ import java.util.*;
 public class JuiceExe {
 
     HashMap<String, String[]> pairs = new HashMap<String, String[]>();
+    int totaldoc;
 
 
 
     public static void main(String[] args){
 
 //        String[] args1 = new String[1];
-//        args1[0] = "/Users/naveed/Desktop/Courses/CS425/MP4/sfds2/1_V";
+//        args1[0] = "/Users/naveed/Desktop/Courses/CS425/MP4/outputFile";
         JuiceExe juiceExe = new JuiceExe();
+
         juiceExe.getAllPairs(args);
+        juiceExe.getTotalDoc();
         juiceExe.displayTFIDF();
 
     }
@@ -35,11 +38,13 @@ public class JuiceExe {
         for(String inputFile:inputFiles){
             ArrayList<String[]> parsedPairs = parsePairs(inputFile);
             for(String[] pair:parsedPairs){
-//            System.out.println(pair[0]);
+
+
+
 
             String key = pair[0];
             String[] value = new String[4];
-            System.arraycopy(pair, 1, value, 0, 4);
+            System.arraycopy(pair, 1, value, 0, pair.length-1);
 
             if(pairs.containsKey(key)){
                 value[3] = Integer.toString(Integer.parseInt(value[3]) + 1);
@@ -50,6 +55,21 @@ public class JuiceExe {
             pairs.put(key, value);
             }
         }
+    }
+
+    public int getTotalDoc(){
+        int totalDoc = 0;
+        ArrayList<String> processedNames = new ArrayList<String>();
+        for(Map.Entry<String, String[]> pair : pairs.entrySet()){
+            String docName = pair.getValue()[0];
+            if(!processedNames.contains(docName)){
+                processedNames.add(docName);
+                totalDoc++;
+            }
+
+        }
+        this.totaldoc = totalDoc;
+        return totalDoc;
     }
 
 
@@ -64,7 +84,7 @@ public class JuiceExe {
     }
 
     public Double computeTFIDF(int singleWordCountInDoc, int totalWordCountInDoc, int docCountInCorpus) {
-        return ((double)singleWordCountInDoc / (double)totalWordCountInDoc) * Math.log(1/(double)docCountInCorpus);
+        return ((double)singleWordCountInDoc / (double)totalWordCountInDoc) * Math.log((double)totaldoc/(double)docCountInCorpus);
     }
 
     public ArrayList<String[]> parsePairs(String inputFile){
