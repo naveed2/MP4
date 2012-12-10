@@ -111,7 +111,7 @@ message ImMasterMessage {
 }
 
 message MapleMessage {
-    required ProcessIdentifier fromMachine = 1;
+    required ProcessIdentifier targetMachine = 1;
     optional string cmdExe = 2;
     optional string prefix = 3;
     repeated string fileList = 4;
